@@ -1,8 +1,8 @@
 const express = require("express");
 require("dotenv").config({ path: __dirname + "/.env.local" });
 // require("dotenv").config();
-const sequelize = require("./db/sequelize");
-const Student = require("./entity/student");
+// const sequelize = require("./db/sequelize");
+// const Student = require("./entity/student");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
