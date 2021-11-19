@@ -1,0 +1,156 @@
+<%- include("./partials/header") %> <%- include("./components/TopFlag/index") %>
+
+<!-- <nav class="navbar-light bg-light" style="background: black">
+  <a href="#" class="navbar-brand ml-3">Todo App</a>
+</nav> -->
+
+<div
+  class="mb-5"
+  style="
+    width: 100%;
+    height: 80px;
+    background: linear-gradient(#1e2736, #014fa2);
+  "
+>
+  <div class="container">
+    <img
+      class="p-4"
+      src="https://mika.mikroskil.ac.id/bundles/mikaglobal/images/logo-univ-mikroskil-mika.png"
+      style="
+        max-width: 300px;
+        background-color: white;
+        box-shadow: 0 1px 2px black;
+      "
+    />
+  </div>
+</div>
+
+<div class="container">
+  <div class="alert alert-info" style="border-radius: 0">
+    <div class="h6 mb-0">
+      Ujian Tengah Semester (UTS) Ganjil T.A. 2021/2022 :
+    </div>
+    <div class="h5 mb-0" style="opacity: 0.8; font-size: 16px">
+      Semester 1 adalah
+      <span class="h3" style="font-size: 22px"
+        ><strong>06 s/d 10 Desember 2021</strong></span
+      >
+    </div>
+    <div class="h5 mb-0" style="opacity: 0.8; font-size: 16px">
+      Semester 3, 5, 7 adalah
+      <span class="h3" style="font-size: 22px"
+        ><strong>22 s/d 26 November 2021</strong></span
+      >
+    </div>
+  </div>
+  <div class="row">
+    <div
+      class="col-md-9 d-md-flex flex-column d-none"
+      style="border-right: solid 1px rgba(0, 0, 0, 0.2)"
+    >
+      <div class="d-flex mb-4">
+        <img
+          src="https://mika.mikroskil.ac.id/bundles/mikaglobal/images/profil.png"
+          style="width: 70px"
+        />
+        <div class="d-flex flex-column justify-content-center">
+          <div>Profil</div>
+          <div>Periksa kebenaran profil dan riwayat pembayaran uang kuliah</div>
+        </div>
+      </div>
+      <div class="d-flex mb-4">
+        <img
+          src="https://mika.mikroskil.ac.id/bundles/mikaglobal/images/krs.png"
+          style="width: 70px"
+        />
+        <div class="d-flex flex-column justify-content-center">
+          <div>KRS & KHS</div>
+          <div>
+            Pengisian KRS secara online dan informasi hasil studi yang
+            ditampilkan per semester
+          </div>
+        </div>
+      </div>
+      <div class="d-flex mb-4">
+        <img
+          src="https://mika.mikroskil.ac.id/bundles/mikaglobal/images/transkrip.png"
+          style="width: 70px"
+        />
+        <div class="d-flex flex-column justify-content-center">
+          <div>Nilai</div>
+          <div>
+            Rekapitulasi dari seluruh hasil studi mahasiswa dan IPK sementara
+          </div>
+        </div>
+      </div>
+      <div class="d-flex mb-4">
+        <img
+          src="https://mika.mikroskil.ac.id/bundles/mikaglobal/images/kuesioner.png"
+          style="width: 70px"
+        />
+        <div class="d-flex flex-column justify-content-center">
+          <div>Kuesioner</div>
+          <div>
+            Pengisian kuesioner evaluasi dosen oleh mahasiswa setiap semester
+          </div>
+        </div>
+      </div>
+      <div class="d-flex mb-4">
+        <img
+          src="https://mika.mikroskil.ac.id/bundles/mikaglobal/images/jadwal.png"
+          style="width: 70px"
+        />
+        <div class="d-flex flex-column justify-content-center">
+          <div>Info</div>
+          <div>
+            Akses jadwal kuliah dan ujian, absensi, kalender dan peraturan
+            akademik, informasi wisuda dan lainnya
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="lead"><strong>Login</strong></div>
+      <hr class="m-0" />
+
+      <form class="my-4">
+        <div class="form-group">
+          <label class="mb-1" for="username">
+            <strong> Username </strong></label
+          >
+          <input
+            class="form-control rounded-0"
+            name="username"
+            type="text"
+            placeholder="Input your MISO ID"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="mb-1" for="password">
+            <strong> Password </strong></label
+          >
+          <input
+            class="form-control rounded-0"
+            name="password"
+            type="password"
+            placeholder="Input your password ..."
+          />
+        </div>
+
+        <button
+          class="btn rounded-0"
+          style="
+            background-color: white;
+            border: 1px solid rgba(30, 30, 30, 0.2);
+          "
+        >
+          <strong> Login </strong>
+        </button>
+      </form>
+
+      <a href="#" style="text-decoration: underline">Lupa Password</a>
+    </div>
+  </div>
+</div>
+<%- include("./partials/footer") %>
