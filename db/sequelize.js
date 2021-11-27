@@ -12,22 +12,11 @@ const sequelize = new Sequelize(
   }
 );
 
-// (async () => {
-//   try {
-//     await sequelize.authenticate();
-//     console.log("Connection has been established");
-//   } catch (err) {
-//     console.log("Unable to connect to database");
-//   }
-// })();
+const modelDefiners = [require("./models/user")];
 
-exports.default = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log("Connection has been established");
-    return sequelize;
-  } catch (err) {
-    console.log("Unable to connect to database");
-    throw new Error(err);
-  }
-};
+for (const modelDefiner of modelDefiners) {
+  console.log(modelDefiner);
+  modelDefiner(sequelize);
+}
+
+module.exports = sequelize;

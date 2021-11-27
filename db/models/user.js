@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 
-exports.default = (sequelize) => {
+module.exports = (sequelize) => {
   sequelize.define("user", {
     id: {
       allowNull: false,
@@ -12,6 +12,16 @@ exports.default = (sequelize) => {
       allowNull: false,
       type: DataTypes.STRING,
       unique: true,
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      default: DataTypes.NOW,
+    },
+    updatedAt: {
+      allowNull: true,
+      type: DataTypes.DATE,
+      default: null,
     },
   });
 };
