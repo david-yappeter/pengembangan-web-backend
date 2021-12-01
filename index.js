@@ -5,10 +5,20 @@ require("dotenv").config({
 });
 const cookieParser = require("cookie-parser");
 const sequelize = require("./db/sequelize");
+const sessions = require("express-session");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const oneDay = 1000 * 60 * 60 * 24;
 
+// app.use(
+//   sessions({
+//     secret: "tihasdasjfsmaskeyas25412ks",
+//     saveUninitialized: true,
+//     cookie: { maxAge: oneDay, httpOnly: true },
+//     resave: false,
+//   })
+// );
 app.use(express.urlencoded({ extended: true }));
 // app.use(cookieParser());
 app.use(express.static("public"));
