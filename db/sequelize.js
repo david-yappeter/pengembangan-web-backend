@@ -15,7 +15,6 @@ const sequelize = new Sequelize(
 const modelDefiners = [require("./models/user")];
 
 for (const modelDefiner of modelDefiners) {
-  console.log(modelDefiner);
   modelDefiner(sequelize);
 }
 
