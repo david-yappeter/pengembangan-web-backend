@@ -1,28 +1,30 @@
+const bcryptjs = require("bcryptjs");
 const express = require("express");
-const sequelize = require("../../../db/sequelize");
+const { models } = require("../../../db/sequelize");
 
 const router = express.Router();
 
-router.get("/a", async (req, res) => {
-  console.log(req.session);
-  console.log(req.session.id);
-  console.log(req.session.cookie);
-
-  res.send("hello");
-  // const temp = await sequelize.models.user.findAll();
-  // console.log(temp);
-});
-
-router.post("/auth_login", (req, res) => {
+router.post("/auth_login", async (req, res) => {
   const { username, password } = req.body;
 
-  if (username === "admin" && password === "admin") {
-    req.session.username = "admin";
-    req.session.isAuth = true;
-    return res.status(200).send();
-  } else {
-    return res.status(403).send();
-  }
+  await models.Student.findOne({
+    where: {
+      nim: username,
+    },
+    raw: true,
+  })
+    .then((result) => {
+      if (result && bcryptjs.compareSync(password, result.password)) {
+        req.session.student = result;
+        req.session.isAuth = true;
+        res.status(200).send();
+      } else {
+        res.status(403).send();
+      }
+    })
+    .catch((err) => {
+      return res.status(500).send();
+    });
 });
 
 router.get("/logout", (req, res) => {

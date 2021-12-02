@@ -1,33 +1,20 @@
 <%- include("../../partials/header") %> <%-
 include("../../components/Student/header") %>
 
-<div class="container">
-  <div class="text-right mb-3 mr-3" style="font-size: 0.9rem; color: #094594">
-    Anda sedang Login sebagai:
-    <strong> Admin (2012501010) </strong>
-  </div>
+<div class="container-fluid container-md px-0">
+  <%- include("../../components/Global/current-student", {currentStudent}) %>
   <div class="card">
     <div class="card-header" style="background-color: #094584; color: white">
       <h4 class="card-title mb-0">Berita</h4>
     </div>
-    <div class="card-body">
+    <div class="card-body py-0">
       <div class="row">
-        <div class="col-6 pb-5 pt-3 news-block-container">
-          <%- include("../../components/Global/berita-card") %>
+        <% news.forEach((berita) => { %>
+        <div class="col-12 col-md-6 pb-md-5 pt-2 pt-md-3 news-block-container">
+          <%- include("../../components/Global/berita-card", {berita: berita})
+          %>
         </div>
-        <hr />
-        <div class="col-6 pb-5 pt-3 news-block-container">
-          <%- include("../../components/Global/berita-card") %>
-        </div>
-        <div class="col-6 pb-5 pt-3 news-block-container">
-          <%- include("../../components/Global/berita-card") %>
-        </div>
-        <div class="col-6 pb-5 pt-3 news-block-container">
-          <%- include("../../components/Global/berita-card") %>
-        </div>
-        <div class="col-6 pb-5 pt-3 news-block-container">
-          <%- include("../../components/Global/berita-card") %>
-        </div>
+        <% }) %>
       </div>
     </div>
   </div>

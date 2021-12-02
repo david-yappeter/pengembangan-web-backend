@@ -15,15 +15,19 @@ class Lecturer extends Model {
         },
         name: {
           type: DataTypes.STRING(255),
+          allowNull: false,
         },
         status: {
           type: DataTypes.INTEGER,
+          allowNull: false,
         },
         sex: {
           type: DataTypes.ENUM("L", "P"),
+          allowNull: false,
         },
         email: {
           type: DataTypes.STRING(100),
+          allowNull: false,
         },
         ...timestampData(sequelize),
       },

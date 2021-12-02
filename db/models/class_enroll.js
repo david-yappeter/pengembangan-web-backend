@@ -13,12 +13,15 @@ class ClassEnroll extends Model {
           type: DataTypes.INTEGER,
           primaryKey: true,
           autoIncrement: true,
+          allowNull: false,
         },
         startYear: {
           type: DataTypes.INTEGER,
+          allowNull: false,
         },
         semester: {
           type: DataTypes.INTEGER,
+          allowNull: false,
         },
         ...timestampData(sequelize),
       },

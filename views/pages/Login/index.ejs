@@ -192,7 +192,7 @@ include("../../components/TopFlag/banner") %>
           data: values,
           async: true,
           callback: function (response) {
-            alert("AJAX submit successful! \nResponse from server:" + response);
+            window.location.replace("/berita");
           },
           error: function (response) {
             alert("AJAX submit error! \nResponse from server:" + response);

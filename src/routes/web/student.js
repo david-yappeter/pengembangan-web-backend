@@ -12,19 +12,24 @@ router.get("/home", (req, res) => {
 
 router.get("/berita", async (req, res) => {
   if (req.session.isAuth) {
-    const news = await models.News.findAll({
-      limit: 5,
-      offset: 0,
-    }).then((result) => {
-      // console.log(result);
-      // console.log(result.rows[0]);
-      console.log(result);
-      console.log(result.id);
-      console.log(result.title);
-    });
-    res.render("pages/Student/berita");
+    await models.News.findAndCountAll({
+      limit: 10,
+      offset: req.query.page ? (req.query.page - 1) * 10 : 0,
+      raw: true,
+    })
+      .then((result) => {
+        return res.render("pages/Student/berita", {
+          news: result.rows,
+          count: result.count,
+          page: req.query.page ? req.query.page : 1,
+          currentStudent: req.session.student,
+        });
+      })
+      .catch((err) => {
+        return res.render("partials/page500");
+      });
   } else {
-    res.redirect("/");
+    return res.redirect("/");
   }
 });
 

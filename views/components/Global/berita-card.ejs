@@ -6,12 +6,15 @@
   />
   <div>
     <h6 class="mb-0">
-      <a href="#" class="news-title"
-        >Kesempatan Magang di Wiraland Property Group</a
-      >
+      <a href="#" class="news-title"> <%= berita.title %> </a>
     </h6>
-    <span class="news-category">Umum</span>
-    <span class="news-date"> - 27 Nov 2021 11:07:39</span>
+    <span class="news-category"> <%= berita.news_categories_name %> </span>
+    <span class="news-date">
+      <% beritaDate = new Date(berita.createdAt) %> - <%=
+      beritaDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short',
+      year: 'numeric' }) + " " + beritaDate.getHours() + ":" +
+      beritaDate.getMinutes() + ":" + beritaDate.getSeconds() %>
+    </span>
     <!-- <p>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
       consectetur, nisl eget congue consectetur, nisi nunc ultricies purus, eget

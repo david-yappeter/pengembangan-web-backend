@@ -16,12 +16,15 @@ class ClassEnrollSubject extends Model {
         },
         day: {
           type: DataTypes.ENUM("Senin", "Selasa", "Rabu", "Kamis", "Jumat"),
+          allowNull: false,
         },
         startTime: {
           type: DataTypes.TIME,
+          allowNull: false,
         },
         endTime: {
           type: DataTypes.TIME,
+          allowNull: false,
         },
         ...timestampData(sequelize),
       },

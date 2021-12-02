@@ -15,6 +15,7 @@ class Subject extends Model {
         },
         name: {
           type: DataTypes.STRING(255),
+          allowNull: false,
         },
         ...timestampData(sequelize),
       },
