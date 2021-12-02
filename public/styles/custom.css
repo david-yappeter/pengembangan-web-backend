@@ -9,3 +9,45 @@
   color: #c4c4c4;
   text-decoration: none;
 }
+
+.main-menu-btn {
+  background-color: #0d67c4;
+  border-radius: 0;
+  font-size: 0.95rem;
+  font-weight: bold;
+}
+
+.main-menu-btn:focus {
+  outline: none;
+}
+
+.news-title {
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: black;
+  text-decoration: underline;
+}
+
+.news-category {
+  font-weight: bold;
+  font-size: 0.85rem;
+  color: #094584;
+}
+
+.news-date {
+  font-weight: bold;
+  font-size: 0.7rem;
+  color: #c04a48;
+}
+
+.news-block-container {
+  border-bottom: 1px solid #c4c4c4;
+}
+
+@media (max-width: 991px) {
+  .mikro-nav-link {
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin: 0.35rem 0;
+  }
+}

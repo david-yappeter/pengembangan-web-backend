@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require("sequelize/dist");
 const timestampData = require("./global");
 
-class ClassEnrollSubject extends Model {
+class News extends Model {
   static tableName() {
-    return "class_enroll_subjects";
+    return "news";
   }
 
   static sequelizeInit(sequelize) {
@@ -14,27 +14,26 @@ class ClassEnrollSubject extends Model {
           primaryKey: true,
           autoIncrement: true,
         },
-        day: {
-          type: DataTypes.ENUM("Senin", "Selasa", "Rabu", "Kamis", "Jumat"),
+        title: {
+          type: DataTypes.STRING(255),
+          allowNull: false,
         },
-        startTime: {
-          type: DataTypes.TIME,
-        },
-        endTime: {
-          type: DataTypes.TIME,
+        content: {
+          type: DataTypes.TEXT,
+          allowNull: false,
         },
         ...timestampData(sequelize),
       },
       {
         sequelize,
-        modelName: "ClassEnrollSubject",
-        tableName: ClassEnrollSubject.tableName(),
+        modelName: "News",
+        tableName: News.tableName(),
       }
     );
   }
 }
 
 module.exports = {
-  default: ClassEnrollSubject,
-  ClassEnrollSubject,
+  default: News,
+  News,
 };

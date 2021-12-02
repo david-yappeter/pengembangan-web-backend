@@ -1,29 +1,30 @@
-const { Model, DataTypes } = require("sequelize/dist");
+const { DataTypes, Model } = require("sequelize/dist");
 const timestampData = require("./global");
 
-class Room extends Model {
+class NewsCategory extends Model {
   static tableName() {
-    return "rooms";
+    return "news_category";
   }
+
   static sequelizeInit(sequelize) {
     this.init(
       {
         name: {
-          type: DataTypes.STRING(100),
+          type: DataTypes.STRING(45),
           primaryKey: true,
         },
         ...timestampData(sequelize),
       },
       {
         sequelize,
-        modelName: "Room",
-        tableName: Room.tableName(),
+        modelName: "NewsCategory",
+        tableName: NewsCategory.tableName(),
       }
     );
   }
 }
 
 module.exports = {
-  default: Room,
-  Room,
+  default: NewsCategory,
+  NewsCategory,
 };

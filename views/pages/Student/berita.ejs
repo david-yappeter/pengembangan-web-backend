@@ -2,185 +2,35 @@
 include("../../components/Student/header") %>
 
 <div class="container">
-  <div class="alert alert-info" style="border-radius: 0">
-    <div class="h6 mb-0">
-      Ujian Tengah Semester (UTS) Ganjil T.A. 2021/2022 :
-    </div>
-    <div class="h5 mb-0" style="opacity: 0.8; font-size: 16px">
-      Semester 1 adalah
-      <span class="h3" style="font-size: 22px"
-        ><strong>06 s/d 10 Desember 2021</strong></span
-      >
-    </div>
-    <div class="h5 mb-0" style="opacity: 0.8; font-size: 16px">
-      Semester 3, 5, 7 adalah
-      <span class="h3" style="font-size: 22px"
-        ><strong>22 s/d 26 November 2021</strong></span
-      >
-    </div>
+  <div class="text-right mb-3 mr-3" style="font-size: 0.9rem; color: #094594">
+    Anda sedang Login sebagai:
+    <strong> Admin (2012501010) </strong>
   </div>
-  <div class="row">
-    <div
-      class="col-md-8 d-md-flex flex-column d-none"
-      style="border-right: solid 1px rgba(0, 0, 0, 0.2)"
-    >
-      <div class="d-flex mb-4">
-        <img
-          src="https://mika.mikroskil.ac.id/bundles/mikaglobal/images/profil.png"
-          style="width: 70px"
-        />
-        <div class="d-flex flex-column justify-content-center">
-          <div>Profil</div>
-          <div>Periksa kebenaran profil dan riwayat pembayaran uang kuliah</div>
-        </div>
-      </div>
-      <div class="d-flex mb-4">
-        <img
-          src="https://mika.mikroskil.ac.id/bundles/mikaglobal/images/krs.png"
-          style="width: 70px"
-        />
-        <div class="d-flex flex-column justify-content-center">
-          <div>KRS & KHS</div>
-          <div>
-            Pengisian KRS secara online dan informasi hasil studi yang
-            ditampilkan per semester
-          </div>
-        </div>
-      </div>
-      <div class="d-flex mb-4">
-        <img
-          src="https://mika.mikroskil.ac.id/bundles/mikaglobal/images/transkrip.png"
-          style="width: 70px"
-        />
-        <div class="d-flex flex-column justify-content-center">
-          <div>Nilai</div>
-          <div>
-            Rekapitulasi dari seluruh hasil studi mahasiswa dan IPK sementara
-          </div>
-        </div>
-      </div>
-      <div class="d-flex mb-4">
-        <img
-          src="https://mika.mikroskil.ac.id/bundles/mikaglobal/images/kuesioner.png"
-          style="width: 70px"
-        />
-        <div class="d-flex flex-column justify-content-center">
-          <div>Kuesioner</div>
-          <div>
-            Pengisian kuesioner evaluasi dosen oleh mahasiswa setiap semester
-          </div>
-        </div>
-      </div>
-      <div class="d-flex mb-4">
-        <img
-          src="https://mika.mikroskil.ac.id/bundles/mikaglobal/images/jadwal.png"
-          style="width: 70px"
-        />
-        <div class="d-flex flex-column justify-content-center">
-          <div>Info</div>
-          <div>
-            Akses jadwal kuliah dan ujian, absensi, kalender dan peraturan
-            akademik, informasi wisuda dan lainnya
-          </div>
-        </div>
-      </div>
+  <div class="card">
+    <div class="card-header" style="background-color: #094584; color: white">
+      <h4 class="card-title mb-0">Berita</h4>
     </div>
-    <div class="col-md-4">
-      <div class="lead"><strong>Login</strong></div>
-      <hr class="m-0" />
-
-      <p id="_alert-error" class="alert alert-danger my-4 d-none">
-        <strong style="font-size: 0.9em"
-          >Login gagal. Periksa kembali username/e-mail dan password
-          anda.</strong
-        >
-      </p>
-
-      <form class="my-4" id="_login-form" action="/auth_login">
-        <div class="form-group">
-          <label class="mb-1" for="username">
-            <strong> Username </strong></label
-          >
-          <input
-            class="form-control rounded-0"
-            id="username"
-            name="username"
-            type="text"
-            data-validate-field="username"
-            placeholder="Input your MISO ID"
-          />
+    <div class="card-body">
+      <div class="row">
+        <div class="col-6 pb-5 pt-3 news-block-container">
+          <%- include("../../components/Global/berita-card") %>
         </div>
-
-        <div class="form-group">
-          <label class="mb-1" for="password">
-            <strong> Password </strong></label
-          >
-          <input
-            class="form-control rounded-0"
-            id="password"
-            name="password"
-            type="password"
-            data-validate-field="password"
-            placeholder="Input your password ..."
-          />
+        <hr />
+        <div class="col-6 pb-5 pt-3 news-block-container">
+          <%- include("../../components/Global/berita-card") %>
         </div>
-
-        <button
-          class="btn rounded-0"
-          style="
-            background-color: white;
-            border: 1px solid rgba(30, 30, 30, 0.2);
-          "
-        >
-          <strong> Login </strong>
-        </button>
-      </form>
-
-      <a href="#" style="text-decoration: underline">Lupa Password</a>
+        <div class="col-6 pb-5 pt-3 news-block-container">
+          <%- include("../../components/Global/berita-card") %>
+        </div>
+        <div class="col-6 pb-5 pt-3 news-block-container">
+          <%- include("../../components/Global/berita-card") %>
+        </div>
+        <div class="col-6 pb-5 pt-3 news-block-container">
+          <%- include("../../components/Global/berita-card") %>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
-<%- include("../../partials/form") %>
-
-<script>
-  $(document).ready(function () {
-    new window.JustValidate("#_login-form", {
-      rules: {
-        username: {
-          required: true,
-          minLength: 1,
-          maxLength: 20,
-        },
-        password: {
-          required: true,
-          minLength: 4,
-          maxLength: 20,
-        },
-      },
-      focusWrongField: true,
-
-      submitHandler: function (form, values, ajax) {
-        console.log(values);
-        ajax({
-          url: form.action,
-          method: "POST",
-          data: values,
-          async: true,
-          callback: function (response) {
-            alert("AJAX submit successful! \nResponse from server:" + response);
-          },
-          error: function (response) {
-            alert("AJAX submit error! \nResponse from server:" + response);
-          },
-        });
-      },
-
-      invalidFormCallback: function (errors) {
-        console.log(errors);
-      },
-    });
-  });
-</script>
 
 <%- include("../../partials/footer") %>

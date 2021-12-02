@@ -9,6 +9,9 @@ const sequelize = new Sequelize(
     port: process.env.DB_PORT,
     dialect: "mysql",
     logging: true,
+    define: {
+      underscored: true,
+    },
   }
 );
 
@@ -23,6 +26,8 @@ const modelDefiners = [
   require("./models/class_enroll_subject"),
   require("./models/lecturer_title"),
   require("./models/attendance"),
+  require("./models/news"),
+  require("./models/news_category"),
 ];
 
 for (const modelDefiner of modelDefiners) {

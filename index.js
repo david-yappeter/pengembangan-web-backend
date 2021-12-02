@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
-app.use(require("./src/routes/apis/login"));
+app.use(require("./src/routes/apis/auth"));
 app.use(require("./src/routes/web/login"));
 app.use(require("./src/routes/web/student"));
 

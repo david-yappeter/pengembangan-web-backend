@@ -186,7 +186,6 @@ include("../../components/TopFlag/banner") %>
       focusWrongField: true,
 
       submitHandler: function (form, values, ajax) {
-        console.log(values);
         ajax({
           url: form.action,
           method: "POST",

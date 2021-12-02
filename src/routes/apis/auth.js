@@ -25,6 +25,11 @@ router.post("/auth_login", (req, res) => {
   }
 });
 
+router.get("/logout", (req, res) => {
+  req.session.isAuth = false;
+  return res.redirect("/");
+});
+
 // passport.use(
 //   new CookieStrategy(function (token, done) {
 //     done(null, { id: "123", username: "test" });

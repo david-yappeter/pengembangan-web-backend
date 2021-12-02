@@ -1,4 +1,5 @@
 const { Model, DataTypes } = require("sequelize/dist");
+const timestampData = require("./global");
 
 class StudentHasClassEnroll extends Model {
   static tableName() {
@@ -13,6 +14,7 @@ class StudentHasClassEnroll extends Model {
           primaryKey: true,
           autoIncrement: true,
         },
+        ...timestampData(sequelize),
       },
       {
         sequelize,

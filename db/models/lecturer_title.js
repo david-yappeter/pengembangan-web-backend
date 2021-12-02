@@ -1,4 +1,5 @@
 const { Model, DataTypes } = require("sequelize/dist");
+const timestampData = require("./global");
 
 class LecturerTitle extends Model {
   static tableName() {
@@ -22,12 +23,13 @@ class LecturerTitle extends Model {
         year: {
           type: DataTypes.INTEGER,
         },
-        education_place: {
+        educationPlace: {
           type: DataTypes.STRING(100),
         },
         field: {
           type: DataTypes.STRING(100),
         },
+        ...timestampData(sequelize),
       },
       {
         sequelize,
@@ -41,4 +43,4 @@ class LecturerTitle extends Model {
 module.exports = {
   default: LecturerTitle,
   LecturerTitle,
-}
+};

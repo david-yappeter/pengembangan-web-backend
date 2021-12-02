@@ -1,4 +1,5 @@
 const { Model, DataTypes } = require("sequelize/dist");
+const timestampData = require("./global");
 
 class Lecturer extends Model {
   static tableName() {
@@ -24,6 +25,7 @@ class Lecturer extends Model {
         email: {
           type: DataTypes.STRING(100),
         },
+        ...timestampData(sequelize),
       },
       {
         sequelize,

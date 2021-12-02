@@ -10,6 +10,8 @@ function applyExtraSetup(sequelize) {
     Room,
     LecturerTitle,
     Attendance,
+    News,
+    NewsCategory,
   } = sequelize.models;
 
   // ========================================================
@@ -34,6 +36,7 @@ function applyExtraSetup(sequelize) {
   StudentHasClassEnroll.belongsTo(ClassEnroll, {
     foreignKey: "class_enrolls_id",
   });
+
   // ========================================================
   ClassEnroll.hasMany(ClassEnrollSubject, {
     foreignKey: "class_enrolls_id",
@@ -68,6 +71,7 @@ function applyExtraSetup(sequelize) {
   LecturerTitle.belongsTo(Lecturer, {
     foreignKey: "lecturers_nip",
   });
+
   // ========================================================
   StudentHasClassEnroll.hasMany(Attendance, {
     foreignKey: "students_has_class_enrolls_id",
@@ -80,6 +84,14 @@ function applyExtraSetup(sequelize) {
   });
   Attendance.belongsTo(ClassEnrollSubject, {
     foreignKey: "class_enroll_subjects_id",
+  });
+
+  // ========================================================
+  NewsCategory.hasMany(News, {
+    foreignKey: "news_categories_name",
+  });
+  News.belongsTo(NewsCategory, {
+    foreignKey: "news_categories_name",
   });
 }
 
