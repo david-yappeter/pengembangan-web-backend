@@ -16,82 +16,148 @@ function applyExtraSetup(sequelize) {
 
   // ========================================================
   Class.hasMany(ClassEnroll, {
-    foreignKey: "classes_id",
+    foreignKey: {
+      name: "classes_id",
+      allowNull: false,
+    },
   });
   ClassEnroll.belongsTo(Class, {
-    foreignKey: "classes_id",
+    foreignKey: {
+      name: "classes_id",
+      allowNull: false,
+    },
   });
 
   // ========================================================
   Student.hasMany(StudentHasClassEnroll, {
-    foreignKey: "students_nim",
+    foreignKey: {
+      name: "students_nim",
+      allowNull: false,
+    },
   });
   ClassEnroll.hasMany(StudentHasClassEnroll, {
-    foreignKey: "class_enrolls_id",
+    foreignKey: {
+      name: "class_enrolls_id",
+      allowNull: false,
+    },
   });
 
   StudentHasClassEnroll.belongsTo(Student, {
-    foreignKey: "students_nim",
+    foreignKey: {
+      name: "students_nim",
+      allowNull: false,
+    },
   });
   StudentHasClassEnroll.belongsTo(ClassEnroll, {
-    foreignKey: "class_enrolls_id",
+    foreignKey: {
+      name: "class_enrolls_id",
+      allowNull: false,
+    },
   });
 
   // ========================================================
   ClassEnroll.hasMany(ClassEnrollSubject, {
-    foreignKey: "class_enrolls_id",
+    foreignKey: {
+      name: "class_enrolls_id",
+      allowNull: false,
+    },
   });
   Room.hasMany(ClassEnrollSubject, {
-    foreignKey: "rooms_name",
+    foreignKey: {
+      name: "rooms_name",
+      allowNull: false,
+    },
   });
   Subject.hasMany(ClassEnrollSubject, {
-    foreignKey: "subjects_code",
+    foreignKey: {
+      name: "subjects_code",
+      allowNull: false,
+    },
   });
   Lecturer.hasMany(ClassEnrollSubject, {
-    foreignKey: "lecturers_nip",
+    foreignKey: {
+      name: "lecturers_nip",
+      allowNull: false,
+    },
   });
 
   ClassEnrollSubject.belongsTo(ClassEnroll, {
-    foreignKey: "class_enrolls_id",
+    foreignKey: {
+      name: "class_enrolls_id",
+      allowNull: false,
+    },
   });
   ClassEnrollSubject.belongsTo(Room, {
-    foreignKey: "rooms_name",
+    foreignKey: {
+      name: "rooms_name",
+      allowNull: false,
+    },
   });
   ClassEnrollSubject.belongsTo(Subject, {
-    foreignKey: "subjects_code",
+    foreignKey: {
+      name: "subjects_code",
+      allowNull: false,
+    },
   });
   ClassEnrollSubject.belongsTo(Lecturer, {
-    foreignKey: "lecturers_nip",
+    foreignKey: {
+      name: "lecturers_nip",
+      allowNull: false,
+    },
   });
 
   // ========================================================
   Lecturer.hasMany(LecturerTitle, {
-    foreignKey: "lecturers_nip",
+    foreignKey: {
+      name: "lecturers_nip",
+      allowNull: false,
+    },
   });
   LecturerTitle.belongsTo(Lecturer, {
-    foreignKey: "lecturers_nip",
+    foreignKey: {
+      name: "lecturers_nip",
+      allowNull: false,
+    },
   });
 
   // ========================================================
   StudentHasClassEnroll.hasMany(Attendance, {
-    foreignKey: "students_has_class_enrolls_id",
+    foreignKey: {
+      name: "students_has_class_enrolls_id",
+      allowNull: false,
+    },
   });
   ClassEnrollSubject.hasMany(Attendance, {
-    foreignKey: "class_enroll_subjects_id",
+    foreignKey: {
+      name: "class_enroll_subjects_id",
+      allowNull: false,
+    },
   });
   Attendance.belongsTo(StudentHasClassEnroll, {
-    foreignKey: "students_has_class_enrolls_id",
+    foreignKey: {
+      name: "students_has_class_enrolls_id",
+      allowNull: false,
+    },
   });
   Attendance.belongsTo(ClassEnrollSubject, {
-    foreignKey: "class_enroll_subjects_id",
+    foreignKey: {
+      name: "class_enroll_subjects_id",
+      allowNull: false,
+    },
   });
 
   // ========================================================
   NewsCategory.hasMany(News, {
-    foreignKey: "news_categories_name",
+    foreignKey: {
+      name: "news_categories_name",
+      allowNull: false,
+    },
   });
   News.belongsTo(NewsCategory, {
-    foreignKey: "news_categories_name",
+    foreignKey: {
+      name: "news_categories_name",
+      allowNull: false,
+    },
   });
 }
 
