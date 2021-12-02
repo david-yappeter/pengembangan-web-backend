@@ -1,5 +1,5 @@
 const { DataTypes, Model } = require("sequelize");
-const sequelize =  require("../db/sequelize");
+const sequelize = require("../db/sequelize");
 
 class Student extends Model {
   static tableName() {
@@ -51,10 +51,4 @@ Student.init(
   }
 );
 
-// (async () => {
-//   await sequelize.sync();
-// })();
-
-console.log(new Student() === sequelize.models.student);
-
-exports.default = Student;
+module.exports = Student;

@@ -1,20 +1,28 @@
 const express = require("express");
-const { userInfo } = require("os");
-const passport = require("passport");
-const CookieStrategy = require("passport-cookie");
 const sequelize = require("../../../db/sequelize");
 
 const router = express.Router();
 
 router.get("/a", async (req, res) => {
-  const temp = await sequelize.models.user.findAll();
-  console.log(temp);
+  console.log(req.session);
+  console.log(req.session.id);
+  console.log(req.session.cookie);
+
+  res.send("hello");
+  // const temp = await sequelize.models.user.findAll();
+  // console.log(temp);
 });
 
 router.post("/auth_login", (req, res) => {
-  console.log(req.body);
-  return res.status(200).json({ hello: "world" });
-  // return res.status(200).json({ hello: "world" });
+  const { username, password } = req.body;
+
+  if (username === "admin" && password === "admin") {
+    req.session.username = "admin";
+    req.session.isAuth = true;
+    return res.status(200).send();
+  } else {
+    return res.status(403).send();
+  }
 });
 
 // passport.use(

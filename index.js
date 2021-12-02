@@ -3,29 +3,32 @@ const path = require("path");
 require("dotenv").config({
   path: path.resolve(__dirname, ".env.local"),
 });
-const cookieParser = require("cookie-parser");
 const sequelize = require("./db/sequelize");
-const sessions = require("express-session");
+const session = require("express-session");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const oneDay = 1000 * 60 * 60 * 24;
 
-// app.use(
-//   sessions({
-//     secret: "tihasdasjfsmaskeyas25412ks",
-//     saveUninitialized: true,
-//     cookie: { maxAge: oneDay, httpOnly: true },
-//     resave: false,
-//   })
-// );
+app.use(
+  session({
+    secret: "keyboasrd secasdet",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: null,
+      httpOnly: true,
+    },
+    name: "mikro_session",
+  })
+);
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(cookieParser());
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 app.use(require("./src/routes/apis/login"));
 app.use(require("./src/routes/web/login"));
+app.use(require("./src/routes/web/student"));
 
 async function assertDatabaseConnectionOk() {
   console.log("Checking database connection...");

@@ -1,4 +1,3 @@
-const { rulesToMonitor } = require("nodemon/lib/monitor/match");
 const { DataTypes, Model } = require("sequelize");
 
 class Student extends Model {
