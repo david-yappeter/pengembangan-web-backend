@@ -44,6 +44,48 @@
   border-bottom: 1px solid #c4c4c4;
 }
 
+._profile-accordion-header-card {
+  border-radius: 0;
+}
+
+._profile-accordion-header-container {
+  background-color: #094584;
+}
+
+._profile-accordion-button {
+  border-radius: 0;
+  border: 0;
+  outline: 0;
+}
+
+._profile-accordion-header-card {
+  border-bottom: 0;
+}
+
+._profile-accordion-button {
+  color: #165190;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+._font-md-bold {
+  font-weight: bold;
+}
+
+._profile-image {
+  height: 100px;
+}
+
+@media (max-width: 767px) {
+  ._font-md-bold {
+    font-weight: normal;
+  }
+
+  ._profile-image {
+    width: 100px;
+  }
+}
+
 @media (max-width: 991px) {
   .mikro-nav-link {
     font-size: 0.9rem;
@@ -51,3 +93,25 @@
     margin: 0.35rem 0;
   }
 }
+
+/* Overwrite Bootstrap - Start */
+.collapsing {
+  -webkit-transition: none;
+  transition: none;
+  display: none;
+}
+
+._profile-accordion-button[aria-expanded="false"] {
+  color: #fff;
+  background-color: #094584;
+}
+
+._profile-accordion-button[aria-expanded="true"] {
+  color: #000;
+  background-color: white;
+}
+
+.btn:focus {
+  box-shadow: none;
+}
+/* Overwrite Bootstrap - End */

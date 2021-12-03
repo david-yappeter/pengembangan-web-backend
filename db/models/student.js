@@ -58,6 +58,9 @@ class Student extends Model {
           type: DataTypes.STRING(100),
           allowNull: false,
         },
+        role: {
+          type: DataTypes.ENUM("student", "dosen"),
+        },
         ...timestampData(sequelize),
       },
       {

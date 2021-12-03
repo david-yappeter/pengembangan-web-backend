@@ -15,7 +15,7 @@ router.post("/auth_login", async (req, res) => {
   })
     .then((result) => {
       if (result && bcryptjs.compareSync(password, result.password)) {
-        req.session.student = result;
+        req.session.login = result;
         req.session.isAuth = true;
         res.status(200).send();
       } else {
