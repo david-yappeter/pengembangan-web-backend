@@ -10,6 +10,21 @@ router.use((req, res, next) => {
   }
 });
 
+router.get("/a", async (req, res) => {
+  await models.Student.findAll({
+    include: [models.ClassEnroll],
+    raw: true,
+  })
+    .then((students) => {
+      console.log(students);
+      res.send(students);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.render("partials/page500");
+    });
+});
+
 router.get("/home", (req, res) => {
   res.send("Welcome to the Student Home Page");
 });
@@ -42,12 +57,12 @@ router.get("/berita/detail/:id", async (req, res) => {
   })
     .then((result) => {
       if (result) {
-        console.log(result);
         return res.render("pages/Student/detail-berita", {
           berita: result,
           currentLogin: req.session.login,
         });
       } else {
+        res.render("partials/page404");
       }
     })
     .catch((err) => {

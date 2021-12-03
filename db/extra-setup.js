@@ -145,6 +145,12 @@ function applyExtraSetup(sequelize) {
       allowNull: false,
     },
   });
+  Student.belongsToMany(ClassEnroll, {
+    through: "student_has_class_enrolls",
+  });
+  ClassEnroll.belongsToMany(Student, {
+    through: "student_has_class_enrolls",
+  });
 
   // ========================================================
   NewsCategory.hasMany(News, {
