@@ -38,10 +38,6 @@ class Student extends Model {
           type: DataTypes.STRING(20),
           allowNull: false,
         },
-        phone: {
-          type: DataTypes.STRING(20),
-          allowNull: false,
-        },
         password: {
           type: DataTypes.STRING(100),
           allowNull: false,

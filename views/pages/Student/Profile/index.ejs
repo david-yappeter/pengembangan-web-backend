@@ -13,7 +13,7 @@ include("../../../components/Student/header") %>
     <!-- Outer Card Body - Start -->
     <div class="card-body py-0">
       <!-- Profile Image and Main Data - Start -->
-      <%- include("./main-data") %>
+      <%- include("./main-data", {currentLogin} ) %>
       <!-- Profile Image and Main Data - End -->
 
       <!-- 4 Accordion - Start -->
@@ -118,7 +118,9 @@ include("../../../components/Student/header") %>
           aria-labelledby="data-pribadi-acc"
           data-parent="#profileAccordion"
         >
-          <div class="card-body"><%- include("./data-pribadi") %></div>
+          <div class="card-body">
+            <%- include("./data-pribadi", {currentLogin} ) %>
+          </div>
         </div>
         <div
           id="collapseTwo"

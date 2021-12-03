@@ -1,0 +1,25 @@
+<%- include("../../partials/header") %> <%-
+include("../../components/Student/header") %>
+
+<div class="container-fluid container-md px-0">
+  <%- include("../../components/Global/current-login", {currentLogin}) %>
+  <div class="card">
+    <div class="card-header" style="background-color: #094584; color: white">
+      <h5 class="card-title mb-0"><%= berita.title %></h4>
+    </div>
+    <div class="card-body py-0">
+      <h5>Published: 
+        <% beritaDate = new Date(berita.createdAt) %> 
+        <%=
+        beritaDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long',
+        year: 'numeric' }) + " " + beritaDate.getHours() + ":" +
+        beritaDate.getMinutes() + ":" + beritaDate.getSeconds() %>  
+      </h5>
+      <h5>
+        Kategori: <%= berita.newsCategoriesName %>
+      </h5>
+    </div>
+  </div>
+</div>
+
+<%- include("../../partials/footer") %>

@@ -149,13 +149,13 @@ function applyExtraSetup(sequelize) {
   // ========================================================
   NewsCategory.hasMany(News, {
     foreignKey: {
-      name: "news_categories_name",
+      name: "newsCategoriesName",
       allowNull: false,
     },
   });
   News.belongsTo(NewsCategory, {
     foreignKey: {
-      name: "news_categories_name",
+      name: "newsCategoriesName",
       allowNull: false,
     },
   });

@@ -1,1 +1,15 @@
 <h4 class="text-center"><u>Data Pribadi </u></h4>
+
+<div>
+  <h5>Data Pribadi dan Kontak</h5>
+  <%- include('./data-pribadi-column', { key: "NIK", value: currentLogin.nik }) %> 
+  <%- include('./data-pribadi-column', { key: "Tempat, Tanggal Lahir", value:
+  currentLogin.placeOfBirth + ", " + new
+  Date(currentLogin.dateOfBirth).toLocaleDateString('en-GB', {day: 'numeric',
+  month: 'long', year: 'numeric'})}) 
+  %>
+  <%- include("./data-pribadi-column", {key: "Agama", value: currentLogin.religion }) %>
+  <%- include("./data-pribadi-column", {key: "Jenis Kelamin", value: currentLogin.sex === "L" ? "Laki-laki": "Perempuan" }) %>
+  <%- include("./data-pribadi-column", {key: "Nomor Handphone / Email", value: currentLogin.phone + " / " + currentLogin.email }) %>
+
+</div>

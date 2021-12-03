@@ -33,6 +33,28 @@ router.get("/berita", async (req, res) => {
     });
 });
 
+router.get("/berita/detail/:id", async (req, res) => {
+  await models.News.findOne({
+    where: {
+      id: req.params.id,
+    },
+    raw: true,
+  })
+    .then((result) => {
+      if (result) {
+        console.log(result);
+        return res.render("pages/Student/detail-berita", {
+          berita: result,
+          currentLogin: req.session.login,
+        });
+      } else {
+      }
+    })
+    .catch((err) => {
+      return res.render("partials/page500");
+    });
+});
+
 router.get("/profile", async (req, res) => {
   res.render("pages/Student/Profile/index", {
     currentLogin: req.session.login,

@@ -6,19 +6,15 @@
   />
   <div>
     <h6 class="mb-0">
-      <a href="#" class="news-title"> <%= berita.title %> </a>
+      <a href="/berita/detail/<%= berita.id %>" class="news-title"> <%= berita.title %> </a>
     </h6>
     <span class="news-category"> <%= berita.news_categories_name %> </span>
     <span class="news-date">
-      <% beritaDate = new Date(berita.createdAt) %> - <%=
+      <% beritaDate = new Date(berita.createdAt) %> 
+      - <%=
       beritaDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short',
       year: 'numeric' }) + " " + beritaDate.getHours() + ":" +
       beritaDate.getMinutes() + ":" + beritaDate.getSeconds() %>
     </span>
-    <!-- <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-      consectetur, nisl eget congue consectetur, nisi nunc ultricies purus, eget
-      tincidunt nisl nisl eget congue.
-    </p> -->
   </div>
 </div>
