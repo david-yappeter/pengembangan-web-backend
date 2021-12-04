@@ -4,39 +4,10 @@
     src="https://sps.widyatama.ac.id/wp-content/uploads/2020/08/dummy-profile-pic-male1-300x300.jpg"
   />
   <div class="container-fluid my-md-5 font-weight-bold">
-    <div class="row my-2">
-      <div class="col-12 col-md-4 text-center text-md-left">Nama / NIM</div>
-      <div class="col-12 col-md-8 _font-md-bold text-center text-md-left">
-        <%= currentLogin.name %> / <%= currentLogin.nim %>
-      </div>
-    </div>
-    <div class="row my-2">
-      <div class="col-12 col-md-4 text-center text-md-left">
-        Program Studi / Kelas
-      </div>
-      <div class="col-12 col-md-8 _font-md-bold text-center text-md-left">
-        Teknik Informatika / B
-      </div>
-    </div>
-    <div class="row my-2">
-      <div class="col-12 col-md-4 text-center text-md-left">Peminatan</div>
-      <div class="col-12 col-md-8 _font-md-bold text-center text-md-left">
-        Teknik Informatika
-      </div>
-    </div>
-    <div class="row my-2">
-      <div class="col-12 col-md-4 text-center text-md-left">
-        Semester / Waktu Kuliah
-      </div>
-      <div class="col-12 col-md-8 _font-md-bold text-center text-md-left">
-        III / Sore
-      </div>
-    </div>
-    <div class="row my-2">
-      <div class="col-12 col-md-4 text-center text-md-left">Dosen Wali</div>
-      <div class="col-12 col-md-8 _font-md-bold text-center text-md-left">
-        Waliii
-      </div>
-    </div>
+    <%- include("./main-data-column", {key: "Nama / NIM",  value:  student.name + " / " + student.nim}) %>
+    <%- include("./main-data-column", {key: "Program Studi / Kelas",  value:  currentClassEnroll.Class.studyProgram + " / " + currentClassEnroll.Class.letter}) %>
+    <%- include("./main-data-column", {key: "Peminatan",  value:  currentClassEnroll.Class.studyProgram }) %>
+    <%- include("./main-data-column", {key: "Semester / Waktu Kuliah",  value:  currentClassEnroll.semester + " / " + currentClassEnroll.time }) %>
+    <%- include("./main-data-column", {key: "Dosen Wali",  value:  currentClassEnroll.Lecturer.name }) %>
   </div>
 </div>

@@ -11,11 +11,10 @@ router.post("/auth_login", async (req, res) => {
     where: {
       nim: username,
     },
-    raw: true,
   })
     .then((result) => {
-      if (result && bcryptjs.compareSync(password, result.password)) {
-        req.session.login = result;
+      if (result && bcryptjs.compareSync(password, result.toJSON().password)) {
+        req.session.login = result.toJSON();
         req.session.isAuth = true;
         res.status(200).send();
       } else {

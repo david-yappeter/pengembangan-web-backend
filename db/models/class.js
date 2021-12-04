@@ -14,8 +14,16 @@ class Class extends Model {
           primaryKey: true,
           autoIncrement: true,
         },
-        name: {
+        studyProgram: {
           type: DataTypes.STRING(100),
+          allowNull: false,
+        },
+        acronym: {
+          type: DataTypes.STRING(10),
+          allowNull: false,
+        },
+        letter: {
+          type: DataTypes.STRING(5),
           allowNull: false,
         },
         ...timestampData(sequelize),

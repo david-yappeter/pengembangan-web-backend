@@ -6,6 +6,7 @@ require("dotenv").config({
 });
 const sequelize = require("./db/sequelize");
 const session = require("express-session");
+const res = require("express/lib/response");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,6 +31,9 @@ app.set("view engine", "ejs");
 app.use(require("./src/routes/apis/auth"));
 app.use(require("./src/routes/web/login"));
 app.use(require("./src/routes/web/student"));
+app.all("*", (req, res) => {
+  res.render("partials/page404");
+});
 
 async function assertDatabaseConnectionOk() {
   console.log("Checking database connection...");

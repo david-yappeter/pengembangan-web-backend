@@ -1,0 +1,34 @@
+<h4 class="text-center"><u>Jadwal Harian Masuk Kuliah </u></h4>
+
+<div class="table-responsive">
+  <table class="table table-sm table-hover table-bordered text-center" style="font-size: 0.8rem">
+    <thead>
+      <tr style="background: #094584;color: white">
+        <th scope="col">Hari</th>
+        <th scope="col">Kode</th>
+        <th scope="col">Mata Kuliah</th>
+        <th scope="col">Kelas</th>
+        <th scope="col">Ruangan</th>
+        <th scope="col">Pukul</th>
+        <th scope="col">SKS</th>
+      </tr>
+    </thead>
+    <tbody style="font-size: 0.9rem">
+      <% currentClassEnroll.ClassEnrollSubjects.forEach((jadwal) => { %>
+      <tr>
+        <td><%= jadwal.day %></td>
+        <td><%= jadwal.subjectsCode %></td>
+        <td class="text-left"><%= jadwal.Subject.name %></td>
+        <td><%= currentClassEnroll.Class.acronym + " - " + currentClassEnroll.Class.letter %></td>
+        <td><%= jadwal.roomsName %></td>
+        <td><%= jadwal.startTime.substring(0,5) + " - " + jadwal.endTime.substring(0,5) %></td>
+        <td><%= Math.ceil(((new Date("01/01/2007 " + jadwal.endTime).getHours() * 60 + new Date("01/01/2007 " + jadwal.endTime).getMinutes()) - (new Date("01/01/2007 " + jadwal.startTime).getHours() * 60 + new Date("01/01/2007 " + jadwal.startTime).getMinutes())) /  60.0)  %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+  <%#- include("./jadwal-kuliah-header", { hari: "Hari", kode: "Kode", mataKuliah: "Mata Kuliah", kelas: "Kelas", ruangan: "Ruangan",  pukul: "Pukul", sks: "SKS" }) %>
+  <%#- include("./jadwal-kuliah-column", { hari: "Hari", kode: "Kode", mataKuliah: "Mata Kuliah", kelas: "Kelas", ruangan: "Ruangan",  pukul: "Pukul", sks: "SKS" }) %>
+

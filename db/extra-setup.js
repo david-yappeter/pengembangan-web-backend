@@ -17,13 +17,13 @@ function applyExtraSetup(sequelize) {
   // ========================================================
   Class.hasMany(ClassEnroll, {
     foreignKey: {
-      name: "classes_id",
+      name: "classesId",
       allowNull: false,
     },
   });
   ClassEnroll.belongsTo(Class, {
     foreignKey: {
-      name: "classes_id",
+      name: "classesId",
       allowNull: false,
     },
   });
@@ -31,26 +31,40 @@ function applyExtraSetup(sequelize) {
   // ========================================================
   Student.hasMany(StudentHasClassEnroll, {
     foreignKey: {
-      name: "students_nim",
+      name: "studentsNim",
       allowNull: false,
     },
   });
   ClassEnroll.hasMany(StudentHasClassEnroll, {
     foreignKey: {
-      name: "class_enrolls_id",
+      name: "classEnrollsId",
       allowNull: false,
     },
   });
 
   StudentHasClassEnroll.belongsTo(Student, {
     foreignKey: {
-      name: "students_nim",
+      name: "studentsNim",
       allowNull: false,
     },
   });
   StudentHasClassEnroll.belongsTo(ClassEnroll, {
     foreignKey: {
-      name: "class_enrolls_id",
+      name: "classEnrollsId",
+      allowNull: false,
+    },
+  });
+  Student.belongsToMany(ClassEnroll, {
+    through: StudentHasClassEnroll,
+    foreignKey: {
+      name: "studentsNim",
+      allowNull: false,
+    },
+  });
+  ClassEnroll.belongsToMany(Student, {
+    through: StudentHasClassEnroll,
+    foreignKey: {
+      name: "classEnrollsId",
       allowNull: false,
     },
   });
@@ -58,50 +72,64 @@ function applyExtraSetup(sequelize) {
   // ========================================================
   ClassEnroll.hasMany(ClassEnrollSubject, {
     foreignKey: {
-      name: "class_enrolls_id",
+      name: "classEnrollsId",
       allowNull: false,
     },
   });
   Room.hasMany(ClassEnrollSubject, {
     foreignKey: {
-      name: "rooms_name",
+      name: "roomsName",
       allowNull: false,
     },
   });
   Subject.hasMany(ClassEnrollSubject, {
     foreignKey: {
-      name: "subjects_code",
+      name: "subjectsCode",
       allowNull: false,
     },
   });
   Lecturer.hasMany(ClassEnrollSubject, {
     foreignKey: {
-      name: "lecturers_nip",
+      name: "lecturersNip",
       allowNull: false,
     },
   });
 
   ClassEnrollSubject.belongsTo(ClassEnroll, {
     foreignKey: {
-      name: "class_enrolls_id",
+      name: "classEnrollsId",
       allowNull: false,
     },
   });
   ClassEnrollSubject.belongsTo(Room, {
     foreignKey: {
-      name: "rooms_name",
+      name: "roomsName",
       allowNull: false,
     },
   });
   ClassEnrollSubject.belongsTo(Subject, {
     foreignKey: {
-      name: "subjects_code",
+      name: "subjectsCode",
       allowNull: false,
     },
   });
   ClassEnrollSubject.belongsTo(Lecturer, {
     foreignKey: {
-      name: "lecturers_nip",
+      name: "lecturersNip",
+      allowNull: false,
+    },
+  });
+  ClassEnroll.belongsToMany(Subject, {
+    through: ClassEnrollSubject,
+    foreignKey: {
+      name: "classEnrollsId",
+      allowNull: false,
+    },
+  });
+  Subject.belongsToMany(ClassEnroll, {
+    through: ClassEnrollSubject,
+    foreignKey: {
+      name: "subjectsCode",
       allowNull: false,
     },
   });
@@ -109,13 +137,13 @@ function applyExtraSetup(sequelize) {
   // ========================================================
   Lecturer.hasMany(LecturerTitle, {
     foreignKey: {
-      name: "lecturers_nip",
+      name: "lecturersNip",
       allowNull: false,
     },
   });
   LecturerTitle.belongsTo(Lecturer, {
     foreignKey: {
-      name: "lecturers_nip",
+      name: "lecturersNip",
       allowNull: false,
     },
   });
@@ -123,33 +151,39 @@ function applyExtraSetup(sequelize) {
   // ========================================================
   StudentHasClassEnroll.hasMany(Attendance, {
     foreignKey: {
-      name: "students_has_class_enrolls_id",
+      name: "studentsHasClassEnrollsId",
       allowNull: false,
     },
   });
   ClassEnrollSubject.hasMany(Attendance, {
     foreignKey: {
-      name: "class_enroll_subjects_id",
+      name: "classEnrollSubjectsId",
       allowNull: false,
     },
   });
   Attendance.belongsTo(StudentHasClassEnroll, {
     foreignKey: {
-      name: "students_has_class_enrolls_id",
+      name: "studentsHasClassEnrollsId",
       allowNull: false,
     },
   });
   Attendance.belongsTo(ClassEnrollSubject, {
     foreignKey: {
-      name: "class_enroll_subjects_id",
+      name: "classEnrollSubjectsId",
       allowNull: false,
     },
   });
-  Student.belongsToMany(ClassEnroll, {
-    through: "student_has_class_enrolls",
+  Lecturer.hasMany(ClassEnroll, {
+    foreignKey: {
+      name: "lecturersNip",
+      allowNull: false,
+    },
   });
-  ClassEnroll.belongsToMany(Student, {
-    through: "student_has_class_enrolls",
+  ClassEnroll.belongsTo(Lecturer, {
+    foreignKey: {
+      name: "lecturersNip",
+      allowNull: false,
+    },
   });
 
   // ========================================================
