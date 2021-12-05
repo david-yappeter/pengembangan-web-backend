@@ -3,7 +3,7 @@ const timestampData = require("./global");
 
 class Attendance extends Model {
   static tableName() {
-    return "attendance";
+    return "attendances";
   }
 
   static sequelizeInit(sequelize) {

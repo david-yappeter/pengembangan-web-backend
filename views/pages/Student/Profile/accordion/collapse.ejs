@@ -1,0 +1,10 @@
+<div
+  id="<%= id %>"
+  class="collapse bg-light<%= className ? " " + className : "" %><%= show ? " show" : "" %>"
+  aria-labelledby="<%= label %>"
+  data-parent="#<%= parent %>"
+>
+  <div class="card-body">
+    <%- content %>
+  </div>
+</div>

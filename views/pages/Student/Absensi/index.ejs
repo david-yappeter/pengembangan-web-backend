@@ -1,0 +1,21 @@
+<%- include("../../../partials/header") %> <%-
+include("../../../components/Student/header") %>
+
+<div class="container-fluid container-md px-0">
+  <%- include("../../../components/Global/current-login", {currentLogin}) %>
+  <div class="card">
+    <div
+      class="card-header _profile-accordion-header"
+      style="background-color: #094584; color: white"
+    >
+      <h4 class="card-title mb-0">Absensi</h4>
+    </div>
+    <!-- Outer Card Body - Start -->
+    <div class="card-body py-0">
+      <%- include("absensi-table") %>
+    </div>
+    <!-- Outer Card Body - End -->
+  </div>
+</div>
+
+<%- include("../../../partials/footer") %>

@@ -18,136 +18,24 @@ include("../../../components/Student/header") %>
 
       <!-- 4 Accordion - Start -->
       <div class="accordion card" id="profileAccordion">
-        <div class="container-fluid d-flex _profile-accordion-header-container">
-          <div class="card _profile-accordion-header-card">
-            <div id="data-pribadi-acc">
-              <h2 class="mb-0">
-                <button
-                  class="
-                    btn btn-link
-                    _profile-accordion-button
-                    btn-block
-                    text-left
-                    p-3
-                  "
-                  type="button"
-                  data-toggle="collapse"
-                  data-target="#collapseOne"
-                  aria-expanded="true"
-                  aria-controls="collapseOne"
-                >
-                  Data Pribadi
-                </button>
-              </h2>
-            </div>
-          </div>
-          <div class="card _profile-accordion-header-card">
-            <div id="histori-akademis-acc">
-              <h2 class="mb-0">
-                <button
-                  class="
-                    btn btn-link
-                    _profile-accordion-button
-                    btn-block
-                    text-left
-                    collapsed
-                    p-3
-                  "
-                  type="button"
-                  data-toggle="collapse"
-                  data-target="#collapseTwo"
-                  aria-expanded="false"
-                  aria-controls="collapseTwo"
-                >
-                  History Akademis
-                </button>
-              </h2>
-            </div>
-          </div>
-          <div class="card _profile-accordion-header-card">
-            <div id="data-keuangan-acc">
-              <h2 class="mb-0">
-                <button
-                  class="
-                    btn btn-link
-                    _profile-accordion-button
-                    btn-block
-                    text-left
-                    collapsed
-                    p-3
-                  "
-                  type="button"
-                  data-toggle="collapse"
-                  data-target="#collapseThree"
-                  aria-expanded="false"
-                  aria-controls="collapseThree"
-                >
-                  Data Keuangan
-                </button>
-              </h2>
-            </div>
-          </div>
-          <div class="card _profile-accordion-header-card">
-            <div id="jadwal-kuliah-acc">
-              <h2 class="mb-0">
-                <button
-                  class="
-                    btn btn-link
-                    _profile-accordion-button
-                    btn-block
-                    text-left
-                    collapsed
-                    p-3
-                  "
-                  type="button"
-                  data-toggle="collapse"
-                  data-target="#collapseFour"
-                  aria-expanded="false"
-                  aria-controls="collapseFour"
-                >
-                  Jadwal Perkuliahan
-                </button>
-              </h2>
-            </div>
-          </div>
+        <div class="container-fluid flex-column flex-md-row d-flex _profile-accordion-header-container">
+          <%- include("./accordion/header", { id: "data-pribadi-acc", target: "collapseOne", expanded: "true", value: "Data Pribadi" }) %>
+          <%- include("./accordion/collapse", { id: "collapseOne", show: true, className: "d-md-none",label: "data-pribadi-acc", parent: "profileAccordion", content: include("./data-pribadi", {currentLogin}) }) %>
+          <%- include("./accordion/header", { id: "histori-akademis-acc", target: "collapseTwo", expanded: "false", value: "History Akademis" }) %>
+          <%- include("./accordion/collapse", { id: "collapseTwo", show: false, className: "d-md-none", label: "histori-akademis-acc", parent: "profileAccordion", content: "ASGASGASGSA" }) %>
+          <%- include("./accordion/header", { id: "data-keuangan-acc", target: "collapseThree", expanded: "false", value: "Data Keuangan" }) %>
+          <%- include("./accordion/collapse", { id: "collapseThree", show: false, className: "d-md-none", label: "data-keuangan-acc", parent: "profileAccordion", content: "TRJTRDJTRD" }) %>
+          <%- include("./accordion/header", { id: "jadwal-kuliah-acc", target: "collapseFour", expanded: "false", value: "Jadwal Perkuliahan" }) %>
+          <%- include("./accordion/collapse", { id: "collapseFour", show: false, className: "d-md-none", label: "jadwal-kuliah-acc", parent: "profileAccordion", content: include("./jadwal-kuliah") }) %>
         </div>
 
-        <div
-          id="collapseOne"
-          class="collapse show"
-          aria-labelledby="data-pribadi-acc"
-          data-parent="#profileAccordion"
-        >
-          <div class="card-body">
-            <%- include("./data-pribadi", {currentLogin} ) %>
-          </div>
+        <div class="d-none d-md-block">
+          <%- include("./accordion/collapse", { id: "collapseOne", show: true, className: "", label: "data-pribadi-acc", parent: "profileAccordion", content: include("./data-pribadi", {currentLogin}) }) %>
+          <%- include("./accordion/collapse", { id: "collapseTwo", show: false, className: "", label: "histori-akademis-acc", parent: "profileAccordion", content: "ASGASGASGSA" }) %>
+          <%- include("./accordion/collapse", { id: "collapseThree", show: false, className: "", label: "data-keuangan-acc", parent: "profileAccordion", content: "TRJTRDJTRD" }) %>
+          <%- include("./accordion/collapse", { id: "collapseFour", show: false, className: "", label: "jadwal-kuliah-acc", parent: "profileAccordion", content: include("./jadwal-kuliah") }) %>
         </div>
-        <div
-          id="collapseTwo"
-          class="collapse"
-          aria-labelledby="histori-akademis-acc"
-          data-parent="#profileAccordion"
-        >
-          <div class="card-body">ASGASGASGSA</div>
-        </div>
-        <div
-          id="collapseThree"
-          class="collapse"
-          aria-labelledby="data-keuangan-acc"
-          data-parent="#profileAccordion"
-        >
-          <div class="card-body">TRJTRDJTRD</div>
-        </div>
-        <div
-          id="collapseFour"
-          class="collapse"
-          aria-labelledby="jadwal-kuliah-acc"
-          data-parent="#profileAccordion"
-        >
-          <div class="card-body">
-            <%- include("./jadwal-kuliah") %>
-          </div>
-        </div>
+
       </div>
       <!-- 4 Accordion - End -->
     </div>

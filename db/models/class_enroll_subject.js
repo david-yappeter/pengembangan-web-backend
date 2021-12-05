@@ -16,7 +16,7 @@ class ClassEnrollSubject extends Model {
     };
 
     arr.sort((first, second) => {
-      return valObj[first] > valObj[second] ? 1 : -1;
+      return valObj[first] > valObj[second] ? -1 : 1;
     });
 
     return arr;

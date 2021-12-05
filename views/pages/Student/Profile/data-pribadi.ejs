@@ -12,4 +12,10 @@
   <%- include("./data-pribadi-column", {key: "Jenis Kelamin", value: currentLogin.sex === "L" ? "Laki-laki": "Perempuan" }) %>
   <%- include("./data-pribadi-column", {key: "Nomor Handphone / Email", value: currentLogin.phone + " / " + currentLogin.email }) %>
 
+  <div class="alert alert-info mt-4">
+    <ol class="m-0" style="font-weight: 500; font-size: 0.9rem">
+      <li>Data ini akan digunakan untuk pencetakan transkrip akademik dan ijazah.</li>
+      <li>Jika terdapat kesalahan data seperti nama, tempat/tanggal lahir, dan sebagainya lapor kepada pihak BAA (Kampus A lantai 3) dengan membawa ijazah SMA.</li>
+    </ol>
+  </div>
 </div>

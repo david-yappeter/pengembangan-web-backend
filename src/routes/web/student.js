@@ -93,7 +93,6 @@ router.get("/profile", async (req, res) => {
     .then((student) => {
       if (student) {
         student = student.toJSON();
-        console.log(student);
 
         currentClassEnroll =
           student.ClassEnrolls[student.ClassEnrolls.length - 1];
@@ -107,7 +106,6 @@ router.get("/profile", async (req, res) => {
             currentClassEnroll.ClassEnrollSubjects
           );
 
-        console.log(currentClassEnroll);
         res.render("pages/Student/Profile/index", {
           currentLogin: req.session.login,
           student: student,
@@ -120,6 +118,76 @@ router.get("/profile", async (req, res) => {
     .catch((err) => {
       console.log(err);
       res.render("partials/page500");
+    });
+});
+
+router.get("/absensi", async (req, res) => {
+  await models.Student.findByPk(req.session.login.nim, {
+    include: [
+      {
+        model: models.ClassEnroll,
+        include: [
+          {
+            model: models.ClassEnrollSubject,
+            include: [
+              models.Subject,
+              models.Lecturer,
+              {
+                model: models.Attendance,
+                separate: true,
+                order: [["week", "ASC"]],
+              },
+            ],
+          },
+          models.Class,
+          models.Lecturer,
+        ],
+      },
+    ],
+    order: [[models.ClassEnroll, "semester", "ASC"]],
+    nest: true,
+  })
+    .then((student) => {
+      student = student.toJSON();
+
+      currentClassEnroll =
+        student.ClassEnrolls[student.ClassEnrolls.length - 1];
+
+      currentClassEnroll.semester = models.ClassEnroll.convertToRoman(
+        currentClassEnroll.semester
+      );
+
+      currentClassEnroll.ClassEnrollSubjects =
+        models.ClassEnrollSubject.sortArray(
+          currentClassEnroll.ClassEnrollSubjects
+        );
+
+      const maxPertemuan = Math.max(
+        ...student.ClassEnrolls.reduce((acc, item) => {
+          acc.push(
+            ...item.ClassEnrollSubjects.map((absensi) => {
+              return absensi.Attendances.reduce((acc, curr) => {
+                if (curr.week > acc) {
+                  acc = curr.week;
+                }
+                return acc;
+              }, 0);
+            })
+          );
+          return acc;
+        }, [])
+      );
+
+      return res.render("pages/Student/Absensi/index", {
+        currentLogin: req.session.login,
+        maxPertemuan: maxPertemuan,
+        student: student,
+        currentClassEnroll: currentClassEnroll,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.render("partials/page500");
     });
 });
 
