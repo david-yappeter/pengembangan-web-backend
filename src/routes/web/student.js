@@ -56,8 +56,8 @@ router.get("/berita/detail/:id", async (req, res) => {
     },
   })
     .then((result) => {
+      result = result.toJSON();
       if (result) {
-        result.rows = result.rows.map((item) => item.toJSON());
         return res.render("pages/Student/detail-berita", {
           berita: result,
           currentLogin: req.session.login,
@@ -122,7 +122,7 @@ router.get("/profile", async (req, res) => {
 });
 
 router.get("/absensi", async (req, res) => {
-  const filterSemester = req.query.semester ? req.query.semester : null;
+  let filterSemester = req.query.semester ? req.query.semester : null;
 
   await models.Student.findByPk(req.session.login.nim, {
     include: [
@@ -163,6 +163,8 @@ router.get("/absensi", async (req, res) => {
 
       currentClassEnroll =
         student.ClassEnrolls[student.ClassEnrolls.length - 1];
+
+      filterSemester = currentClassEnroll.semester;
 
       currentClassEnroll.semester = models.ClassEnroll.convertToRoman(
         currentClassEnroll.semester

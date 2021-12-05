@@ -39,7 +39,17 @@
       <a class="nav-item mikro-nav-link" href="/profile"> Profile </a>
       <a class="nav-item mikro-nav-link" href="/absensi"> Absensi </a>
       <a class="nav-item mikro-nav-link" href="/absensi"> Absensi </a>
-      <a class="nav-item mikro-nav-link" href="/absensi"> Absensi </a>
+      <div class="nav-item dropdown">
+        <a class="mikro-nav-link dropdown-toggle" href="#", id="nilaiDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Nilai
+        </a>
+        <div class="dropdown-menu position-absolute" aria-labelledby="nilaiDropdown" style="width: 1150px;">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </div>
       <a class="nav-item mikro-nav-link" href="/absensi"> Absensi </a>
       <a class="nav-item mikro-nav-link" href="/absensi"> Absensi </a>
       <a class="nav-item mikro-nav-link" href="/absensi"> Absensi </a>
@@ -49,3 +59,25 @@
     </div>
   </div>
 </nav>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script>
+  const listenerFunc = function() {
+    const windowWidth = $(window).width();
+
+    if(windowWidth >= 992) {
+      $(".dropdown-menu").css("left", "-490px");
+      $(".dropdown-menu").css("width", "1150px");
+      $(".dropdown-toggle").addClass("disabled")
+    } else {
+      $(".dropdown-menu").css("left", "0px")
+      $(".dropdown-menu").css("width", "100%");
+      $(".dropdown-toggle").removeClass("disabled")
+    }
+
+  }
+
+  $(window).resize(listenerFunc);
+  listenerFunc();
+</script>

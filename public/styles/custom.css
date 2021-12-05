@@ -128,4 +128,13 @@ select {
     padding: 0;
   }
 }
+
+@media (min-width: 992px) {
+  .dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+    width: 100%;
+  }
+}
+
 /* Overwrite Bootstrap - End */

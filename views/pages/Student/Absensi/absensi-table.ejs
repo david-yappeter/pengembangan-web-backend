@@ -1,7 +1,7 @@
 <form class="my-4 form-inline" action="/absensi" method="get">
   <div class="form-group">
     <label for="semester" class="font-weight-bold">Semester:  </label>
-    <select class="mr-5 ml-3 form-control" name="semester" id="">
+    <select class="mr-md-5 ml-md-3 form-control" name="semester" id="">
       <% for(let i = 1; i <= 8; i++) { %>
         <option value="<%= i %>" <% if (filterSemester == i) { %> <%= selected="selected" %>  <% }%> ><%= i %></option>
       <% } %>
@@ -81,3 +81,21 @@
     </tbody>
   </table>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script>
+  const listenerFunc = () => {
+    //get the width of the window
+    var width = $(window).width();
+    //if the window is greater than 600px wide then turn on jScrollPane..
+    if (width > 767) {
+      $('form').addClass('form-inline')
+      $('button').removeClass('btn-block')
+    } else {
+      $('form').removeClass('form-inline')
+      $('button[type=submit]').addClass('btn-block')
+    }
+  };
+  $(window).resize(listenerFunc);
+  listenerFunc();
+</script>
