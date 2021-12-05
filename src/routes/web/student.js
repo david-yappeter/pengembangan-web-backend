@@ -122,10 +122,13 @@ router.get("/profile", async (req, res) => {
 });
 
 router.get("/absensi", async (req, res) => {
+  const filterSemester = req.query.semester ? req.query.semester : null;
+
   await models.Student.findByPk(req.session.login.nim, {
     include: [
       {
         model: models.ClassEnroll,
+        where: filterSemester ? { semester: filterSemester } : null,
         include: [
           {
             model: models.ClassEnrollSubject,
@@ -148,6 +151,14 @@ router.get("/absensi", async (req, res) => {
     nest: true,
   })
     .then((student) => {
+      if (!student) {
+        return res.render("pages/Student/Absensi/index", {
+          currentLogin: req.session.login,
+          maxPertemuan: null,
+          currentClassEnroll: null,
+          filterSemester: filterSemester,
+        });
+      }
       student = student.toJSON();
 
       currentClassEnroll =
@@ -178,11 +189,23 @@ router.get("/absensi", async (req, res) => {
         }, [])
       );
 
+      for (let i = 0; i < currentClassEnroll.ClassEnrollSubjects.length; i++) {
+        currentClassEnroll.ClassEnrollSubjects[i].Attendances =
+          currentClassEnroll.ClassEnrollSubjects[i].Attendances.reduce(
+            (acc, curr) => {
+              acc[curr.week] = curr;
+              return acc;
+            },
+            {}
+          );
+      }
+
       return res.render("pages/Student/Absensi/index", {
         currentLogin: req.session.login,
         maxPertemuan: maxPertemuan,
         student: student,
         currentClassEnroll: currentClassEnroll,
+        filterSemester: filterSemester,
       });
     })
     .catch((err) => {
