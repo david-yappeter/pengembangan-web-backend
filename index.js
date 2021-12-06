@@ -30,6 +30,7 @@ app.set("view engine", "ejs");
 
 app.use(require("./src/routes/apis/auth"));
 app.use(require("./src/routes/web/login"));
+app.use(require("./src/routes/web/admin"));
 app.use(require("./src/routes/web/student"));
 app.all("*", (req, res) => {
   res.render("partials/page404");

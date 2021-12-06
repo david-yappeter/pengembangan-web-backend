@@ -1,0 +1,128 @@
+<%- include("../../partials/header") %> <%-
+include("../../components/TopFlag/banner") %>
+
+<!-- <nav class="navbar-light bg-light" style="background: black">
+  <a href="#" class="navbar-brand ml-3">Todo App</a>
+</nav> -->
+
+<div
+  class="mb-5"
+  style="
+    width: 100%;
+    height: 80px;
+    background: linear-gradient(#1e2736, #014fa2);
+  "
+>
+  <div class="container">
+    <img
+      class="p-4"
+      src="https://mika.mikroskil.ac.id/bundles/mikaglobal/images/logo-univ-mikroskil-mika.png"
+      style="
+        max-width: 300px;
+        background-color: white;
+        box-shadow: 0 1px 2px black;
+      "
+    />
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-8 mx-auto">
+      <div class="lead"><strong>Admin Login</strong></div>
+      <hr class="m-0" />
+
+      <p id="_alert-error" class="alert alert-danger my-4 d-none">
+        <strong style="font-size: 0.9em"
+          >Login gagal. Periksa kembali username/e-mail dan password
+          anda.</strong
+        >
+      </p>
+
+      <form class="my-4" id="_login-form" action="/admin/auth_login">
+        <div class="form-group">
+          <label class="mb-1" for="username">
+            <strong> Username </strong></label
+          >
+          <input
+            class="form-control rounded-0"
+            id="username"
+            name="username"
+            type="text"
+            data-validate-field="username"
+            placeholder="Input Admin Username"
+            autofocus
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="mb-1" for="password">
+            <strong> Password </strong></label
+          >
+          <input
+            class="form-control rounded-0"
+            id="password"
+            name="password"
+            type="password"
+            data-validate-field="password"
+            placeholder="Input your password ..."
+          />
+        </div>
+
+        <button
+          class="btn rounded-0"
+          style="
+            background-color: white;
+            border: 1px solid rgba(30, 30, 30, 0.2);
+          "
+        >
+          <strong> Login </strong>
+        </button>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<%- include("../../partials/form") %>
+
+<script>
+  $(document).ready(function () {
+    new window.JustValidate("#_login-form", {
+      rules: {
+        username: {
+          required: true,
+          minLength: 1,
+          maxLength: 20,
+        },
+        password: {
+          required: true,
+          minLength: 4,
+          maxLength: 20,
+        },
+      },
+      focusWrongField: true,
+
+      submitHandler: function (form, values, ajax) {
+        ajax({
+          url: form.action,
+          method: "POST",
+          data: values,
+          async: true,
+          callback: function (response) {
+            window.location.replace("/admin");
+          },
+          error: function (response) {
+            alert("AJAX submit error! \nResponse from server:" + response);
+          },
+        });
+      },
+
+      invalidFormCallback: function (errors) {
+        console.log(errors);
+      },
+    });
+  });
+</script>
+
+<%- include("../../partials/footer") %>

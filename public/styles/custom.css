@@ -119,6 +119,10 @@ select {
   display: none;
 }
 
+.dropdown-menu {
+  border-radius: 0;
+}
+
 @media (max-width: 767px) {
   ._profile-accordion-button[aria-expanded="true"] {
     color: #fff;
@@ -130,10 +134,21 @@ select {
 }
 
 @media (min-width: 992px) {
+  .dropdown:hover {
+    background-color: white;
+    border-bottom: 1px solid white;
+  }
+
   .dropdown:hover .dropdown-menu {
     display: block;
     margin-top: 0;
     width: 100%;
+    border-top: 0px;
+    color: black;
+  }
+
+  .dropdown:hover .dropdown-toggle {
+    color: black;
   }
 }
 

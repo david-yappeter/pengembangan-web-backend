@@ -1,4 +1,3 @@
-const student = require("../../../db/models/student");
 const { models } = require("../../../db/sequelize");
 
 const router = require("express").Router();
@@ -9,20 +8,6 @@ router.use((req, res, next) => {
   } else {
     res.redirect("/");
   }
-});
-
-router.get("/a", async (req, res) => {
-  await models.Student.findAll({
-    include: [models.ClassEnroll],
-    nest: true,
-  })
-    .then((students) => {
-      res.send(students.toJSON());
-    })
-    .catch((err) => {
-      console.log(err);
-      res.render("partials/page500");
-    });
 });
 
 router.get("/home", (req, res) => {

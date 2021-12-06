@@ -28,6 +28,7 @@ const modelDefiners = [
   require("./models/attendance"),
   require("./models/news"),
   require("./models/news_category"),
+  require("./models/admin"),
 ];
 
 for (const modelDefiner of modelDefiners) {

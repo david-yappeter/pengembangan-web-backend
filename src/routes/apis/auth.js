@@ -22,6 +22,30 @@ router.post("/auth_login", async (req, res) => {
       }
     })
     .catch((err) => {
+      console.log(err);
+      return res.status(500).send();
+    });
+});
+
+router.post("/admin/auth_login", async (req, res) => {
+  const { username, password } = req.body;
+
+  await models.Admin.findOne({
+    where: {
+      username: username,
+    },
+  })
+    .then((result) => {
+      if (result && bcryptjs.compareSync(password, result.toJSON().password)) {
+        req.session.admin = result.toJSON();
+        req.session.isAdmin = true;
+        res.status(200).send();
+      } else {
+        res.status(403).send();
+      }
+    })
+    .catch((err) => {
+      console.log(err);
       return res.status(500).send();
     });
 });
@@ -29,6 +53,11 @@ router.post("/auth_login", async (req, res) => {
 router.get("/logout", (req, res) => {
   req.session.isAuth = false;
   return res.redirect("/");
+});
+
+router.get("/admin/logout", (req, res) => {
+  req.session.isAdmin = false;
+  return res.redirect("/admin");
 });
 
 // passport.use(

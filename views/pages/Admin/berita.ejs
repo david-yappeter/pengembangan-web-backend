@@ -1,0 +1,28 @@
+<%- include("../../partials/header") %> <%-
+include("../../components/Student/header") %>
+
+<div class="container-fluid container-md px-0">
+  <%- include("../../components/Global/current-admin", {currentAdmin}) %>
+  <div class="text-right">
+    <a href="/admin/berita/create" class="btn btn-success m-3">
+      <i class="fa fa-plus" aria-hidden="true"></i>
+    </a>
+  </div>
+  <div class="card">
+    <div class="card-header" style="background-color: #094584; color: white">
+      <h4 class="card-title mb-0">Berita</h4>
+    </div>
+    <div class="card-body py-0">
+      <div class="row">
+        <% news.forEach((berita) => { %>
+        <div class="col-12 col-md-6 pb-md-5 pt-2 pt-md-3 news-block-container">
+          <%- include("../../components/Global/berita-card", {berita: berita})
+          %>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../../partials/footer") %>

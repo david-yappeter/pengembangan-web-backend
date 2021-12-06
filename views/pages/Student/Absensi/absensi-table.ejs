@@ -14,7 +14,7 @@
 </form>
 
 <div class="table-responsive">
-  <table class="table table-sm table-hover table-bordered text-center" style="font-size: 0.8rem">
+  <table class="table table-sm table-hover table-bordered text-center" style="font-size: 0.8rem; min-width: 1000px">
     <thead style="background: #094584;color: white">
       <tr>
         <th class="align-middle" scope="row" rowspan="2">No</th>
@@ -84,10 +84,8 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script>
-  const listenerFunc = () => {
-    //get the width of the window
+  const formButtonFunc = () => {
     var width = $(window).width();
-    //if the window is greater than 600px wide then turn on jScrollPane..
     if (width > 767) {
       $('form').addClass('form-inline')
       $('button').removeClass('btn-block')
@@ -96,6 +94,6 @@
       $('button[type=submit]').addClass('btn-block')
     }
   };
-  $(window).resize(listenerFunc);
-  listenerFunc();
+  $(window).resize(formButtonFunc);
+  formButtonFunc();
 </script>
