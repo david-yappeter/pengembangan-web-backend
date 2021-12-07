@@ -38,21 +38,19 @@ router.get("/admin/berita/create", (req, res) => {
 
 router.post("/admin/berita/insert", async (req, res) => {
   const { editor1, title, category } = req.body;
-  console.log("AAA", editor1);
-  // await models.News.create({
-  //   title: title,
-  //   content: editor1,
-  //   newsCategoriesName: category,
-  // })
-  //   .then((result) => {
-  //     console.log(result);
-  //     res.send(result);
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //     return res.render("partials/page500");
-  //   });
-  res.send(200);
+  await models.News.create({
+    title: title,
+    content: editor1,
+    newsCategoriesName: category,
+  })
+    .then((result) => {
+      console.log(result);
+      res.send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.render("partials/page500");
+    });
 });
 
 module.exports = router;

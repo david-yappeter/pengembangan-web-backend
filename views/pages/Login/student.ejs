@@ -190,7 +190,7 @@ include("../../components/TopFlag/banner") %>
         ajax({
           url: form.action,
           method: "POST",
-          data: values,
+          data: JSON.stringify(values),
           async: true,
           callback: function (response) {
             window.location.replace("/berita");
