@@ -15,9 +15,8 @@ include("../../components/Header/student") %>
     <div class="card-body py-0">
       <div class="row">
         <% news.forEach((berita) => { %>
-        <div class="col-12 col-md-6 pb-md-5 pt-2 pt-md-3 news-block-container">
-          <%- include("../../components/Global/berita-card", {berita: berita})
-          %>
+        <div id="#_news_removeable_container-<%= berita.id %>" class="col-12 col-md-6 pb-md-5 pt-2 pt-md-3 news-block-container">
+          <%- include("../../components/Global/berita-card", {berita: berita}) %>
         </div>
         <% }) %>
       </div>

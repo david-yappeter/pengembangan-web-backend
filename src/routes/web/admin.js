@@ -30,10 +30,19 @@ router.get("/admin", async (req, res) => {
     });
 });
 
-router.get("/admin/berita/create", (req, res) => {
-  return res.render("pages/Admin/berita-create", {
-    currentAdmin: req.session.admin,
-  });
+router.get("/admin/berita/create", async (req, res) => {
+  await models.NewsCategory.findAll()
+    .then((result) => {
+      result = result.map((item) => item.toJSON());
+      return res.render("pages/Admin/berita-create", {
+        categories: result,
+        currentAdmin: req.session.admin,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.render("partials/page500");
+    });
 });
 
 router.post("/admin/berita/insert", async (req, res) => {
@@ -50,6 +59,23 @@ router.post("/admin/berita/insert", async (req, res) => {
     .catch((err) => {
       console.log(err);
       return res.render("partials/page500");
+    });
+});
+
+router.delete("/admin/berita/delete/:id", async (req, res) => {
+  const { id } = req.params;
+  await models.News.destroy({
+    where: {
+      id: id,
+    },
+  })
+    .then((result) => {
+      console.log(result);
+      res.send(200);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send(err);
     });
 });
 

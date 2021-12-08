@@ -11,8 +11,18 @@ include("../../components/Header/student") %>
     <div class="card-body py-0">
       <div class="row">
         <form id="_berita-create-form" class="col-12" action="/admin/berita/insert" method="post">
-          <input class="my-3 form-control" name="title" id="title1"  placeholder="Title ..."/>
-          <input class="my-3 form-control" name="category" id="category1"  placeholder="Category"/>
+          <div class="form-group">
+            <input class="my-3 form-control" name="title" id="title1"  placeholder="Title ..."/>
+          </div>
+          <div class="form-group">
+            <label for="category"> Category: </label>
+            <select name="category" id="category">
+              <% categories.forEach((category) => { %>
+                <option value="<%= category.name %>"> <%= category.name %> </option>
+              <% }) %>
+            </select>
+          </div>
+          <!-- <input class="my-3 form-control" name="category" id="category1"  placeholder="Category"/> -->
 
           <label for="editor1"> Content: </label>
           <textarea name="editor1" id="editor1" ></textarea>
@@ -47,8 +57,7 @@ include("../../components/Header/student") %>
           async: true,
           dataType: "json",
           callback: function (response) {
-            console.log(response);
-            //window.location.replace("/admin/berita");
+            window.location.replace("/admin");
           },
           error: function (response) {
             alert("AJAX submit error! \nResponse from server:" + response);
