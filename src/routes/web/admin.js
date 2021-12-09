@@ -30,6 +30,29 @@ router.get("/admin", async (req, res) => {
     });
 });
 
+router.get("/admin/berita/detail/:id", async (req, res) => {
+  await models.News.findOne({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((result) => {
+      result = result.toJSON();
+      if (result) {
+        return res.render("pages/Admin/detail-berita", {
+          berita: result,
+          currentAdmin: req.session.admin,
+        });
+      } else {
+        res.render("partials/page404");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.render("partials/page500");
+    });
+});
+
 router.get("/admin/berita/create", async (req, res) => {
   await models.NewsCategory.findAll()
     .then((result) => {
@@ -78,5 +101,70 @@ router.delete("/admin/berita/delete/:id", async (req, res) => {
       res.status(500).send(err);
     });
 });
+
+// Class
+router.get("/admin/classes", async (req, res) => {
+  await models.Class.findAll()
+    .then((classes) => {
+      classes = classes.map((kelas) => kelas.toJSON());
+      return res.render("pages/Admin/Class/index", {
+        currentAdmin: req.session.admin,
+        classes: classes,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.render("partials/page500");
+    });
+});
+
+// ClassEnroll
+router.get("/admin/classes/:id/enroll", async (req, res) => {
+  const { id: classId } = req.params;
+  await models.ClassEnroll.findAll({
+    where: {
+      classes_id: classId,
+    },
+    include: [models.Class],
+  })
+    .then((classEnrolls) => {
+      classEnrolls = classEnrolls.map((classEnroll) => classEnroll.toJSON());
+      return res.render("pages/Admin/ClassEnroll/index", {
+        currentAdmin: req.session.admin,
+        classEnrolls: classEnrolls,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.render("partials/page500");
+    });
+});
+
+// ClassEnrollHasStudent
+router.get("/admin/classes/:id/enroll/students", async (req, res) => {
+  const { id: classId } = req.params;
+  await models.ClassEnroll.findOne({
+    where: {
+      classes_id: classId,
+    },
+    include: [models.Class, models.Student],
+  })
+    .then((classEnroll) => {
+      classEnroll = classEnroll.toJSON();
+      console.log(classEnroll);
+      return res.render("pages/Admin/ClassEnrollHasStudent/index", {
+        currentAdmin: req.session.admin,
+        classEnroll: classEnroll,
+        semester: models.ClassEnroll.convertToRoman(classEnroll.semester),
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.render("partials/page500");
+    });
+});
+
+// Student
+router.get("/admin/students", async (req, res) => {});
 
 module.exports = router;

@@ -1,0 +1,59 @@
+<%- include("../../../partials/header") %>
+<%- include("../../../components/Header/admin") %>
+
+<div class="container-fluid container-md px-0">
+  <%- include("../../../components/Global/current-admin", {currentAdmin}) %>
+  <div class="card">
+    <div class="card-header" style="background-color: #094584; color: white">
+      <h4 class="card-title mb-0">Kelas</h4>
+    </div>
+    <div class="text-right">
+      <a href="/admin/berita/create" class="btn btn-success m-3">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </a>
+    </div>
+    <div class="card-body py-0">
+      <div class="row">
+        <div class="col-12 pb-md-5 pt-2 pt-md-3">
+          <!-- table - start -->
+          <div class="table-responsive">
+            <table class="table table-sm table-hover table-bordered text-center" style="font-size: 0.8rem">
+              <thead>
+                <tr style="background: #094584;color: white">
+                  <th scope="col">ID</th>
+                  <th scope="col">Nama</th>
+                  <th scope="col">Program Studi</th>
+                  <th scope="col">Akronim</th>
+                  <th scope="col">Huruf</th>
+                  <th scope="col" style="width: 100px;"></th>
+                </tr>
+              </thead>
+              <tbody style="font-size: 0.9rem">
+                <% classes.forEach((kelas) => { %>
+                <tr>
+                  <td class="align-middle"> <%= kelas.id %> </td>
+                  <td class="align-middle"> <%= kelas.acronym %>-<%= kelas.letter %> </td>
+                  <td class="align-middle"> <%= kelas.studyProgram %> </td>
+                  <td class="align-middle"> <%= kelas.acronym %> </td>
+                  <td class="align-middle"> <%= kelas.letter %> </td>
+                  <td class="d-flex justify-content-around" > 
+                    <a href="/admin/classes/<%= kelas.id %>/enroll" class="btn btn-secondary btn-sm">
+                      <i class="fa fa-eye fa-xs" aria-hidden="true"></i>
+                    </a>
+                    <a class="btn btn-success btn-sm">
+                      <i class="fa fa-pencil fa-xs" aria-hidden="true"></i>
+                    </a>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+          <!-- table - end -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../../../partials/footer") %>

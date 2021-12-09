@@ -17,28 +17,4 @@
       beritaDate.getMinutes() + ":" + beritaDate.getSeconds() %>
     </span>
   </div>
-
-  <button id="_news-delete-<%= berita.id %>" class="btn btn-danger align-self-center ml-auto">
-    <i class="fa fa-trash"></i>
-  </button>
 </div>
-
-<%- include("../../partials/jquery") %>
-
-<script>
-  $(document).ready(function() {
-    $("#_news-delete-<%= berita.id %>").click(function() {
-      $.ajax({
-        url: "/admin/berita/delete/<%= berita.id %>",
-        type: "DELETE",
-        success: function(data) {
-          console.log($("#_news-card-<%= berita.id %>"));
-          $("#_news_removeable_container-<%= berita.id %>").remove();
-        },
-        error: function(err) {
-          console.log(err);
-        }
-      });
-    });
-  });
-</script>

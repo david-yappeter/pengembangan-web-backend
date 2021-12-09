@@ -1,5 +1,5 @@
-<%- include("../../partials/header") %> <%-
-include("../../components/Header/student") %>
+<%- include("../../partials/header") %>
+<%- include("../../components/Header/admin") %>
 
 <div class="container-fluid container-md px-0">
   <%- include("../../components/Global/current-admin", {currentAdmin}) %>
@@ -15,8 +15,8 @@ include("../../components/Header/student") %>
     <div class="card-body py-0">
       <div class="row">
         <% news.forEach((berita) => { %>
-        <div id="#_news_removeable_container-<%= berita.id %>" class="col-12 col-md-6 pb-md-5 pt-2 pt-md-3 news-block-container">
-          <%- include("../../components/Global/berita-card", {berita: berita}) %>
+        <div id="_news_removeable_container-<%= berita.id %>" class="col-12 col-md-6 pb-md-5 pt-2 pt-md-3 news-block-container">
+          <%- include("./berita-card", {berita: berita}) %>
         </div>
         <% }) %>
       </div>

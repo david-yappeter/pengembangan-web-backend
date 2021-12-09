@@ -1,0 +1,70 @@
+<div class="d-flex">
+  <img
+    src="https://mika.mikroskil.ac.id/bundles/mikaglobal/images/berita.png"
+    class="d-none d-md-block mr-3"
+    style="height: 60px"
+  />
+  <div>
+    <h6 class="mb-0">
+      <a href="/admin/berita/detail/<%= berita.id %>" class="news-title"> <%= berita.title %> </a>
+    </h6>
+    <span class="news-category"> <%= berita.newsCategoriesName %> </span>
+    <span class="news-date">
+      <% beritaDate = new Date(berita.createdAt) %> 
+      - <%=
+      beritaDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short',
+      year: 'numeric' }) + " " + beritaDate.getHours() + ":" +
+      beritaDate.getMinutes() + ":" + beritaDate.getSeconds() %>
+    </span>
+  </div>
+
+  <!-- Delete Button - Start -->
+  <button class="btn btn-danger align-self-center ml-auto" data-toggle="modal" data-target="#delete-news-<%= berita.id %>">
+    <i class="fa fa-trash"></i>  
+  </button>
+  <!-- Delete Button - End -->
+
+  <!-- Delete Modal - Start -->
+  <div class="modal fade" id="delete-news-<%= berita.id %>" tabindex="-1" aria-labelledby="exampleModalLabel-<%= berita.id %>" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete News</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Delete <strong> <%= berita.title %> </strong>  ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button id="_news-delete-<%= berita.id %>" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Delete Modal - End -->
+</div>
+
+<%- include("../../partials/jquery") %>
+
+<script>
+  $(document).ready(function() {
+    $("#_news-delete-<%= berita.id %>").click(function() {
+      $.ajax({
+        url: "/admin/berita/delete/<%= berita.id %>",
+        type: "DELETE",
+        success: function(data) {
+          console.log($("#_news-card-<%= berita.id %>"));
+          setTimeout(function() {
+            $("#_news_removeable_container-<%= berita.id %>").remove();
+          }, 500);
+        },
+        error: function(err) {
+          console.log(err);
+        }
+      });
+    });
+  });
+</script>

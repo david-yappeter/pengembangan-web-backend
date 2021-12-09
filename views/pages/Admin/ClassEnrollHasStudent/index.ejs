@@ -1,0 +1,43 @@
+<%- include("../../../partials/header") %>
+<%- include("../../../components/Header/admin") %>
+
+<div class="container-fluid container-md px-0">
+  <%- include("../../../components/Global/current-admin", {currentAdmin}) %>
+  <div class="card">
+    <div class="card-header" style="background-color: #094584; color: white">
+      <h4 class="card-title mb-0">Kelas <%= classEnroll.Class.acronym %>-<%= classEnroll.Class.letter %> (<%= classEnroll.startYear %>) / <%= semester %></h4>
+    </div>
+    <div class="card-body py-0">
+      <div class="row">
+        <div class="col-12 pb-md-5 pt-2 pt-md-3">
+          <!-- table - start -->
+          <div class="table-responsive">
+            <table class="table table-sm table-hover table-bordered text-center" style="font-size: 0.8rem">
+              <thead>
+                <tr style="background: #094584;color: white">
+                  <th scope="col">NIM</th>
+                  <th scope="col">Nama</th>
+                  <th scope="col">Jenis Kelamin</th>
+                  <th scope="col">Email</th>
+                </tr>
+              </thead>
+              <tbody style="font-size: 0.9rem">
+                <% classEnroll.Students.forEach((student) => { %>
+                <tr>
+                  <td> <%= student.nim %></td>
+                  <td> <%= student.name %></td>
+                  <td> <%= student.sex === "L" ? "Laki-Laki" : "Perempuan" %> </td>
+                  <td> <%= student.email %> </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+          <!-- table - end -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../../../partials/footer") %>
