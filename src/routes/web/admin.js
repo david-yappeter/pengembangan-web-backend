@@ -143,11 +143,25 @@ router.get("/admin/classes/:id/enroll", async (req, res) => {
 // ClassEnrollHasStudent
 router.get("/admin/classes/:id/enroll/students", async (req, res) => {
   const { id: classId } = req.params;
+  const { page } = req.query;
   await models.ClassEnroll.findOne({
     where: {
       classes_id: classId,
     },
-    include: [models.Class, models.Student],
+    include: [
+      models.Class,
+      {
+        model: models.StudentHasClassEnroll,
+        include: [
+          {
+            model: models.Student,
+            limit: 5,
+            offset: page ? (page - 1) * 5 : 0,
+            separate: true,
+          },
+        ],
+      },
+    ],
   })
     .then((classEnroll) => {
       classEnroll = classEnroll.toJSON();
@@ -155,6 +169,7 @@ router.get("/admin/classes/:id/enroll/students", async (req, res) => {
       return res.render("pages/Admin/ClassEnrollHasStudent/index", {
         currentAdmin: req.session.admin,
         classEnroll: classEnroll,
+        page: page ? page : 1,
         semester: models.ClassEnroll.convertToRoman(classEnroll.semester),
       });
     })

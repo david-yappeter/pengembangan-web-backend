@@ -34,10 +34,24 @@
             </table>
           </div>
           <!-- table - end -->
+
+          <ul class="sync-pagination"></ul>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  $('.sync-pagination').twbsPagination({
+    totalPages: 20,
+    visiblePages: 4,
+    initiateStartPageClick: false,
+    startPage: "<%= page %>",
+    onPageClick: function (evt, page) {
+      window.location.replace(window.location.href.split("?")[0] + "?page=" + page);
+    },
+  });
+</script>
 
 <%- include("../../../partials/footer") %>
