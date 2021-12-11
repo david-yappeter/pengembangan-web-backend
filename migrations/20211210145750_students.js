@@ -1,6 +1,6 @@
 exports.up = function (knex) {
   return knex.schema.createTable("students", (table) => {
-    table.bigInteger("nim").primary();
+    table.bigInteger("nim").primary().unsigned();
     table.string("name", 255).notNullable();
     table.string("nik", 20).notNullable();
     table.string("place_of_birth", 100).notNullable();
@@ -16,4 +16,6 @@ exports.up = function (knex) {
   });
 };
 
-exports.down = function (knex) {};
+exports.down = function (knex) {
+  return knex.schema.dropTable("students");
+};

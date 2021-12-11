@@ -3,7 +3,7 @@ const timestampData = require("./global");
 
 class NewsCategory extends Model {
   static tableName() {
-    return "news_category";
+    return "news_categories";
   }
 
   static sequelizeInit(sequelize) {
