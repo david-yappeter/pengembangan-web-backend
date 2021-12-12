@@ -33,21 +33,21 @@
     </thead>
     <tbody style="font-size: 0.9rem">
       <% if(currentClassEnroll) { %>
-        <% currentClassEnroll.ClassEnrollSubjects.forEach((item, idx) => { %>
+        <% currentClassEnroll.class_enroll_subjects.forEach((item, idx) => { %>
           <tr>
             <td><%= idx + 1 %></td>
-            <td><%= item.subjectsCode %></td>
+            <td><%= item.subject_code %></td>
             <td class="text-left">
-              <strong><%= item.Subject.name %></strong>
+              <strong><%= item.subject.name %></strong>
               <%= item.day %>,
-              <%= item.startTime.substring(0,5) %>-<%= item.endTime.substring(0,5) %>
-              [<%= item.Lecturer.name %>]
+              <%= item.start_time.substring(0,5) %>-<%= item.end_time.substring(0,5) %>
+              [<%= item.lecturer.name %>]
             </td>
             <% let kehadiran = 0, maxKehadiran = 0 %>
             <% if(maxPertemuan) { %>
               <% for(let i = 1; i <= maxPertemuan; i++) { %>
-                <% if(item.Attendances[i]) { %>
-                  <% attendance = item.Attendances[i] %>
+                <% if(item.attendances[i]) { %>
+                  <% attendance = item.attendances[i] %>
                   <% if (attendance.status == 1) { %>
                     <td style="background-color: #4d70b7; color: white">H</td>
                     <% kehadiran++;maxKehadiran++ %>
@@ -72,7 +72,7 @@
                 <%= Math.ceil(kehadiran/maxKehadiran * 100) %> %
               <% } %>
             </td>
-            <td><%= Math.ceil(((new Date("01/01/2007 " + item.endTime).getHours() * 60 + new Date("01/01/2007 " + item.endTime).getMinutes()) - (new Date("01/01/2007 " + item.startTime).getHours() * 60 + new Date("01/01/2007 " + item.startTime).getMinutes())) /  60.0)  %></td>
+            <td><%= Math.ceil(((new Date("01/01/2007 " + item.end_time).getHours() * 60 + new Date("01/01/2007 " + item.end_time).getMinutes()) - (new Date("01/01/2007 " + item.start_time).getHours() * 60 + new Date("01/01/2007 " + item.start_time).getMinutes())) /  60.0)  %></td>
           </tr> 
         <% }) %>
       <% } else { %>

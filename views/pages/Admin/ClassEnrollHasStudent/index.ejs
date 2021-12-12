@@ -5,7 +5,7 @@
   <%- include("../../../components/Global/current-admin", {currentAdmin}) %>
   <div class="card">
     <div class="card-header" style="background-color: #094584; color: white">
-      <h4 class="card-title mb-0">Kelas <%= classEnroll.Class.acronym %>-<%= classEnroll.Class.letter %> (<%= classEnroll.startYear %>) / <%= semester %></h4>
+      <h4 class="card-title mb-0">Kelas <%= classEnroll.class.acronym %>-<%= classEnroll.class.letter %> (<%= classEnroll.startYear %>) / <%= semester %></h4>
     </div>
     <div class="card-body py-0">
       <div class="row">
@@ -22,7 +22,7 @@
                 </tr>
               </thead>
               <tbody style="font-size: 0.9rem">
-                <% classEnroll.Students.forEach((student) => { %>
+                <% classEnroll.students.forEach((student) => { %>
                 <tr>
                   <td> <%= student.nim %></td>
                   <td> <%= student.name %></td>

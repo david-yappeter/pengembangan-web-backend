@@ -1,3 +1,7 @@
+const { Class } = require("../../../db/models/class");
+const { ClassEnroll } = require("../../../db/models/class_enroll");
+const { News } = require("../../../db/models/news");
+const { NewsCategory } = require("../../../db/models/news_category");
 const { models } = require("../../../db/sequelize");
 
 const router = require("express").Router();
@@ -11,16 +15,15 @@ router.use("/admin", (req, res, next) => {
 });
 
 router.get("/admin", async (req, res) => {
-  await models.News.findAndCountAll({
-    limit: 10,
-    offset: req.query.page ? (req.query.page - 1) * 10 : 0,
-  })
+  const page = req.query.page || 1;
+  const limit = 10;
+  News.query()
+    .page(page - 1, limit)
     .then((result) => {
-      result.rows = result.rows.map((item) => item.toJSON());
       return res.render("pages/Admin/berita", {
-        news: result.rows,
-        count: result.count,
-        page: req.query.page ? req.query.page : 1,
+        news: result.results,
+        count: result.total,
+        page: page,
         currentAdmin: req.session.admin,
       });
     })
@@ -31,13 +34,9 @@ router.get("/admin", async (req, res) => {
 });
 
 router.get("/admin/berita/detail/:id", async (req, res) => {
-  await models.News.findOne({
-    where: {
-      id: req.params.id,
-    },
-  })
+  News.query()
+    .findById(req.params.id)
     .then((result) => {
-      result = result.toJSON();
       if (result) {
         return res.render("pages/Admin/detail-berita", {
           berita: result,
@@ -54,9 +53,8 @@ router.get("/admin/berita/detail/:id", async (req, res) => {
 });
 
 router.get("/admin/berita/create", async (req, res) => {
-  await models.NewsCategory.findAll()
+  NewsCategory.query()
     .then((result) => {
-      result = result.map((item) => item.toJSON());
       return res.render("pages/Admin/berita-create", {
         categories: result,
         currentAdmin: req.session.admin,
@@ -104,9 +102,8 @@ router.delete("/admin/berita/delete/:id", async (req, res) => {
 
 // Class
 router.get("/admin/classes", async (req, res) => {
-  await models.Class.findAll()
+  Class.query()
     .then((classes) => {
-      classes = classes.map((kelas) => kelas.toJSON());
       return res.render("pages/Admin/Class/index", {
         currentAdmin: req.session.admin,
         classes: classes,
@@ -121,14 +118,13 @@ router.get("/admin/classes", async (req, res) => {
 // ClassEnroll
 router.get("/admin/classes/:id/enroll", async (req, res) => {
   const { id: classId } = req.params;
-  await models.ClassEnroll.findAll({
-    where: {
-      classes_id: classId,
-    },
-    include: [models.Class],
-  })
+
+  ClassEnroll.query()
+    .where({
+      class_id: classId,
+    })
+    .withGraphFetched("[class]")
     .then((classEnrolls) => {
-      classEnrolls = classEnrolls.map((classEnroll) => classEnroll.toJSON());
       return res.render("pages/Admin/ClassEnroll/index", {
         currentAdmin: req.session.admin,
         classEnrolls: classEnrolls,
@@ -141,36 +137,27 @@ router.get("/admin/classes/:id/enroll", async (req, res) => {
 });
 
 // ClassEnrollHasStudent
-router.get("/admin/classes/:id/enroll/students", async (req, res) => {
-  const { id: classId } = req.params;
+router.get("/admin/class_enrolls/:id/students", async (req, res) => {
+  const { id: classEnrollId } = req.params;
   const { page } = req.query;
-  await models.ClassEnroll.findOne({
-    where: {
-      classes_id: classId,
-    },
-    include: [
-      models.Class,
-      {
-        model: models.StudentHasClassEnroll,
-        include: [
-          {
-            model: models.Student,
-            limit: 5,
-            offset: page ? (page - 1) * 5 : 0,
-            separate: true,
-          },
-        ],
+  const limit = 3;
+
+  ClassEnroll.query()
+    .findById(classEnrollId)
+    .withGraphFetched("[class,students(student)]")
+    .modifiers({
+      student: (builder) => {
+        builder.limit(limit);
+        builder.offset(limit * (page - 1));
       },
-    ],
-  })
+    })
     .then((classEnroll) => {
-      classEnroll = classEnroll.toJSON();
       console.log(classEnroll);
       return res.render("pages/Admin/ClassEnrollHasStudent/index", {
         currentAdmin: req.session.admin,
         classEnroll: classEnroll,
-        page: page ? page : 1,
-        semester: models.ClassEnroll.convertToRoman(classEnroll.semester),
+        page: page || 1,
+        semester: ClassEnroll.convertToRoman(classEnroll.semester),
       });
     })
     .catch((err) => {

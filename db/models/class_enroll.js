@@ -10,6 +10,7 @@ class ClassEnroll extends Model {
     const { ClassEnrollSubject } = require("./class_enroll_subject");
     const { Student } = require("./student");
     const { Lecturer } = require("./lecturer");
+    const { StudentHasClassEnroll } = require("./student_has_class_enroll");
 
     return {
       class: {
@@ -34,8 +35,8 @@ class ClassEnroll extends Model {
         join: {
           from: this.tableName + ".id",
           through: {
-            from: ClassEnrollSubject.tableName + ".class_enroll_id",
-            to: ClassEnrollSubject.tableName + ".student_nim",
+            from: StudentHasClassEnroll.tableName + ".class_enroll_id",
+            to: StudentHasClassEnroll.tableName + ".student_nim",
           },
           to: Student.tableName + ".nim",
         },
@@ -92,6 +93,8 @@ class ClassEnroll extends Model {
       while (i--) roman = (key[+digits.pop() + i * 10] || "") + roman;
       return Array(+digits.join("") + 1).join("M") + roman;
     }
+
+    return romanize(num);
   }
 }
 

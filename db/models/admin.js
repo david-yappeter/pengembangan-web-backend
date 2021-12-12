@@ -1,5 +1,4 @@
-const { Model, DataTypes } = require("sequelize/dist");
-const timestampData = require("./global");
+const { Model } = require("objection");
 
 class Admin extends Model {
   static get tableName() {
