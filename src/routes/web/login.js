@@ -1,3 +1,5 @@
+const { Student } = require("../../../db/models/student");
+
 const router = require("express").Router();
 
 router.get("/", (req, res) => {
@@ -14,6 +16,17 @@ router.get("/admin/login", (req, res) => {
   } else {
     res.render("pages/Login/admin.ejs");
   }
+});
+
+router.get("/test", async (req, res) => {
+  const resp = await Student.query().first();
+  console.log(resp);
+
+  // await knexCon("students").then((rows) => {
+  //   console.log(rows);
+  // });
+
+  res.send("asd");
 });
 
 module.exports = router;

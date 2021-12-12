@@ -10,14 +10,14 @@ include("../../components/Header/student") %>
     <div class="card-body py-0">
       <div class="container-fluid my-3">
         <h5>Published: 
-          <% beritaDate = new Date(berita.createdAt) %> 
+          <% beritaDate = new Date(berita.created_at) %> 
           <%=
           beritaDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long',
           year: 'numeric' }) + " " + beritaDate.getHours() + ":" +
           beritaDate.getMinutes() + ":" + beritaDate.getSeconds() %>  
         </h5>
         <h5>
-          Kategori: <%= berita.newsCategoriesName %>
+          Kategori: <%= berita.news_category_name %>
         </h5>
         <div>
           <%- berita.content %>

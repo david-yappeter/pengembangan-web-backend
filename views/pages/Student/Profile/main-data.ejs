@@ -5,9 +5,9 @@
   />
   <div class="container-fluid my-md-5 font-weight-bold">
     <%- include("./main-data-column", {key: "Nama / NIM",  value:  student.name + " / " + student.nim}) %>
-    <%- include("./main-data-column", {key: "Program Studi / Kelas",  value:  currentClassEnroll.Class.studyProgram + " / " + currentClassEnroll.Class.letter}) %>
-    <%- include("./main-data-column", {key: "Peminatan",  value:  currentClassEnroll.Class.studyProgram }) %>
+    <%- include("./main-data-column", {key: "Program Studi / Kelas",  value:  currentClassEnroll.class.study_program + " / " + currentClassEnroll.class.letter}) %>
+    <%- include("./main-data-column", {key: "Peminatan",  value:  currentClassEnroll.class.study_program }) %>
     <%- include("./main-data-column", {key: "Semester / Waktu Kuliah",  value:  currentClassEnroll.semester + " / " + currentClassEnroll.time }) %>
-    <%- include("./main-data-column", {key: "Dosen Wali",  value:  currentClassEnroll.Lecturer.name }) %>
+    <%- include("./main-data-column", {key: "Dosen Wali",  value:  currentClassEnroll.lecturer.name }) %>
   </div>
 </div>

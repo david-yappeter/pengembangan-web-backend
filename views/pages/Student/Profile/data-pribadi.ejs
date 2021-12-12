@@ -4,8 +4,8 @@
   <h5>Data Pribadi dan Kontak</h5>
   <%- include('./data-pribadi-column', { key: "NIK", value: currentLogin.nik }) %> 
   <%- include('./data-pribadi-column', { key: "Tempat, Tanggal Lahir", value:
-  currentLogin.placeOfBirth + ", " + new
-  Date(currentLogin.dateOfBirth).toLocaleDateString('en-GB', {day: 'numeric',
+  currentLogin.place_of_birth + ", " + new
+  Date(currentLogin.date_of_birth).toLocaleDateString('en-GB', {day: 'numeric',
   month: 'long', year: 'numeric'})}) 
   %>
   <%- include("./data-pribadi-column", {key: "Agama", value: currentLogin.religion }) %>

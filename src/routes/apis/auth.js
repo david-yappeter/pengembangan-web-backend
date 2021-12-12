@@ -1,20 +1,21 @@
 const bcryptjs = require("bcryptjs");
 const express = require("express");
-const { models } = require("../../../db/sequelize");
+const { Admin } = require("../../../db/models/admin");
+const { Student } = require("../../../db/models/student");
 
 const router = express.Router();
 
 router.post("/auth_login", async (req, res) => {
   const { username, password } = req.body;
 
-  await models.Student.findOne({
-    where: {
+  Student.query()
+    .where({
       nim: username,
-    },
-  })
+    })
+    .first()
     .then((result) => {
-      if (result && bcryptjs.compareSync(password, result.toJSON().password)) {
-        req.session.login = result.toJSON();
+      if (result && bcryptjs.compareSync(password, result.password)) {
+        req.session.login = result;
         req.session.isAuth = true;
         res.status(200).send();
       } else {
@@ -30,14 +31,14 @@ router.post("/auth_login", async (req, res) => {
 router.post("/admin/auth_login", async (req, res) => {
   const { username, password } = req.body;
 
-  await models.Admin.findOne({
-    where: {
+  Admin.query()
+    .where({
       username: username,
-    },
-  })
+    })
+    .first()
     .then((result) => {
-      if (result && bcryptjs.compareSync(password, result.toJSON().password)) {
-        req.session.admin = result.toJSON();
+      if (result && bcryptjs.compareSync(password, result.password)) {
+        req.session.admin = result;
         req.session.isAdmin = true;
         res.status(200).send();
       } else {
@@ -59,38 +60,5 @@ router.get("/admin/logout", (req, res) => {
   req.session.isAdmin = false;
   return res.redirect("/admin");
 });
-
-// passport.use(
-//   new CookieStrategy(function (token, done) {
-//     done(null, { id: "123", username: "test" });
-//   })
-// );
-// passport.use(
-//   new CookieStrategy(function (token, done) {
-//     done(null, { id: "123", username: "test" });
-//   })
-// );
-
-// router.get(
-//   "/api/users/profile",
-//   passport.authenticate("cookie", { session: false }),
-//   function (req, res) {
-//     res.json(req);
-//   }
-// );
-
-// router.post("/api/users/login", (req, res) => {
-//   res.cookie(
-//     "token",
-//     {
-//       val: "of cookie",
-//     },
-//     {
-//       httpOnly: true,
-//     }
-//   );
-
-//   return res.status(200).send();
-// });
 
 module.exports = router;

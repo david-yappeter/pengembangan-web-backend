@@ -1,4 +1,6 @@
-const knex = require("knex")({
+const { Model } = require("objection");
+
+const knexCon = require("knex")({
   client: "mysql2",
   connection: {
     host: process.env.DB_HOST,
@@ -9,4 +11,4 @@ const knex = require("knex")({
   },
 });
 
-module.exports = knex;
+Model.knex(knexCon);

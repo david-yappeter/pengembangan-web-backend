@@ -4,9 +4,8 @@ require("express-async-errors");
 require("dotenv").config({
   path: path.resolve(__dirname, ".env.local"),
 });
-const sequelize = require("./db/sequelize");
 const session = require("express-session");
-const res = require("express/lib/response");
+require("./db/knex");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -36,23 +35,7 @@ app.all("*", (req, res) => {
   res.render("partials/page404");
 });
 
-async function assertDatabaseConnectionOk() {
-  console.log("Checking database connection...");
-  try {
-    await sequelize.authenticate();
-    console.log("Database connection OK");
-
-    sequelize.sync();
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-    console.log(error.message);
-    process.exit(1);
-  }
-}
-
 async function init() {
-  await assertDatabaseConnectionOk();
-
   app.listen(PORT, () => {
     console.log(`Listen and serve at http://localhost:${PORT}`);
   });

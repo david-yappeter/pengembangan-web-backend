@@ -1,26 +1,27 @@
-const { DataTypes, Model } = require("sequelize/dist");
-const timestampData = require("./global");
+const { Model } = require("objection");
 
 class NewsCategory extends Model {
-  static tableName() {
+  static get tableName() {
     return "news_categories";
   }
 
-  static sequelizeInit(sequelize) {
-    this.init(
-      {
-        name: {
-          type: DataTypes.STRING(45),
-          primaryKey: true,
+  static get idColumn() {
+    return "name";
+  }
+
+  static get relationMappings() {
+    const { News } = require("./news");
+
+    return {
+      news: {
+        relation: Model.HasManyRelation,
+        modelClass: News,
+        join: {
+          from: this.tableName + ".name",
+          to: News.tableName + ".news_category_name",
         },
-        ...timestampData(sequelize),
       },
-      {
-        sequelize,
-        modelName: "NewsCategory",
-        tableName: NewsCategory.tableName(),
-      }
-    );
+    };
   }
 }
 

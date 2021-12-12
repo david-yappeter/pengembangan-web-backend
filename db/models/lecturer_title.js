@@ -1,47 +1,23 @@
-const { Model, DataTypes } = require("sequelize/dist");
-const timestampData = require("./global");
+const { Model } = require("objection");
 
 class LecturerTitle extends Model {
-  static tableName() {
+  static get tableName() {
     return "lecturer_titles";
   }
 
-  static sequelizeInit(sequelize) {
-    this.init(
-      {
-        id: {
-          type: DataTypes.INTEGER,
-          primaryKey: true,
-          autoIncrement: true,
+  static get relationMappings() {
+    const { Lecturer } = require("./lecturer");
+
+    return {
+      lecturer: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Lecturer,
+        join: {
+          from: this.tableName + ".lecturer_nip",
+          to: Lecturer.tableName + ".nip",
         },
-        level: {
-          type: DataTypes.STRING(10),
-          allowNull: false,
-        },
-        title: {
-          type: DataTypes.STRING(10),
-          allowNull: false,
-        },
-        year: {
-          type: DataTypes.INTEGER,
-          allowNull: false,
-        },
-        educationPlace: {
-          type: DataTypes.STRING(100),
-          allowNull: false,
-        },
-        field: {
-          type: DataTypes.STRING(100),
-          allowNull: false,
-        },
-        ...timestampData(sequelize),
       },
-      {
-        sequelize,
-        modelName: "LecturerTitle",
-        tableName: "lecturer_titles",
-      }
-    );
+    };
   }
 }
 

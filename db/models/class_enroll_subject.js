@@ -1,8 +1,7 @@
-const { Model, DataTypes } = require("sequelize/dist");
-const timestampData = require("./global");
+const { Model } = require("objection");
 
 class ClassEnrollSubject extends Model {
-  static tableName() {
+  static get tableName() {
     return "class_enroll_subjects";
   }
 
@@ -22,34 +21,55 @@ class ClassEnrollSubject extends Model {
     return arr;
   }
 
-  static sequelizeInit(sequelize) {
-    this.init(
-      {
-        id: {
-          type: DataTypes.INTEGER,
-          primaryKey: true,
-          autoIncrement: true,
+  static get relationMappings() {
+    const { Room } = require("./room");
+    const { Subject } = require("./subject");
+    const { ClassEnroll } = require("./class_enroll");
+    const { Lecturer } = require("./lecturer");
+    const { Attendance } = require("./attendance")
+
+    return {
+      room: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Room,
+        join: {
+          from: this.tableName + ".room_name",
+          to: Room.tableName + ".name",
         },
-        day: {
-          type: DataTypes.ENUM("Senin", "Selasa", "Rabu", "Kamis", "Jumat"),
-          allowNull: false,
-        },
-        startTime: {
-          type: DataTypes.TIME,
-          allowNull: false,
-        },
-        endTime: {
-          type: DataTypes.TIME,
-          allowNull: false,
-        },
-        ...timestampData(sequelize),
       },
-      {
-        sequelize,
-        modelName: "ClassEnrollSubject",
-        tableName: ClassEnrollSubject.tableName(),
+      subject: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Subject,
+        join: {
+          from: this.tableName + ".subject_code",
+          to: Subject.tableName + ".code",
+        },
+      },
+      class_enroll_subject: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: ClassEnroll,
+        join: {
+          from: this.tableName + ".class_enroll_id",
+          to: ClassEnroll.tableName + ".id",
+        },
+      },
+      lecturer: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Lecturer,
+        join: {
+          from: this.tableName + ".lecturer_nip",
+          to: Lecturer.tableName + ".nip",
+        },
+      },
+      attendances: {
+        relation: Model.HasManyRelation,
+        modelClass: Attendance,
+        join: {
+          from: this.tableName + ".id",
+          to: Attendance.tableName + ".class_enroll_subject_id",
+        }
       }
-    );
+    };
   }
 }
 

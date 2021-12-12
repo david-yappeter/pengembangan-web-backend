@@ -1,35 +1,23 @@
-const { Model, DataTypes } = require("sequelize/dist");
-const timestampData = require("./global");
+const { Model } = require("objection");
 
 class News extends Model {
-  static tableName() {
+  static get tableName() {
     return "news";
   }
 
-  static sequelizeInit(sequelize) {
-    this.init(
-      {
-        id: {
-          type: DataTypes.INTEGER,
-          primaryKey: true,
-          autoIncrement: true,
+  static get relationMappings() {
+    const { NewsCategory } = require("./news_category");
+
+    return {
+      news_category: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: NewsCategory,
+        join: {
+          from: this.tableName + ".news_category_name",
+          to: NewsCategory.tableName + ".name",
         },
-        title: {
-          type: DataTypes.STRING(255),
-          allowNull: false,
-        },
-        content: {
-          type: DataTypes.TEXT,
-          allowNull: false,
-        },
-        ...timestampData(sequelize),
       },
-      {
-        sequelize,
-        modelName: "News",
-        tableName: News.tableName(),
-      }
-    );
+    };
   }
 }
 

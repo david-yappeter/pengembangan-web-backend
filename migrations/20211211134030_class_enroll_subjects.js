@@ -17,7 +17,7 @@ exports.up = function (knex) {
       .notNullable()
       .unsigned();
     table
-      .string("subjects_code")
+      .string("subject_code")
       .references("code")
       .inTable("subjects")
       .onDelete("CASCADE")

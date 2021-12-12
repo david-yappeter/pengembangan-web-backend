@@ -1,4 +1,9 @@
-const { models } = require("../../../db/sequelize");
+const { ClassEnroll } = require("../../../db/models/class_enroll");
+const {
+  ClassEnrollSubject,
+} = require("../../../db/models/class_enroll_subject");
+const { News } = require("../../../db/models/news");
+const { Student } = require("../../../db/models/student");
 
 const router = require("express").Router();
 
@@ -15,16 +20,14 @@ router.get("/home", (req, res) => {
 });
 
 router.get("/berita", async (req, res) => {
-  await models.News.findAndCountAll({
-    limit: 10,
-    offset: req.query.page ? (req.query.page - 1) * 10 : 0,
-  })
+  const { page } = req.query.page || 1;
+  News.query()
+    .page(page - 1, 10)
     .then((result) => {
-      result.rows = result.rows.map((item) => item.toJSON());
       return res.render("pages/Student/berita", {
-        news: result.rows,
-        count: result.count,
-        page: req.query.page ? req.query.page : 1,
+        news: result.results,
+        count: result.total,
+        page: page,
         currentLogin: req.session.login,
       });
     })
@@ -35,13 +38,12 @@ router.get("/berita", async (req, res) => {
 });
 
 router.get("/berita/detail/:id", async (req, res) => {
-  await models.News.findOne({
-    where: {
+  News.query()
+    .where({
       id: req.params.id,
-    },
-  })
+    })
+    .first()
     .then((result) => {
-      result = result.toJSON();
       if (result) {
         return res.render("pages/Student/detail-berita", {
           berita: result,
@@ -58,52 +60,88 @@ router.get("/berita/detail/:id", async (req, res) => {
 });
 
 router.get("/profile", async (req, res) => {
-  await models.Student.findByPk(req.session.login.nim, {
-    include: [
-      {
-        model: models.ClassEnroll,
-        order: [["semester", "ASC"]],
-        include: [
-          {
-            model: models.ClassEnrollSubject,
-            include: [models.Subject],
-          },
-          models.Class,
-          models.Lecturer,
-        ],
+  Student.query()
+    .findById(req.session.login.nim)
+    .withGraphFetched(
+      "[class_enrolls(orderSemester).[class_enroll_subjects.[subject],class,lecturer]]"
+    )
+    .modifiers({
+      orderSemester: (builder) => {
+        builder.orderBy("semester", "asc");
       },
-    ],
-    nest: true,
-  })
+    })
     .then((student) => {
-      if (student) {
-        student = student.toJSON();
+      console.log(student);
 
-        currentClassEnroll =
-          student.ClassEnrolls[student.ClassEnrolls.length - 1];
+      currentClassEnroll =
+        student.class_enrolls[student.class_enrolls.length - 1];
 
-        currentClassEnroll.semester = models.ClassEnroll.convertToRoman(
-          currentClassEnroll.semester
-        );
+      currentClassEnroll.semester = ClassEnroll.convertToRoman(
+        currentClassEnroll.semester
+      );
 
-        currentClassEnroll.ClassEnrollSubjects =
-          models.ClassEnrollSubject.sortArray(
-            currentClassEnroll.ClassEnrollSubjects
-          );
+      currentClassEnroll.class_enroll_subjects = ClassEnrollSubject.sortArray(
+        currentClassEnroll.class_enroll_subjects
+      );
 
-        res.render("pages/Student/Profile/index", {
-          currentLogin: req.session.login,
-          student: student,
-          currentClassEnroll: currentClassEnroll,
-        });
-      } else {
-        res.render("partials/page500");
-      }
+      console.log("current", currentClassEnroll);
+
+      return res.render("pages/Student/Profile/index", {
+        currentLogin: req.session.login,
+        student: student,
+        currentClassEnroll: currentClassEnroll,
+      });
     })
     .catch((err) => {
       console.log(err);
-      res.render("partials/page500");
+      return res.render("partials/page500");
     });
+  // await models.Student.findByPk(req.session.login.nim, {
+  //   include: [
+  //     {
+  //       model: models.ClassEnroll,
+  //       order: [["semester", "ASC"]],
+  //       include: [
+  //         {
+  //           model: models.ClassEnrollSubject,
+  //           include: [models.Subject],
+  //         },
+  //         models.Class,
+  //         models.Lecturer,
+  //       ],
+  //     },
+  //   ],
+  //   nest: true,
+  // })
+  //   .then((student) => {
+  //     if (student) {
+  //       student = student.toJSON();
+
+  // currentClassEnroll =
+  //   student.ClassEnrolls[student.ClassEnrolls.length - 1];
+
+  // currentClassEnroll.semester = models.ClassEnroll.convertToRoman(
+  //   currentClassEnroll.semester
+  // );
+
+  // currentClassEnroll.ClassEnrollSubjects =
+  //   models.ClassEnrollSubject.sortArray(
+  //     currentClassEnroll.ClassEnrollSubjects
+  //   );
+
+  // res.render("pages/Student/Profile/index", {
+  //   currentLogin: req.session.login,
+  //   student: student,
+  //   currentClassEnroll: currentClassEnroll,
+  // });
+  //     } else {
+  //       res.render("partials/page500");
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //     res.render("partials/page500");
+  //   });
 });
 
 router.get("/absensi", async (req, res) => {

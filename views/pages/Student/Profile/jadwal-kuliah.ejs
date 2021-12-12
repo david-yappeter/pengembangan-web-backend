@@ -14,15 +14,15 @@
       </tr>
     </thead>
     <tbody style="font-size: 0.9rem">
-      <% currentClassEnroll.ClassEnrollSubjects.forEach((jadwal) => { %>
+      <% currentClassEnroll.class_enroll_subjects.forEach((jadwal) => { %>
       <tr>
         <td><%= jadwal.day %></td>
-        <td><%= jadwal.subjectsCode %></td>
-        <td class="text-left"><%= jadwal.Subject.name %></td>
-        <td><%= currentClassEnroll.Class.acronym + " - " + currentClassEnroll.Class.letter %></td>
-        <td><%= jadwal.roomsName %></td>
-        <td><%= jadwal.startTime.substring(0,5) + " - " + jadwal.endTime.substring(0,5) %></td>
-        <td><%= Math.ceil(((new Date("01/01/2007 " + jadwal.endTime).getHours() * 60 + new Date("01/01/2007 " + jadwal.endTime).getMinutes()) - (new Date("01/01/2007 " + jadwal.startTime).getHours() * 60 + new Date("01/01/2007 " + jadwal.startTime).getMinutes())) /  60.0)  %></td>
+        <td><%= jadwal.subject_code %></td>
+        <td class="text-left"><%= jadwal.subject.name %></td>
+        <td><%= currentClassEnroll.class.acronym + " - " + currentClassEnroll.class.letter %></td>
+        <td><%= jadwal.room_name %></td>
+        <td><%= jadwal.start_time.substring(0,5) + " - " + jadwal.end_time.substring(0,5) %></td>
+        <td><%= Math.ceil(((new Date("01/01/2007 " + jadwal.end_time).getHours() * 60 + new Date("01/01/2007 " + jadwal.end_time).getMinutes()) - (new Date("01/01/2007 " + jadwal.start_time).getHours() * 60 + new Date("01/01/2007 " + jadwal.start_time).getMinutes())) /  60.0)  %></td>
       </tr>
       <% }) %>
     </tbody>

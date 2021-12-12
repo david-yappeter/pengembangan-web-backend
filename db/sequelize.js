@@ -31,10 +31,10 @@ const modelDefiners = [
   require("./models/admin"),
 ];
 
-for (const modelDefiner of modelDefiners) {
-  modelDefiner.default.sequelizeInit(sequelize);
-}
+// for (const modelDefiner of modelDefiners) {
+//   modelDefiner.default.sequelizeInit(sequelize);
+// }
 
-applyExtraSetup(sequelize);
+// applyExtraSetup(sequelize);
 
 module.exports = sequelize;
