@@ -44,10 +44,10 @@
 
 <script>
   $('.sync-pagination').twbsPagination({
-    totalPages: 20,
+    totalPages: <%= totalPage %>,
     visiblePages: 4,
     initiateStartPageClick: false,
-    startPage: "<%= page %>",
+    startPage: <%= page %>,
     onPageClick: function (evt, page) {
       window.location.replace(window.location.href.split("?")[0] + "?page=" + page);
     },

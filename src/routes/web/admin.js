@@ -2,6 +2,7 @@ const { Class } = require("../../../db/models/class");
 const { ClassEnroll } = require("../../../db/models/class_enroll");
 const { News } = require("../../../db/models/news");
 const { NewsCategory } = require("../../../db/models/news_category");
+const { Student } = require("../../../db/models/student");
 const { models } = require("../../../db/sequelize");
 
 const router = require("express").Router();
@@ -74,7 +75,6 @@ router.post("/admin/berita/insert", async (req, res) => {
     newsCategoriesName: category,
   })
     .then((result) => {
-      console.log(result);
       res.send(result);
     })
     .catch((err) => {
@@ -91,7 +91,6 @@ router.delete("/admin/berita/delete/:id", async (req, res) => {
     },
   })
     .then((result) => {
-      console.log(result);
       res.send(200);
     })
     .catch((err) => {
@@ -139,23 +138,25 @@ router.get("/admin/classes/:id/enroll", async (req, res) => {
 // ClassEnrollHasStudent
 router.get("/admin/class_enrolls/:id/students", async (req, res) => {
   const { id: classEnrollId } = req.params;
-  const { page } = req.query;
-  const limit = 3;
+  const page = req.query.page || 1;
+  const limit = 10;
 
   ClassEnroll.query()
     .findById(classEnrollId)
-    .withGraphFetched("[class,students(student)]")
-    .modifiers({
-      student: (builder) => {
-        builder.limit(limit);
-        builder.offset(limit * (page - 1));
-      },
-    })
+    .withGraphFetched("[class,students]")
     .then((classEnroll) => {
-      console.log(classEnroll);
+      const totalStudent = classEnroll.students.length;
+
+      classEnroll.students = classEnroll.students.slice(
+        limit * (page - 1),
+        limit * (page - 1) + limit
+      );
+
       return res.render("pages/Admin/ClassEnrollHasStudent/index", {
         currentAdmin: req.session.admin,
         classEnroll: classEnroll,
+        total: totalStudent,
+        totalPage: Math.ceil(totalStudent / limit),
         page: page || 1,
         semester: ClassEnroll.convertToRoman(classEnroll.semester),
       });
