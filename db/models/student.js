@@ -17,6 +17,7 @@ class Student extends Model {
   static get relationMappings() {
     const { StudentHasClassEnroll } = require("./student_has_class_enroll");
     const { ClassEnroll } = require("./class_enroll");
+    const { Attendance } = require("./attendance");
 
     return {
       student_has_class_enroll: {

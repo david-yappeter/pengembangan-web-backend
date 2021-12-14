@@ -35,9 +35,9 @@
                   <td class="align-middle"> <%= classEnroll.start_year %> </td>
                   <td class="align-middle"> <%= classEnroll.semester %> </td>
                   <td class="align-middle"> <%= classEnroll.time %> </td>
-                  <td class="align-middle"> <%= classEnroll.class.acronym %>-<%= classEnroll.class.letter %> </td>
+                  <td class="align-middle"> <%= classEnroll.name %> </td>
                   <td class="align-middle"> 
-                    <a href="/admin/class_enrolls/<%= classEnroll.id %>/students" class="btn btn-secondary btn-sm">
+                    <a href="/admin/class_enrolls/<%= classEnroll.id %>" class="btn btn-secondary btn-sm">
                       <i class="fa fa-eye fa-xs" aria-hidden="true"></i>
                     </a>
                     <a class="btn btn-success btn-sm">

@@ -5,6 +5,10 @@ class ClassEnroll extends Model {
     return "class_enrolls";
   }
 
+  $afterFind() {
+    this.semester_roman = ClassEnroll.convertToRoman(this.semester);
+  }
+
   static get relationMappings() {
     const { Class } = require("./class");
     const { ClassEnrollSubject } = require("./class_enroll_subject");

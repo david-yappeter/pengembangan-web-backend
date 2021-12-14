@@ -1,9 +1,12 @@
 const { Model } = require("objection");
-const timestampData = require("./global");
 
 class Class extends Model {
   static get tableName() {
     return "classes";
+  }
+
+  $afterFind() {
+    this.name = this.acronym + "-" + this.letter;
   }
 
   static get relationMappings() {

@@ -5,6 +5,16 @@ class ClassEnrollSubject extends Model {
     return "class_enroll_subjects";
   }
 
+  $afterFind() {
+    this.sks = Math.ceil(
+      (new Date("01/01/2007 " + this.end_time).getHours() * 60 +
+        new Date("01/01/2007 " + this.end_time).getMinutes() -
+        (new Date("01/01/2007 " + this.start_time).getHours() * 60 +
+          new Date("01/01/2007 " + this.start_time).getMinutes())) /
+        60.0
+    );
+  }
+
   static sortArray(arr) {
     const valObj = {
       Senin: 1,
@@ -26,7 +36,7 @@ class ClassEnrollSubject extends Model {
     const { Subject } = require("./subject");
     const { ClassEnroll } = require("./class_enroll");
     const { Lecturer } = require("./lecturer");
-    const { Attendance } = require("./attendance")
+    const { Attendance } = require("./attendance");
 
     return {
       room: {
@@ -67,8 +77,8 @@ class ClassEnrollSubject extends Model {
         join: {
           from: this.tableName + ".id",
           to: Attendance.tableName + ".class_enroll_subject_id",
-        }
-      }
+        },
+      },
     };
   }
 }

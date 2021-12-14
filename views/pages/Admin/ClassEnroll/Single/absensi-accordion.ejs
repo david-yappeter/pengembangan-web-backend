@@ -1,0 +1,86 @@
+<div class="accordion" id="absensiAccordion">
+
+  <% class_enroll_subjects.forEach((item, idx) => { %>
+  <div class="card">
+    <h2 class="mb-0">
+      <button class="btn btn-link _admin-classenroll-accordion-button btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse-<%= idx %>" aria-expanded="false" aria-controls="collapse<%= idx %>">
+      <span>+</span>  <%= item.subject.name %>
+      </button>
+    </h2>
+
+    <div id="collapse-<%= idx %>" style="max-height: 500px; overflow-y: auto;" class="collapse" aria-labelledby="heading-<%= idx %>" data-parent="#absensiAccordion">
+      <div class="card-body">
+
+        <!-- Absensi Subject Table - Start -->
+        <div class="table-responsive">
+          <table class="table table-sm table-hover table-bordered text-center" style="font-size: 0.8rem; min-width: 1000px">
+            <thead style="background: #094584;color: white">
+              <tr>
+                <th class="align-middle" scope="row" rowspan="2">NIM</th>
+                <th class="align-middle" scope="row" rowspan="2">Nama</th>
+                <th class="align-middle" scope="row" colspan="16">Pertemuan Ke</th>
+                <th class="align-middle" scope="row" rowspan="2">Kehadiran</th>
+                <th class="align-middle" scope="row" rowspan="2">%</th>
+                <th class="align-middle" scope="row" rowspan="2">SKS</th>
+              </tr>
+              <tr>
+                <% for(let i = 1; i <= 16; i++) { %>
+                  <td><%= i %></td>
+                <% } %>
+              </tr>
+            </thead>
+            <tbody style="font-size: 0.9rem">
+              <% let absensi_obj = {} %>
+              <% Object.values(item.attendances).forEach((attendance) => { %>
+                <% if(!absensi_obj[attendance.student_has_class_enroll.student.nim]) { %>
+                  <% absensi_obj[attendance.student_has_class_enroll.student.nim] = {} %>
+                <% }%>
+                  <% absensi_obj[attendance.student_has_class_enroll.student.nim][attendance.week] = attendance %>
+              <% }) %>
+
+              <% students.forEach((student) => { %>
+                <% let kehadiran = 0, maxKehadiran = 0 %>
+                <tr>
+                  <td><%= student.nim %></td>
+                  <td><%= student.name %></td>
+                  <% if(absensi_obj[student.nim]) { %>
+                    <% for(let i = 1; i <= 16; i++) { %>
+                      <% if(absensi_obj[student.nim][i]) { %>
+                        <% absen = absensi_obj[student.nim][i] %>
+                        <% if(absen.status === 1) { %>
+                          <td style="background-color: #4d70b7; color: white">H</td>
+                          <% kehadiran++;maxKehadiran++ %>
+                        <% } else if (absen.status === 2) { %>
+                          <td style="background-color: red; color: white">A</td>
+                          <% maxKehadiran++ %>
+                        <% } %>
+                      <% } else { %>
+                        <td>-</td>
+                      <% } %>
+                    <% } %>
+                  <% } else { %>
+                    <% for(let i = 1; i <= 16; i++) { %>
+                      <td>-</td>
+                    <% } %>
+                  <% } %>
+                  <td><%= kehadiran %> / <%= maxKehadiran %></td>
+                  <td style="color: blue">
+                    <% if (maxKehadiran == 0) { %>
+                      100 %
+                    <% } else { %>
+                      <%= Math.ceil(kehadiran/maxKehadiran * 100) %> %
+                    <% } %>
+                  </td>
+                  <td><%= item.sks  %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+        <!-- Absensi Subject Table - End -->
+
+      </div>
+    </div>
+  </div>
+  <% }) %>
+</div>

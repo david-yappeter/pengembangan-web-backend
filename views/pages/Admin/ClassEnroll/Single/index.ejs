@@ -1,0 +1,38 @@
+<%- include("../../../../partials/header") %>
+<%- include("../../../../components/Header/admin") %>
+
+<div class="container-fluid container-md px-0">
+  <%- include("../../../../components/Global/current-admin", {currentAdmin}) %>
+  <div class="card">
+    <div class="card-header" style="background-color: #094584; color: white">
+      <h4 class="card-title mb-0">Kelas <%= classEnroll.class.name %> </h4>
+    </div>
+    <div class="card-body py-0">
+      <div class="row">
+        <!-- ClassEnroll Data - Start -->
+        <div class="col-12">
+          <%- include("./data-column.ejs", { key: "ID", value: classEnroll.id }) %>
+          <%- include("./data-column.ejs", { key: "Tahun Mulai", value: classEnroll.start_year }) %>
+          <%- include("./data-column.ejs", { key: "Semester", value: classEnroll.semester_roman }) %>
+          <%- include("./data-column.ejs", { key: "Waktu Kuliah", value: classEnroll.time }) %>
+          <%- include("./data-column.ejs", { key: "Kelas", value: classEnroll.class.name }) %>
+        </div>
+        <!-- ClassEnroll Data - End -->
+
+        <!-- ClassEnroll Subjects - Start -->
+        <div class="col-12">
+          <%- include("./subject-table", { class_enroll_subjects: classEnroll.class_enroll_subjects, class_name: classEnroll.class.name }) %>
+        </div>
+        <!-- ClassEnroll Subjects - End -->
+        
+        <!-- Absensi - Start -->
+        <div class="col-12">
+          <%- include("./absensi-accordion", { students: classEnroll.students, class_enroll_subjects: classEnroll.class_enroll_subjects }) %>
+        </div>
+        <!-- Absensi - End -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../../../../partials/footer") %>

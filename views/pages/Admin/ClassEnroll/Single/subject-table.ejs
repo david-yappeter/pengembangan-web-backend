@@ -1,7 +1,5 @@
-<h4 class="text-center"><u>Jadwal Harian Masuk Kuliah </u></h4>
-
 <div class="table-responsive">
-  <table class="table table-sm table-hover table-bordered text-center" style="font-size: 0.8rem">
+  <table class="table table-sm table-hover table-bordered text-center" style="font-size: 0.8rem; min-width: 1000px">
     <thead>
       <tr style="background: #094584;color: white">
         <th scope="col">Hari</th>
@@ -14,12 +12,12 @@
       </tr>
     </thead>
     <tbody style="font-size: 0.9rem">
-      <% currentClassEnroll.class_enroll_subjects.forEach((jadwal) => { %>
+      <% class_enroll_subjects.forEach((jadwal) => { %>
       <tr>
         <td><%= jadwal.day %></td>
         <td><%= jadwal.subject_code %></td>
         <td class="text-left"><%= jadwal.subject.name %></td>
-        <td><%= currentClassEnroll.class.name %></td>
+        <td><%= class_name %></td>
         <td><%= jadwal.room_name %></td>
         <td><%= jadwal.start_time.substring(0,5) + " - " + jadwal.end_time.substring(0,5) %></td>
         <td><%= jadwal.sks  %></td>
@@ -27,4 +25,4 @@
       <% }) %>
     </tbody>
   </table>
-</div>
+</div>        

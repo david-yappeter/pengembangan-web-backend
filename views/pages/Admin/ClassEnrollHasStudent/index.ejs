@@ -5,7 +5,7 @@
   <%- include("../../../components/Global/current-admin", {currentAdmin}) %>
   <div class="card">
     <div class="card-header" style="background-color: #094584; color: white">
-      <h4 class="card-title mb-0">Kelas <%= classEnroll.class.acronym %>-<%= classEnroll.class.letter %> (<%= classEnroll.startYear %>) / <%= semester %></h4>
+      <h4 class="card-title mb-0">Kelas <%= kelas.name %> (<%= classEnroll.startYear %>) / <%= semester %></h4>
     </div>
     <div class="card-body py-0">
       <div class="row">
@@ -24,7 +24,11 @@
               <tbody style="font-size: 0.9rem">
                 <% classEnroll.students.forEach((student) => { %>
                 <tr>
-                  <td> <%= student.nim %></td>
+                  <td> 
+                    <a href="/admin/students/<%= student.nim %>">
+                      <%= student.nim %>
+                    </a>
+                  </td>
                   <td> <%= student.name %></td>
                   <td> <%= student.sex === "L" ? "Laki-Laki" : "Perempuan" %> </td>
                   <td> <%= student.email %> </td>
@@ -35,7 +39,7 @@
           </div>
           <!-- table - end -->
 
-          <ul class="sync-pagination"></ul>
+          <div id="sync-pagination" class="d-flex justify-content-center mt-3"></div>
         </div>
       </div>
     </div>
@@ -43,7 +47,7 @@
 </div>
 
 <script>
-  $('.sync-pagination').twbsPagination({
+  $('#sync-pagination').twbsPagination({
     totalPages: <%= totalPage %>,
     visiblePages: 4,
     initiateStartPageClick: false,

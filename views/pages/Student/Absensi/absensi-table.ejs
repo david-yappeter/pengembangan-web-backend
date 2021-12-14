@@ -48,10 +48,10 @@
               <% for(let i = 1; i <= maxPertemuan; i++) { %>
                 <% if(item.attendances[i]) { %>
                   <% attendance = item.attendances[i] %>
-                  <% if (attendance.status == 1) { %>
+                  <% if (attendance.status === 1) { %>
                     <td style="background-color: #4d70b7; color: white">H</td>
                     <% kehadiran++;maxKehadiran++ %>
-                  <% } else if (attendance.status == 2) { %>  
+                  <% } else if (attendance.status === 2) { %>  
                     <td style="background-color: red; color: white">A</td>
                     <% maxKehadiran++ %>
                   <% } %>
@@ -72,7 +72,7 @@
                 <%= Math.ceil(kehadiran/maxKehadiran * 100) %> %
               <% } %>
             </td>
-            <td><%= Math.ceil(((new Date("01/01/2007 " + item.end_time).getHours() * 60 + new Date("01/01/2007 " + item.end_time).getMinutes()) - (new Date("01/01/2007 " + item.start_time).getHours() * 60 + new Date("01/01/2007 " + item.start_time).getMinutes())) /  60.0)  %></td>
+            <td><%= item.sks  %></td>
           </tr> 
         <% }) %>
       <% } else { %>

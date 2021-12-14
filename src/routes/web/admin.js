@@ -136,6 +136,70 @@ router.get("/admin/classes/:id/enroll", async (req, res) => {
 });
 
 // ClassEnrollHasStudent
+router.get("/admin/class_enrolls/:id", async (req, res) => {
+  const { id: classEnrollId } = req.params;
+
+  ClassEnroll.query()
+    .findById(classEnrollId)
+    .withGraphFetched(
+      "[students,class,class_enroll_subjects.[subject,attendances.[student_has_class_enroll.[student]]]]"
+    )
+    .then((classEnroll) => {
+      for (let i = 0; i < classEnroll.class_enroll_subjects.length; i++) {
+        classEnroll.class_enroll_subjects[i].attendances =
+          classEnroll.class_enroll_subjects[i].attendances.reduce(
+            (acc, curr) => {
+              acc[curr.week] = curr;
+              return acc;
+            },
+            {}
+          );
+      }
+      return res.render("pages/Admin/ClassEnroll/Single/index", {
+        currentAdmin: req.session.admin,
+        classEnroll: classEnroll,
+        semester: ClassEnroll.convertToRoman(classEnroll.semester),
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.render("partials/page500");
+    });
+});
+
+// // ClassEnrollHasStudent
+// router.get("/admin/class_enrolls/:id/absensi", async (req, res) => {
+//   const { id: classEnrollId } = req.params;
+//   const page = req.query.page || 1;
+//   const limit = 10;
+
+//   ClassEnroll.query()
+//     .findById(classEnrollId)
+//     .withGraphFetched("[class,students]")
+//     .then((classEnroll) => {
+//       const totalStudent = classEnroll.students.length;
+
+//       classEnroll.students = classEnroll.students.slice(
+//         limit * (page - 1),
+//         limit * (page - 1) + limit
+//       );
+
+//       return res.render("pages/Admin/ClassEnrollHasStudent/index", {
+//         currentAdmin: req.session.admin,
+//         classEnroll: classEnroll,
+//         total: totalStudent,
+//         totalPage: Math.ceil(totalStudent / limit),
+//         page: page || 1,
+//         semester: ClassEnroll.convertToRoman(classEnroll.semester),
+//       });
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       return res.render("partials/page500");
+//     });
+// });
+
+// ClassEnrollHasStudent
 router.get("/admin/class_enrolls/:id/students", async (req, res) => {
   const { id: classEnrollId } = req.params;
   const page = req.query.page || 1;
@@ -168,6 +232,22 @@ router.get("/admin/class_enrolls/:id/students", async (req, res) => {
 });
 
 // Student
-router.get("/admin/students", async (req, res) => {});
+router.get("/admin/students/:nim", async (req, res) => {
+  const { nim } = req.params;
+
+  Student.query()
+    .where({
+      nim: nim,
+    })
+    .first()
+    .then((student) => {
+      if (!student) {
+        return res.render("partials/page404");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
 module.exports = router;

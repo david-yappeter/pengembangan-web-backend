@@ -60,16 +60,27 @@ select {
   border-radius: 0;
   border: 0;
   outline: 0;
+  color: #165190;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+._admin-classenroll-accordion-button {
+  border-radius: 0;
+  border: 0;
+  outline: 0;
+  font-size: 0.8rem;
+  font-weight: bold;
+  background-color: #094584;
+  color: white;
+}
+
+._admin-classenroll-accordion-button:hover {
+  color: white;
 }
 
 ._profile-accordion-header-card {
   border-bottom: 0;
-}
-
-._profile-accordion-button {
-  color: #165190;
-  font-size: 0.8rem;
-  font-weight: bold;
 }
 
 ._font-md-bold {
