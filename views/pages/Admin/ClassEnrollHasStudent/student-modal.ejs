@@ -1,0 +1,79 @@
+<div class="text-right">
+  <button type="button" class="btn btn-success m-3" data-toggle="modal" data-target="#studentModal">
+    <i class="fa fa-plus" aria-hidden="true"></i>
+  </button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="studentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Tambah Murid</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="position-relative">
+        <div class="modal-body">
+          <input 
+            type="text" 
+            class="form-control" 
+            id="nim" 
+            name="name"
+            placeholder="Nim . . ."
+            required
+          />
+        </div>
+        
+        <ul id="searchResult" class="position-absolute pl-3" style="top:52px"></ul>
+
+      <div class="modal-footer">
+        <button type="button" id="_add-student-btn" class="btn btn-success" data-dismiss="modal">Tambah</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    
+
+    let delayTimer;
+    $("#nim").keyup(function() {
+      clearTimeout(delayTimer);
+      delayTimer = setTimeout(() => {
+        var nim = $("#nim").val();
+        if(nim === "") {
+          $("#searchResult").empty();
+          return;
+        }
+        $.ajax({
+          url: "/admin/students/search",
+          type: "POST",
+          data: {
+            "nim": nim
+          },
+          success: function(data) {
+            $("#searchResult").empty();
+  
+            data.forEach((student) => {
+              $("#searchResult").append(`
+                <button type="button" class="list-group-item" value="${student.nim}">
+                  ${student.nim}
+                </button>
+              `);
+  
+            });
+            
+            $("#searchResult button").bind('click', function() {
+              $("#nim").val($(this).val());
+              $("#searchResult").empty();
+            });
+          }
+        });
+      }, 1500);
+    });
+  });
+</script>

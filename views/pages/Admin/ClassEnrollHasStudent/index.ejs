@@ -5,9 +5,13 @@
   <%- include("../../../components/Global/current-admin", {currentAdmin}) %>
   <div class="card">
     <div class="card-header" style="background-color: #094584; color: white">
-      <h4 class="card-title mb-0">Kelas <%= kelas.name %> (<%= classEnroll.startYear %>) / <%= semester %></h4>
+      <h4 class="card-title mb-0">Kelas <%= classEnroll.class.name %> (<%= classEnroll.start_year %>) / <%= semester %></h4>
     </div>
     <div class="card-body py-0">
+      <!-- Add Section - Start -->
+      <%- include("./student-modal") %>
+      <!-- Add Section - End -->
+
       <div class="row">
         <div class="col-12 pb-md-5 pt-2 pt-md-3">
           <!-- table - start -->

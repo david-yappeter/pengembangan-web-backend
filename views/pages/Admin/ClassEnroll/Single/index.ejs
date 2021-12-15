@@ -10,7 +10,8 @@
     <div class="card-body py-0">
       <div class="row">
         <!-- ClassEnroll Data - Start -->
-        <div class="col-12">
+        <div class="col-12 my-3">
+          <h4>Detail</h4>
           <%- include("./data-column.ejs", { key: "ID", value: classEnroll.id }) %>
           <%- include("./data-column.ejs", { key: "Tahun Mulai", value: classEnroll.start_year }) %>
           <%- include("./data-column.ejs", { key: "Semester", value: classEnroll.semester_roman }) %>
@@ -18,15 +19,25 @@
           <%- include("./data-column.ejs", { key: "Kelas", value: classEnroll.class.name }) %>
         </div>
         <!-- ClassEnroll Data - End -->
+        
+        <!-- Button Option - Start -->
+        <div class="col-12 my-3 d-flex">
+          <a href="/admin/class_enrolls/<%= classEnroll.id %>/students" class="btn btn-primary _mikro-semi-bg ">
+            List Murid
+          </a>
+        </div>
+        <!-- Button Option - End -->
 
         <!-- ClassEnroll Subjects - Start -->
-        <div class="col-12">
+        <div class="col-12 my-3">
+          <h4>Mata Kuliah</h4>
           <%- include("./subject-table", { class_enroll_subjects: classEnroll.class_enroll_subjects, class_name: classEnroll.class.name }) %>
         </div>
         <!-- ClassEnroll Subjects - End -->
         
         <!-- Absensi - Start -->
-        <div class="col-12">
+        <div class="col-12 my-3">
+          <h4>Absensi</h4>
           <%- include("./absensi-accordion", { students: classEnroll.students, class_enroll_subjects: classEnroll.class_enroll_subjects }) %>
         </div>
         <!-- Absensi - End -->

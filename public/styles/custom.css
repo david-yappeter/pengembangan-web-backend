@@ -2,6 +2,14 @@ select {
   border-radius: 0 !important;
 }
 
+._mikro-semi-bg {
+  background-color: #0d67c4 !important;
+}
+
+._mikro-dark-bg {
+  background-color: #0d67c4 !important;
+}
+
 .mikro-nav-link {
   color: rgb(226, 226, 226);
   text-decoration: none;

@@ -167,38 +167,6 @@ router.get("/admin/class_enrolls/:id", async (req, res) => {
     });
 });
 
-// // ClassEnrollHasStudent
-// router.get("/admin/class_enrolls/:id/absensi", async (req, res) => {
-//   const { id: classEnrollId } = req.params;
-//   const page = req.query.page || 1;
-//   const limit = 10;
-
-//   ClassEnroll.query()
-//     .findById(classEnrollId)
-//     .withGraphFetched("[class,students]")
-//     .then((classEnroll) => {
-//       const totalStudent = classEnroll.students.length;
-
-//       classEnroll.students = classEnroll.students.slice(
-//         limit * (page - 1),
-//         limit * (page - 1) + limit
-//       );
-
-//       return res.render("pages/Admin/ClassEnrollHasStudent/index", {
-//         currentAdmin: req.session.admin,
-//         classEnroll: classEnroll,
-//         total: totalStudent,
-//         totalPage: Math.ceil(totalStudent / limit),
-//         page: page || 1,
-//         semester: ClassEnroll.convertToRoman(classEnroll.semester),
-//       });
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       return res.render("partials/page500");
-//     });
-// });
-
 // ClassEnrollHasStudent
 router.get("/admin/class_enrolls/:id/students", async (req, res) => {
   const { id: classEnrollId } = req.params;
@@ -224,6 +192,29 @@ router.get("/admin/class_enrolls/:id/students", async (req, res) => {
         page: page || 1,
         semester: ClassEnroll.convertToRoman(classEnroll.semester),
       });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.render("partials/page500");
+    });
+});
+
+router.post("/admin/students/search", async (req, res) => {
+  Student.query()
+    .where("nim", "like", `%${req.body.nim}%`)
+    .limit(10)
+    .context({
+      runAfter: (students) => {
+        students = students.map((student) => {
+          delete student.password;
+          return student;
+        });
+
+        return students;
+      },
+    })
+    .then((students) => {
+      return res.send(students);
     })
     .catch((err) => {
       console.log(err);
