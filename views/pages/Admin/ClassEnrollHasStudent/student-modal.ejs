@@ -14,23 +14,23 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form class="position-relative">
-        <div class="modal-body">
+      <form id="_add-student-enroll-form" class="position-relative" action="/admin/class_enrolls/<%= classEnroll.id %>/students">
+        <div class="form-group modal-body">
           <input 
             type="text" 
             class="form-control" 
             id="nim" 
-            name="name"
+            name="nim"
             placeholder="Nim . . ."
             required
+            autocomplete="nope"
           />
         </div>
-        
         <ul id="searchResult" class="position-absolute pl-3" style="top:52px"></ul>
 
-      <div class="modal-footer">
-        <button type="button" id="_add-student-btn" class="btn btn-success" data-dismiss="modal">Tambah</button>
-      </div>
+        <div class="modal-footer">
+          <button type="submit" id="_add-student-btn" class="btn btn-success">Tambah</button>
+        </div>
       </form>
     </div>
   </div>
@@ -38,10 +38,49 @@
 
 <script>
   $(document).ready(function() {
-    
+
+    new window.JustValidate("#_add-student-enroll-form", {
+      rules: {
+        nim: {
+          required: true,
+        }
+      },
+      focusWrongField: true,
+
+      submitHandler: function(form, values, ajax) {
+        ajax({
+          url: form.action,
+          method: "POST",
+          data: JSON.stringify(values),
+          async:  true,
+          callback: function() {
+              window.location.reload();
+          },
+          error: function(response) {
+            console.log(response);
+            new SnackBar({
+              message: "Internal Server Error",
+              status: "error",
+              timeout: 5000,
+              position: "bl",
+            });
+          }
+        })
+      },
+      invalidFormCallback: function (errors) {
+        console.log(errors);
+      },
+    })
 
     let delayTimer;
+    $("#nim").focusout(function() {
+      setTimeout(() => {
+        $("#searchResult").empty();
+      }, 200)
+    })
+
     $("#nim").keyup(function() {
+      $("#searchResult").empty();
       clearTimeout(delayTimer);
       delayTimer = setTimeout(() => {
         var nim = $("#nim").val();
@@ -64,8 +103,17 @@
                   ${student.nim}
                 </button>
               `);
-  
             });
+
+            if(data.length === 0) {
+              $("#searchResult").append(`
+                <li class="list-group-item">
+                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                  Data tidak ditemukan
+                </li>
+              `);
+              return
+            }
             
             $("#searchResult button").bind('click', function() {
               $("#nim").val($(this).val());
@@ -73,7 +121,7 @@
             });
           }
         });
-      }, 1500);
+      }, 1000);
     });
   });
 </script>

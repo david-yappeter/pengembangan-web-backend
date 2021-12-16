@@ -3,6 +3,9 @@ const { ClassEnroll } = require("../../../db/models/class_enroll");
 const { News } = require("../../../db/models/news");
 const { NewsCategory } = require("../../../db/models/news_category");
 const { Student } = require("../../../db/models/student");
+const {
+  StudentHasClassEnroll,
+} = require("../../../db/models/student_has_class_enroll");
 const { models } = require("../../../db/sequelize");
 
 const router = require("express").Router();
@@ -196,6 +199,34 @@ router.get("/admin/class_enrolls/:id/students", async (req, res) => {
     .catch((err) => {
       console.log(err);
       return res.render("partials/page500");
+    });
+});
+// ClassEnrollHasStudent
+router.post("/admin/class_enrolls/:id/students", async (req, res) => {
+  const { id: classEnrollId } = req.params;
+  const { nim } = req.body;
+
+  StudentHasClassEnroll.query()
+    .where({
+      class_enroll_id: classEnrollId,
+      student_nim: nim,
+    })
+    .first()
+    .then(async (result) => {
+      if (result) {
+        return res.status(400).send();
+      }
+
+      await StudentHasClassEnroll.query().insert({
+        class_enroll_id: classEnrollId,
+        student_nim: nim,
+      });
+
+      return res.status(200).send();
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send();
     });
 });
 

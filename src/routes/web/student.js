@@ -3,6 +3,7 @@ const {
   ClassEnrollSubject,
 } = require("../../../db/models/class_enroll_subject");
 const { News } = require("../../../db/models/news");
+const student = require("../../../db/models/student");
 const { Student } = require("../../../db/models/student");
 
 const router = require("express").Router();
@@ -96,6 +97,87 @@ router.get("/profile", async (req, res) => {
 
 router.get("/absensi", async (req, res) => {
   let filterSemester = req.query.semester;
+  const nim = req.session.login.nim;
+
+  // Student.query()
+  //   .findById(nim)
+  //   .withGraphJoined(
+  //     // "class_enrolls.[class_enroll_subjects,class,lecturer]",
+  //     // "class_enrolls.[class_enroll_subjects.[subject,lecturer,attendances],class,lecturer]",
+  //     "class_enrolls(classEnrolls).[class_enroll_subjects.[subject,lecturer,attendances(orderWeek)],class,lecturer]",
+  //     // "class_enrolls(classEnrolls).[class_enroll_subjects.[subject,lecturer,attendances(orderWeek).[student_has_class_enroll(filterStudentNim)]],class,lecturer]",
+  //     {
+  //       minimize: true,
+  //     }
+  //   )
+  //   // .withGraphFetched(
+  //   //   "[class_enrolls(classEnrolls).[class_enroll_subjects.[subject,lecturer,attendances(orderWeek)],class,lecturer]]"
+  //   // )
+  //   .modifiers({
+  //     classEnrolls: (builder) => {
+  //       builder.orderBy("semester", "asc");
+  //       filterSemester &&
+  //         builder.where({
+  //           semester: filterSemester,
+  //         });
+  //     },
+  //     orderWeek: (builder) => {
+  //       builder.orderBy("week", "asc");
+  //     },
+  //     filterStudentNim: (builder) => {
+  //       builder.where({
+  //         student_nim: nim,
+  //       });
+  //     },
+  //   })
+  //   .then((resp) => {
+  //     console.log(resp);
+  //     return res.send(resp);
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //     return res.send(err);
+  //   });
+
+  Student.query()
+    .findById(nim)
+    .withGraphJoined(
+      // "class_enrolls.[class_enroll_subjects,class,lecturer]",
+      // "class_enrolls.[class_enroll_subjects.[subject,lecturer,attendances],class,lecturer]",
+      "class_enrolls(classEnrolls).[class_enroll_subjects.[subject,lecturer,attendances(orderWeek)],class,lecturer]",
+      // "class_enrolls(classEnrolls).[class_enroll_subjects.[subject,lecturer,attendances(orderWeek).[student_has_class_enroll(filterStudentNim)]],class,lecturer]",
+      {
+        minimize: true,
+      }
+    )
+    // .withGraphFetched(
+    //   "[class_enrolls(classEnrolls).[class_enroll_subjects.[subject,lecturer,attendances(orderWeek)],class,lecturer]]"
+    // )
+    .modifiers({
+      classEnrolls: (builder) => {
+        builder.orderBy("semester", "asc");
+        filterSemester &&
+          builder.where({
+            semester: filterSemester,
+          });
+      },
+      orderWeek: (builder) => {
+        builder.orderBy("week", "asc");
+      },
+      filterStudentNim: (builder) => {
+        builder.where({
+          student_nim: nim,
+        });
+      },
+    })
+    .then((resp) => {
+      console.log(resp);
+      return res.send(resp);
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.send(err);
+    });
 
   Student.query()
     .findById(req.session.login.nim)
@@ -115,6 +197,7 @@ router.get("/absensi", async (req, res) => {
       },
     })
     .then((student) => {
+      console.log(student);
       if (!student || student.class_enrolls.length === 0) {
         return res.render("pages/Student/Absensi/index", {
           currentLogin: req.session.login,
@@ -182,97 +265,6 @@ router.get("/absensi", async (req, res) => {
       console.log(err);
       return res.render("partials/page500");
     });
-
-  // await models.Student.findByPk(req.session.login.nim, {
-  //   include: [
-  //     {
-  //       model: models.ClassEnroll,
-  //       where: filterSemester ? { semester: filterSemester } : null,
-  //       include: [
-  //         {
-  //           model: models.ClassEnrollSubject,
-  //           include: [
-  //             models.Subject,
-  //             models.Lecturer,
-  //             {
-  //               model: models.Attendance,
-  //               separate: true,
-  //               order: [["week", "ASC"]],
-  //             },
-  //           ],
-  //         },
-  //         models.Class,
-  //         models.Lecturer,
-  //       ],
-  //     },
-  //   ],
-  //   order: [[models.ClassEnroll, "semester", "ASC"]],
-  //   nest: true,
-  // })
-  //   .then((student) => {
-  // if (!student) {
-  //   return res.render("pages/Student/Absensi/index", {
-  //     currentLogin: req.session.login,
-  //     maxPertemuan: null,
-  //     currentClassEnroll: null,
-  //     filterSemester: filterSemester,
-  //   });
-  // }
-  // student = student.toJSON();
-
-  // currentClassEnroll =
-  //   student.ClassEnrolls[student.ClassEnrolls.length - 1];
-
-  // filterSemester = currentClassEnroll.semester;
-
-  // currentClassEnroll.semester = models.ClassEnroll.convertToRoman(
-  //   currentClassEnroll.semester
-  // );
-
-  // currentClassEnroll.ClassEnrollSubjects =
-  //   models.ClassEnrollSubject.sortArray(
-  //     currentClassEnroll.ClassEnrollSubjects
-  //   );
-
-  // const maxPertemuan = Math.max(
-  //   ...student.ClassEnrolls.reduce((acc, item) => {
-  //     acc.push(
-  //       ...item.ClassEnrollSubjects.map((absensi) => {
-  //         return absensi.Attendances.reduce((acc, curr) => {
-  //           if (curr.week > acc) {
-  //             acc = curr.week;
-  //           }
-  //           return acc;
-  //         }, 0);
-  //       })
-  //     );
-  //     return acc;
-  //   }, [])
-  // );
-
-  // for (let i = 0; i < currentClassEnroll.ClassEnrollSubjects.length; i++) {
-  //   currentClassEnroll.ClassEnrollSubjects[i].Attendances =
-  //     currentClassEnroll.ClassEnrollSubjects[i].Attendances.reduce(
-  //       (acc, curr) => {
-  //         acc[curr.week] = curr;
-  //         return acc;
-  //       },
-  //       {}
-  //     );
-  // }
-
-  // return res.render("pages/Student/Absensi/index", {
-  //   currentLogin: req.session.login,
-  //   maxPertemuan: maxPertemuan,
-  //   student: student,
-  //   currentClassEnroll: currentClassEnroll,
-  //   filterSemester: filterSemester,
-  // });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //     return res.render("partials/page500");
-  //   });
 });
 
 module.exports = router;
