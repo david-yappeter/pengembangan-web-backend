@@ -1,0 +1,13 @@
+<ol class="breadcrumb _mikro-breadcrumb">
+  <% items.forEach((item) =>{ %>
+    <li class="breadcrumb-item">
+      <% if(item.url) { %>
+        <a href="<%= item.url %>">
+          <%= item.label %>
+        </a>
+      <% } else { %>
+        <%= item.label %>
+      <% } %>
+    </li>
+  <% }) %>
+</ol>
