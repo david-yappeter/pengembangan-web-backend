@@ -22,10 +22,6 @@ router.get("/test", async (req, res) => {
   const resp = await Student.query().first();
   console.log(resp);
 
-  // await knexCon("students").then((rows) => {
-  //   console.log(rows);
-  // });
-
   res.send("asd");
 });
 

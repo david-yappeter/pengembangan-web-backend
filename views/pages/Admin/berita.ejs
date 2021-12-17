@@ -2,7 +2,12 @@
 <%- include("../../components/Header/admin") %>
 
 <div class="container-fluid container-md px-0">
-  <%- include("../../components/Global/breadcrumb", {items: [{url: "/admin", label: "Home"}]}) %>
+  <%- include("../../components/Global/breadcrumb", {items: [
+    {
+      label: "Home",
+    },
+    ]}) 
+  %>
   <%- include("../../components/Global/current-admin", {currentAdmin}) %>
   <div class="text-right">
     <a href="/admin/berita/create" class="btn btn-success m-3">

@@ -1,6 +1,6 @@
-<ol class="breadcrumb _mikro-breadcrumb">
+<ol class="breadcrumb _mikro-dark-bg">
   <% items.forEach((item) =>{ %>
-    <li class="breadcrumb-item">
+    <li class="breadcrumb-item user-select-none<%= !item.url ? " active" : "" %>">
       <% if(item.url) { %>
         <a href="<%= item.url %>">
           <%= item.label %>

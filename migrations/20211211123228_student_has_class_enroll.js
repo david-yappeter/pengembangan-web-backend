@@ -6,12 +6,16 @@ exports.up = function (knex) {
       .references("nim")
       .inTable("students")
       .notNullable()
-      .unsigned();
+      .unsigned()
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE");
     table
       .integer("class_enroll_id")
       .references("class_enrolls.id")
       .notNullable()
-      .unsigned();
+      .unsigned()
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE");
     table.timestamps();
   });
 };

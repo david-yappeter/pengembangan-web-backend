@@ -9,7 +9,9 @@ exports.up = function (knex) {
       .string("news_category_name", 45)
       .notNullable()
       .references("name")
-      .inTable("news_categories");
+      .inTable("news_categories")
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE");
   });
 };
 

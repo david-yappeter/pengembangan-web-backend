@@ -2,6 +2,24 @@
 <%- include("../../../../components/Header/admin") %>
 
 <div class="container-fluid container-md px-0">
+  <%- include("../../../../components/Global/breadcrumb", {items: [
+    {
+      url: "/admin",
+      label: "Home",
+    },
+    {
+      url: "/admin/classes",
+      label: "Kelas",
+    },
+    {
+      url: `/admin/classes/${classEnroll.class_id}/enroll`,
+      label: "Enroll",
+    },
+    {
+      label: classEnroll.id,
+    },
+    ]}) 
+  %>
   <%- include("../../../../components/Global/current-admin", {currentAdmin}) %>
   <div class="card">
     <div class="card-header" style="background-color: #094584; color: white">

@@ -24,35 +24,9 @@ class Attendance extends Model {
         join: {
           from: this.tableName + ".class_enroll_subject_id",
           to: ClassEnrollSubject.tableName + ".id",
-        }
+        },
       },
     };
-  }
-
-  static sequelizeInit(sequelize) {
-    this.init(
-      {
-        id: {
-          type: DataTypes.INTEGER,
-          primaryKey: true,
-          autoIncrement: true,
-        },
-        week: {
-          type: DataTypes.INTEGER,
-          allowNull: false,
-        },
-        status: {
-          type: DataTypes.INTEGER,
-          allowNull: false,
-        },
-        ...timestampData(sequelize),
-      },
-      {
-        sequelize,
-        modelName: "Attendance",
-        tableName: Attendance.tableName(),
-      }
-    );
   }
 }
 

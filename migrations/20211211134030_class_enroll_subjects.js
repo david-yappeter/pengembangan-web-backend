@@ -12,32 +12,32 @@ exports.up = function (knex) {
       .integer("class_enroll_id")
       .references("id")
       .inTable("class_enrolls")
-      .onDelete("CASCADE")
-      .onUpdate("CASCADE")
       .notNullable()
-      .unsigned();
+      .unsigned()
+      .onDelete("CASCADE")
+      .onUpdate("CASCADE");
     table
       .string("subject_code")
       .references("code")
       .inTable("subjects")
-      .onDelete("CASCADE")
       .notNullable()
-      .onUpdate("CASCADE");
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE");
     table
       .bigInteger("lecturer_nip")
       .references("nip")
       .inTable("lecturers")
-      .onDelete("CASCADE")
-      .onUpdate("CASCADE")
       .notNullable()
-      .unsigned();
+      .unsigned()
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE");
     table
       .string("room_name")
       .references("name")
       .inTable("rooms")
-      .onDelete("CASCADE")
+      .notNullable()
       .onUpdate("CASCADE")
-      .notNullable();
+      .onDelete("CASCADE");
   });
 };
 

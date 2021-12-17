@@ -6,9 +6,9 @@ exports.up = function (knex) {
       .notNullable()
       .references("nip")
       .inTable("lecturers")
-      .onDelete("CASCADE")
+      .after("updated_at")
       .onUpdate("CASCADE")
-      .after("updated_at");
+      .onDelete("CASCADE");
   });
 };
 

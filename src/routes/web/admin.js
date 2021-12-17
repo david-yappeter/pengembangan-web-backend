@@ -12,7 +12,6 @@ const {
   StudentHasClassEnroll,
 } = require("../../../db/models/student_has_class_enroll");
 const { Subject } = require("../../../db/models/subject");
-const { models } = require("../../../db/sequelize");
 
 const router = require("express").Router();
 
@@ -78,11 +77,12 @@ router.get("/admin/berita/create", async (req, res) => {
 
 router.post("/admin/berita/insert", async (req, res) => {
   const { editor1, title, category } = req.body;
-  await models.News.create({
-    title: title,
-    content: editor1,
-    newsCategoriesName: category,
-  })
+  News.query()
+    .insert({
+      title: title,
+      content: editor1,
+      newsCategoriesName: category,
+    })
     .then((result) => {
       res.send(result);
     })
@@ -94,13 +94,13 @@ router.post("/admin/berita/insert", async (req, res) => {
 
 router.delete("/admin/berita/delete/:id", async (req, res) => {
   const { id } = req.params;
-  await models.News.destroy({
-    where: {
+  News.query()
+    .delete()
+    .where({
       id: id,
-    },
-  })
-    .then((result) => {
-      res.send(200);
+    })
+    .then(() => {
+      res.status(200).send();
     })
     .catch((err) => {
       console.log(err);
@@ -198,7 +198,12 @@ router.get("/admin/class_enrolls/:id/students", async (req, res) => {
 
   ClassEnroll.query()
     .findById(classEnrollId)
-    .withGraphFetched("[class,students]")
+    .withGraphFetched("[class,students(studentModify)]")
+    .modifiers({
+      studentModify: (builder) => {
+        builder.orderBy("student_nim", "asc");
+      },
+    })
     .then((classEnroll) => {
       const totalStudent = classEnroll.students.length;
 
@@ -221,7 +226,7 @@ router.get("/admin/class_enrolls/:id/students", async (req, res) => {
       return res.render("partials/page500");
     });
 });
-// ClassEnrollHasStudent
+
 router.post("/admin/class_enrolls/:id/students", async (req, res) => {
   const { id: classEnrollId } = req.params;
   const { nim } = req.body;
@@ -249,6 +254,31 @@ router.post("/admin/class_enrolls/:id/students", async (req, res) => {
       return res.status(500).send();
     });
 });
+
+router.delete(
+  "/admin/class_enrolls/:classEnrollId/students/:studentNim",
+  async (req, res) => {
+    const { classEnrollId, studentNim } = req.params;
+
+    const temp = StudentHasClassEnroll.query()
+      .where({
+        class_enroll_id: classEnrollId,
+        student_nim: studentNim,
+      })
+      .delete();
+
+    console.log(temp.toKnexQuery().toQuery());
+
+    temp
+      .then(async () => {
+        return res.status(200).send();
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).send();
+      });
+  }
+);
 
 // Student
 router.get("/admin/students/:nim", async (req, res) => {
@@ -297,7 +327,6 @@ router.post("/admin/class_enroll_subjects", async (req, res) => {
   ClassEnrollSubject.query()
     .insert(req.body)
     .then((resp) => {
-      console.log(resp);
       return res.status(200).send(resp);
     })
     .catch((err) => {

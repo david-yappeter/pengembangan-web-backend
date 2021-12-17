@@ -2,6 +2,28 @@
 <%- include("../../../components/Header/admin") %>
 
 <div class="container-fluid container-md px-0">
+  <%- include("../../../components/Global/breadcrumb", {items: [
+    {
+      url: "/admin",
+      label: "Home",
+    },
+    {
+      url: `/admin/classes`,
+      label: "Kelas",
+    },
+    {
+      url: `/admin/class_enrolls`,
+      label: "Enroll",
+    },
+    {
+      url: `/admin/class_enrolls/${classEnroll.id}`,
+      label: classEnroll.id,
+    },
+    {
+      label: "Students",
+    },
+    ]}) 
+  %>
   <%- include("../../../components/Global/current-admin", {currentAdmin}) %>
   <div class="card">
     <div class="card-header" style="background-color: #094584; color: white">
@@ -23,20 +45,70 @@
                   <th scope="col">Nama</th>
                   <th scope="col">Jenis Kelamin</th>
                   <th scope="col">Email</th>
+                  <th scope="col"></th>
                 </tr>
               </thead>
               <tbody style="font-size: 0.9rem">
-                <% classEnroll.students.forEach((student) => { %>
+              <% classEnroll.students.forEach((student, idx) => { %>
                 <tr>
-                  <td> 
+                  <td class="align-middle"> 
                     <a href="/admin/students/<%= student.nim %>">
                       <%= student.nim %>
                     </a>
                   </td>
-                  <td> <%= student.name %></td>
-                  <td> <%= student.sex === "L" ? "Laki-Laki" : "Perempuan" %> </td>
-                  <td> <%= student.email %> </td>
+                  <td class="align-middle"> <%= student.name %></td>
+                  <td class="align-middle"> <%= student.sex === "L" ? "Laki-Laki" : "Perempuan" %> </td>
+                  <td class="align-middle"> <%= student.email %> </td>
+                  <td>
+                    <!-- Remove Student From Class - Start -->
+                    <button class="btn btn-danger" data-toggle="modal" data-target="#_remove-student-modal-<%= idx %>">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="_remove-student-modal-<%= idx %>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Remove <%= student.name %> (<%= student.nim %>) </h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                          </div>
+                          <div class="modal-body text-left h5">
+                            Are you sure ?
+                          </div>
+                          <div class="modal-footer justify-content-start">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button id="_remove-student-btn-<%= idx %>" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Remove Student From Class - End -->
+                  </td>
                 </tr>
+                
+                <script>
+                  $("#_remove-student-btn-<%= idx %>").click(function() {
+                    $.ajax({
+                      url: "/admin/class_enrolls/<%= classEnroll.id %>/students/<%= student.nim %>",
+                      type: "DELETE",
+                      success: function() {
+                        window.location.reload();
+                      },
+                      error: function() {
+                        new SnackBar({
+                          message: "Internal Server Error",
+                          status: "error",
+                          timeout: 5000,
+                          position: "bl",
+                          fixed: true,
+                        });
+                      }
+                    });
+                  });
+                </script>
                 <% }) %>
               </tbody>
             </table>
