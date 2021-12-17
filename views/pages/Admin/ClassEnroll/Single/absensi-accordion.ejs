@@ -1,7 +1,8 @@
+<h4>Absensi</h4>
 <div class="accordion" id="absensiAccordion">
 
   <% class_enroll_subjects.forEach((item, idx) => { %>
-  <div class="card">
+  <div id="_absensi-subject-container-<%= idx %>" class="card">
     <h2 class="mb-0">
       <button class="btn btn-link _admin-classenroll-accordion-button btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse-<%= idx %>" aria-expanded="false" aria-controls="collapse<%= idx %>">
       <span>+</span>  <%= item.subject.name %>

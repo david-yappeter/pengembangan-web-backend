@@ -23,21 +23,19 @@
         <!-- Button Option - Start -->
         <div class="col-12 my-3 d-flex">
           <a href="/admin/class_enrolls/<%= classEnroll.id %>/students" class="btn btn-primary _mikro-semi-bg ">
-            List Murid
+            List Mahasiswa
           </a>
         </div>
         <!-- Button Option - End -->
 
         <!-- ClassEnroll Subjects - Start -->
         <div class="col-12 my-3">
-          <h4>Mata Kuliah</h4>
           <%- include("./subject-table", { class_enroll_subjects: classEnroll.class_enroll_subjects, class_name: classEnroll.class.name }) %>
         </div>
         <!-- ClassEnroll Subjects - End -->
         
         <!-- Absensi - Start -->
         <div class="col-12 my-3">
-          <h4>Absensi</h4>
           <%- include("./absensi-accordion", { students: classEnroll.students, class_enroll_subjects: classEnroll.class_enroll_subjects }) %>
         </div>
         <!-- Absensi - End -->

@@ -25,6 +25,14 @@ class ClassEnroll extends Model {
           to: Class.tableName + ".id",
         },
       },
+      student_has_class_enrolls: {
+        relation: Model.HasManyRelation,
+        modelClass: StudentHasClassEnroll,
+        join: {
+          from: this.tableName + ".id",
+          to: StudentHasClassEnroll.tableName + ".class_enroll_id",
+        },
+      },
       class_enroll_subjects: {
         relation: Model.HasManyRelation,
         modelClass: ClassEnrollSubject,

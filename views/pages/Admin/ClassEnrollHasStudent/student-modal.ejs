@@ -9,7 +9,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Tambah Murid</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Tambah Mahasiswa</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -57,12 +57,12 @@
               window.location.reload();
           },
           error: function(response) {
-            console.log(response);
             new SnackBar({
-              message: "Internal Server Error",
+              message: "Mahasiswa sudah terdaftar",
               status: "error",
               timeout: 5000,
               position: "bl",
+              fixed: true,
             });
           }
         })
@@ -83,7 +83,7 @@
       $("#searchResult").empty();
       clearTimeout(delayTimer);
       delayTimer = setTimeout(() => {
-        var nim = $("#nim").val();
+        var nim = $("#nim").val().trim();
         if(nim === "") {
           $("#searchResult").empty();
           return;
@@ -100,7 +100,7 @@
             data.forEach((student) => {
               $("#searchResult").append(`
                 <button type="button" class="list-group-item" value="${student.nim}">
-                  ${student.nim}
+                  <bold>${student.nim} - ${student.name} </bold>
                 </button>
               `);
             });

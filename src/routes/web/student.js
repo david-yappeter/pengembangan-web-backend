@@ -1,3 +1,4 @@
+const { Attendance } = require("../../../db/models/attendance");
 const { ClassEnroll } = require("../../../db/models/class_enroll");
 const {
   ClassEnrollSubject,
@@ -5,6 +6,9 @@ const {
 const { News } = require("../../../db/models/news");
 const student = require("../../../db/models/student");
 const { Student } = require("../../../db/models/student");
+const {
+  StudentHasClassEnroll,
+} = require("../../../db/models/student_has_class_enroll");
 
 const router = require("express").Router();
 
@@ -99,86 +103,6 @@ router.get("/absensi", async (req, res) => {
   let filterSemester = req.query.semester;
   const nim = req.session.login.nim;
 
-  // Student.query()
-  //   .findById(nim)
-  //   .withGraphJoined(
-  //     // "class_enrolls.[class_enroll_subjects,class,lecturer]",
-  //     // "class_enrolls.[class_enroll_subjects.[subject,lecturer,attendances],class,lecturer]",
-  //     "class_enrolls(classEnrolls).[class_enroll_subjects.[subject,lecturer,attendances(orderWeek)],class,lecturer]",
-  //     // "class_enrolls(classEnrolls).[class_enroll_subjects.[subject,lecturer,attendances(orderWeek).[student_has_class_enroll(filterStudentNim)]],class,lecturer]",
-  //     {
-  //       minimize: true,
-  //     }
-  //   )
-  //   // .withGraphFetched(
-  //   //   "[class_enrolls(classEnrolls).[class_enroll_subjects.[subject,lecturer,attendances(orderWeek)],class,lecturer]]"
-  //   // )
-  //   .modifiers({
-  //     classEnrolls: (builder) => {
-  //       builder.orderBy("semester", "asc");
-  //       filterSemester &&
-  //         builder.where({
-  //           semester: filterSemester,
-  //         });
-  //     },
-  //     orderWeek: (builder) => {
-  //       builder.orderBy("week", "asc");
-  //     },
-  //     filterStudentNim: (builder) => {
-  //       builder.where({
-  //         student_nim: nim,
-  //       });
-  //     },
-  //   })
-  //   .then((resp) => {
-  //     console.log(resp);
-  //     return res.send(resp);
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //     return res.send(err);
-  //   });
-
-  Student.query()
-    .findById(nim)
-    .withGraphJoined(
-      // "class_enrolls.[class_enroll_subjects,class,lecturer]",
-      // "class_enrolls.[class_enroll_subjects.[subject,lecturer,attendances],class,lecturer]",
-      "class_enrolls(classEnrolls).[class_enroll_subjects.[subject,lecturer,attendances(orderWeek)],class,lecturer]",
-      // "class_enrolls(classEnrolls).[class_enroll_subjects.[subject,lecturer,attendances(orderWeek).[student_has_class_enroll(filterStudentNim)]],class,lecturer]",
-      {
-        minimize: true,
-      }
-    )
-    // .withGraphFetched(
-    //   "[class_enrolls(classEnrolls).[class_enroll_subjects.[subject,lecturer,attendances(orderWeek)],class,lecturer]]"
-    // )
-    .modifiers({
-      classEnrolls: (builder) => {
-        builder.orderBy("semester", "asc");
-        filterSemester &&
-          builder.where({
-            semester: filterSemester,
-          });
-      },
-      orderWeek: (builder) => {
-        builder.orderBy("week", "asc");
-      },
-      filterStudentNim: (builder) => {
-        builder.where({
-          student_nim: nim,
-        });
-      },
-    })
-    .then((resp) => {
-      console.log(resp);
-      return res.send(resp);
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.send(err);
-    });
-
   Student.query()
     .findById(req.session.login.nim)
     .withGraphFetched(
@@ -194,10 +118,16 @@ router.get("/absensi", async (req, res) => {
       },
       orderWeek: (builder) => {
         builder.orderBy("week", "asc");
+        builder.innerJoin(StudentHasClassEnroll.tableName, function () {
+          this.on(
+            StudentHasClassEnroll.tableName + ".id",
+            "=",
+            Attendance.tableName + ".student_has_class_enroll_id"
+          ).andOn(StudentHasClassEnroll.tableName + ".student_nim", "=", nim);
+        });
       },
     })
     .then((student) => {
-      console.log(student);
       if (!student || student.class_enrolls.length === 0) {
         return res.render("pages/Student/Absensi/index", {
           currentLogin: req.session.login,
@@ -258,8 +188,6 @@ router.get("/absensi", async (req, res) => {
         currentClassEnroll: currentClassEnroll,
         filterSemester: filterSemester,
       });
-
-      return res.send("asdsd");
     })
     .catch((err) => {
       console.log(err);

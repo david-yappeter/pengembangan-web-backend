@@ -1,11 +1,17 @@
 const { Class } = require("../../../db/models/class");
 const { ClassEnroll } = require("../../../db/models/class_enroll");
+const {
+  ClassEnrollSubject,
+} = require("../../../db/models/class_enroll_subject");
+const { Lecturer } = require("../../../db/models/lecturer");
 const { News } = require("../../../db/models/news");
 const { NewsCategory } = require("../../../db/models/news_category");
+const { Room } = require("../../../db/models/room");
 const { Student } = require("../../../db/models/student");
 const {
   StudentHasClassEnroll,
 } = require("../../../db/models/student_has_class_enroll");
+const { Subject } = require("../../../db/models/subject");
 const { models } = require("../../../db/sequelize");
 
 const router = require("express").Router();
@@ -145,9 +151,9 @@ router.get("/admin/class_enrolls/:id", async (req, res) => {
   ClassEnroll.query()
     .findById(classEnrollId)
     .withGraphFetched(
-      "[students,class,class_enroll_subjects.[subject,attendances.[student_has_class_enroll.[student]]]]"
+      "[students,class,class_enroll_subjects.[lecturer,subject,attendances.[student_has_class_enroll.[student]]]]"
     )
-    .then((classEnroll) => {
+    .then(async (classEnroll) => {
       for (let i = 0; i < classEnroll.class_enroll_subjects.length; i++) {
         classEnroll.class_enroll_subjects[i].attendances =
           classEnroll.class_enroll_subjects[i].attendances.reduce(
@@ -158,10 +164,24 @@ router.get("/admin/class_enrolls/:id", async (req, res) => {
             {}
           );
       }
+
+      for (let i = 0; i < classEnroll.class_enroll_subjects.length; i++) {
+        classEnroll.class_enroll_subjects = ClassEnrollSubject.sortArray(
+          classEnroll.class_enroll_subjects
+        );
+      }
+
+      const subjects = await Subject.query();
+      const rooms = await Room.query();
+      const lecturers = await Lecturer.query();
+
       return res.render("pages/Admin/ClassEnroll/Single/index", {
         currentAdmin: req.session.admin,
         classEnroll: classEnroll,
         semester: ClassEnroll.convertToRoman(classEnroll.semester),
+        subjects: subjects,
+        rooms: rooms,
+        lecturers: lecturers,
       });
     })
     .catch((err) => {
@@ -230,6 +250,25 @@ router.post("/admin/class_enrolls/:id/students", async (req, res) => {
     });
 });
 
+// Student
+router.get("/admin/students/:nim", async (req, res) => {
+  const { nim } = req.params;
+
+  Student.query()
+    .where({
+      nim: nim,
+    })
+    .first()
+    .then((student) => {
+      if (!student) {
+        return res.render("partials/page404");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 router.post("/admin/students/search", async (req, res) => {
   Student.query()
     .where("nim", "like", `%${req.body.nim}%`)
@@ -253,22 +292,51 @@ router.post("/admin/students/search", async (req, res) => {
     });
 });
 
-// Student
-router.get("/admin/students/:nim", async (req, res) => {
-  const { nim } = req.params;
-
-  Student.query()
-    .where({
-      nim: nim,
-    })
-    .first()
-    .then((student) => {
-      if (!student) {
-        return res.render("partials/page404");
-      }
+// ClassEnrollSubject
+router.post("/admin/class_enroll_subjects", async (req, res) => {
+  ClassEnrollSubject.query()
+    .insert(req.body)
+    .then((resp) => {
+      console.log(resp);
+      return res.status(200).send(resp);
     })
     .catch((err) => {
       console.log(err);
+      return res.status(500).send();
+    });
+});
+
+router.put("/admin/class_enroll_subjects/:id", async (req, res) => {
+  const { id: classEnrollId } = req.params;
+
+  ClassEnrollSubject.query()
+    .update(req.body)
+    .where({
+      id: classEnrollId,
+    })
+    .then((resp) => {
+      return res.status(200).send();
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send();
+    });
+});
+
+router.delete("/admin/class_enroll_subjects/:id", async (req, res) => {
+  const { id: classEnrollId } = req.params;
+
+  ClassEnrollSubject.query()
+    .delete()
+    .where({
+      id: classEnrollId,
+    })
+    .then(() => {
+      return res.send();
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.send();
     });
 });
 
