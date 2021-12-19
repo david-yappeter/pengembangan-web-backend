@@ -1,0 +1,38 @@
+<%- include("../../../../partials/header") %>
+<%- include("../../../../components/Header/admin") %>
+
+<div class="container-fluid container-md px-0">
+  <%- include("../../../../components/Global/breadcrumb", {items: [
+    {
+      url: "/admin",
+      label: "Home",
+    },
+    {
+      url: "/admin/students",
+      label: "Students",
+    },
+    {
+      label: `${student.nim}`,
+    },
+    ]}) 
+  %>
+  <%- include("../../../../components/Global/current-admin", {currentAdmin}) %>
+  <div class="card">
+    <div class="card-header" style="background-color: #094584; color: white">
+      <h4 class="card-title mb-0"> <%= student.name %> (<%= student.nim %>) </h4>
+    </div>
+    <div class="card-body py-0">
+      <div class="row">
+        <!-- ClassEnroll Data - Start -->
+        <div class="col-12 my-3">
+          <h4>Detail</h4>
+          <%#- include("./data-column.ejs", { key: "ID", value: classEnroll.id }) %>
+        </div>
+        <!-- ClassEnroll Data - End -->
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../../../../partials/footer") %>

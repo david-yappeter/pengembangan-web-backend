@@ -281,6 +281,22 @@ router.delete(
 );
 
 // Student
+router.get("/admin/students", async (req, res) => {
+  const { nim } = req.params;
+
+  Student.query()
+    .then((students) => {
+      return res.render("pages/Admin/Student/index", {
+        currentAdmin: req.session.admin,
+        students: students,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.render("partials/page500");
+    });
+});
+
 router.get("/admin/students/:nim", async (req, res) => {
   const { nim } = req.params;
 
@@ -293,9 +309,14 @@ router.get("/admin/students/:nim", async (req, res) => {
       if (!student) {
         return res.render("partials/page404");
       }
+      return res.render("pages/Admin/Student/Single/index", {
+        currentAdmin: req.session.admin,
+        student: student,
+      });
     })
     .catch((err) => {
       console.log(err);
+      return res.render("partials/page500");
     });
 });
 
