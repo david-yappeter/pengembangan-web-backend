@@ -1,0 +1,193 @@
+<%- include("../../../partials/header") %>
+<%- include("../../../components/Header/admin") %>
+
+<div class="container-fluid container-md px-0">
+  <%- include("../../../components/Global/breadcrumb", {items: [
+    {
+      url: "/admin",
+      label: "Home",
+    },
+    {
+      label: "Mata Kuliah",
+    },
+    ]}) 
+  %>
+  <%- include("../../../components/Global/current-admin", {currentAdmin}) %>
+  <div class="card">
+    <div class="card-header" style="background-color: #094584; color: white">
+      <h4 class="card-title mb-0"> Mata Kuliah </h4>
+    </div>
+    <div class="card-body py-0">
+      <!-- Add Section - Start -->
+        <div class="text-right mt-3">
+          <button class="btn btn-success" data-toggle="modal" data-target="#_add-subject-modal-container">
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
+        <!-- Add Modal - Start -->
+        <div class="modal fade" id="_add-subject-modal-container" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"> Tambah Mata Kuliah </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <form id="_add-subject-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                      <input class="form-control" type="text" id="_add-subject-code" name="code" placeholder="Kode ..." required />
+                    </div>
+                    <div class="form-group">
+                      <input class="form-control" type="text" id="_add-subject-" name="name" placeholder="Nama ..." required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" id="_add-subject-btn" class="btn btn-success"> Create </button>
+                </div>
+              </form> 
+            </div>
+          </div>
+        </div>
+        <!-- Add Modal - End -->
+      <!-- Add Section - End -->
+
+      <div class="row">
+        <div class="col-12 pb-md-5 pt-2 pt-md-3">
+          <!-- table - start -->
+          <div class="table-responsive">
+            <table class="table table-sm table-hover table-bordered text-center" style="font-size: 0.8rem;min-width:1000px">
+              <thead>
+                <tr style="background: #094584;color: white">
+                  <th scope="col"> Kode </th>
+                  <th scope="col">Nama</th>
+                  <th scope="col">Created At</th>
+                  <th scope="col">Updated At</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody style="font-size: 0.9rem">
+                <% subjects.forEach((subject, idx) => { %>
+                  <tr id="_subject-row-container-<%= idx %>">
+                    <td class="align-middle"> <%= subject.code %> </td>
+                    <td class="align-middle"> <%= subject.name %> </td>
+                    <td class="align-middle"> <%= new Date(subject.created_at).toLocaleDateString('en-GB', {day: "numeric",month: "long", year: "numeric"}) %> </td>
+                    <td class="align-middle"> <%= subject.updated_at || "-" %> </td>
+                    <!-- Delete Button - Start -->
+                    <td>
+                      <button class="btn btn-danger" data-toggle="modal" data-target="#_delete-modal-container-<%= idx %>">
+                        <i class="fa fa-trash"></i>
+                      </button>
+
+                      <!-- Delete Modal - Start -->
+                      <div class="modal fade" id="_delete-modal-container-<%= idx %>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Delete <%= subject.name %> </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                              Are you sure ?
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button id="_delete-subject-btn-<%= idx %>" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Delete Modal - End -->
+
+                    </td>
+                    <!-- Delete Button - End -->
+                  </tr>
+
+                  <script>
+                    $("#_delete-subject-btn-<%= idx %>").click(() => {
+                      $.ajax({
+                        url: "/admin/subjects/<%= subject.code %>",
+                        type: "DELETE",
+                        async: true,
+                        success: () => {
+                          new SnackBar({
+                            message: "Success Delete",
+                            status: "success",
+                            timeout: 5000,
+                            position: "bl",
+                            fixed: true,
+                          })
+
+                          setTimeout(() => {
+                            $("#_subject-row-container-<%= idx %>").remove();
+                          }, 500);
+                        },
+                        error: () => {
+                          new SnackBar({
+                            message: "Internal Server Error",
+                            status: "error",
+                            timeout: 5000,
+                            position: "bl",
+                            fixed: true,
+                          })
+                        }
+                      })
+                    });
+                  </script>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+          <!-- table - end -->
+
+          <div id="sync-pagination" class="d-flex justify-content-center mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('#sync-pagination').twbsPagination({
+    totalPages: parseInt("<%= totalPage %>"),
+    visiblePages: 4,
+    initiateStartPageClick: false,
+    startPage: parseInt("<%= page %>"),
+    onPageClick: function (evt, page) {
+      window.location.replace(window.location.href.split("?")[0] + "?page=" + page);
+    },
+  });
+  
+  $(document).ready(function() {
+    $("#_add-subject-form").submit(function(e) {
+      e.preventDefault();
+      const serialized = $(this).serializeArray()
+      $.ajax({
+        url: "/admin/subjects",
+        type: "POST",
+        data: serialized.reduce((prev, curr)  => {
+          prev[curr.name] = curr.value;
+          return prev;
+        }, {}),
+        async: true,
+        success: () => {
+          window.location.reload();
+        },
+        error: () => {
+          new SnackBar({
+            message: "Internal Server Error",
+            status: "error",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          });
+        },
+      })
+    });
+  })
+</script>
+
+<%- include("../../../partials/footer") %>

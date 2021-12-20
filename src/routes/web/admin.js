@@ -463,7 +463,6 @@ router.get("/admin/rooms", async (req, res) => {
         .then(({ total: totalData }) => {
           return res.render("pages/Admin/Room/index", {
             currentAdmin: req.session.admin,
-            rooms: rooms,
             totalData: totalData,
             rooms: rooms.results,
             totalPage: Math.ceil(totalData / limit),
@@ -500,6 +499,65 @@ router.delete("/admin/rooms/:roomName", async (req, res) => {
     .delete()
     .where({
       name: roomName,
+    })
+    .then(() => {
+      return res.status(200).send();
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send();
+    });
+});
+
+// Subjects
+router.get("/admin/subjects", async (req, res) => {
+  const limit = 10;
+  const page = req.query.page || 1;
+
+  Subject.query()
+    .page(page - 1, limit)
+    .then((subjects) => {
+      Subject.query()
+        .count("* as total")
+        .first()
+        .then(({ total: totalData }) => {
+          return res.render("pages/Admin/Subject/index", {
+            currentAdmin: req.session.admin,
+            totalData: totalData,
+            subjects: subjects.results,
+            totalPage: Math.ceil(totalData / limit),
+            page: page,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.render("partials/page500");
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.render("partials/page500");
+    });
+});
+
+router.post("/admin/subjects", async (req, res) => {
+  Subject.query()
+    .insert(req.body)
+    .then(() => {
+      return res.status(200).send();
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send();
+    });
+});
+
+router.delete("/admin/subjects/:subjectCode", async (req, res) => {
+  const { subjectCode } = req.params;
+  Subject.query()
+    .delete()
+    .where({
+      code: subjectCode,
     })
     .then(() => {
       return res.status(200).send();
