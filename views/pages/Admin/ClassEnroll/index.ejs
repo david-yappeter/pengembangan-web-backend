@@ -19,10 +19,10 @@
   <%- include("../../../components/Global/current-admin", {currentAdmin}) %>
   <div class="card">
     <div class="card-header" style="background-color: #094584; color: white">
-      <h4 class="card-title mb-0">Kelas</h4>
+      <h4 class="card-title mb-0">Kelas <%= classObj.name %></h4>
     </div>
     <div class="text-right">
-      <a href="/admin/berita/create" class="btn btn-success m-3">
+      <a href="/admin/classes/testfind/enroll" class="btn btn-success m-3">
         <i class="fa fa-plus" aria-hidden="true"></i>
       </a>
     </div>
@@ -43,7 +43,7 @@
                 </tr>
               </thead>
               <tbody style="font-size: 0.9rem">
-                <% classEnrolls.forEach((classEnroll) => { %>
+                <% classObj.class_enrolls.forEach((classEnroll) => { %>
                 <tr>
                   <td class="align-middle"> <%= classEnroll.id %> </td>
                   <td class="align-middle"> <%= classEnroll.start_year %> </td>

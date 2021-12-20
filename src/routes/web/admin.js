@@ -127,15 +127,16 @@ router.get("/admin/classes", async (req, res) => {
 router.get("/admin/classes/:id/enroll", async (req, res) => {
   const { id: classId } = req.params;
 
-  ClassEnroll.query()
+  Class.query()
     .where({
-      class_id: classId,
+      id: classId,
     })
-    .withGraphFetched("[class]")
-    .then((classEnrolls) => {
+    .first()
+    .withGraphFetched("[class_enrolls]")
+    .then((classObj) => {
       return res.render("pages/Admin/ClassEnroll/index", {
         currentAdmin: req.session.admin,
-        classEnrolls: classEnrolls,
+        classObj: classObj,
       });
     })
     .catch((err) => {
@@ -283,17 +284,52 @@ router.delete(
 // Student
 router.get("/admin/students", async (req, res) => {
   const { nim } = req.params;
-
+  const limit = 10;
+  const page = req.query.page || 1;
   Student.query()
+    .page(page - 1, limit)
     .then((students) => {
-      return res.render("pages/Admin/Student/index", {
-        currentAdmin: req.session.admin,
-        students: students,
-      });
+      Student.query()
+        .count("* as total")
+        .first()
+        .then(({ total: totalData }) => {
+          const totalPage = totalData / limit;
+          return res.render("pages/Admin/Student/index", {
+            totalPage: totalPage,
+            page: page,
+            currentAdmin: req.session.admin,
+            students: students.results,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     })
     .catch((err) => {
       console.log(err);
       return res.render("partials/page500");
+    });
+});
+
+router.get("/admin/students/create", async (req, res) => {
+  return res.render("pages/Admin/Student/Create/index", {
+    currentAdmin: req.session.admin,
+  });
+});
+
+router.post("/admin/students", async (req, res) => {
+  Student.query()
+    .insert({
+      ...req.body,
+      role: "student",
+      status: 1,
+    })
+    .then(() => {
+      return res.status(200).send();
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send();
     });
 });
 
@@ -303,6 +339,12 @@ router.get("/admin/students/:nim", async (req, res) => {
   Student.query()
     .where({
       nim: nim,
+    })
+    .withGraphFetched("[class_enrolls(classEnrollModify).[class,lecturer]]")
+    .modifiers({
+      classEnrollModify: (builder) => {
+        builder.orderBy("semester", "desc").limit(1);
+      },
     })
     .first()
     .then((student) => {
@@ -317,6 +359,23 @@ router.get("/admin/students/:nim", async (req, res) => {
     .catch((err) => {
       console.log(err);
       return res.render("partials/page500");
+    });
+});
+
+router.delete("/admin/students/:nim", async (req, res) => {
+  const { nim } = req.params;
+
+  Student.query()
+    .where({
+      nim: nim,
+    })
+    .delete()
+    .then(() => {
+      return res.status(200).send();
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send();
     });
 });
 
@@ -387,6 +446,21 @@ router.delete("/admin/class_enroll_subjects/:id", async (req, res) => {
     .catch((err) => {
       console.log(err);
       return res.send();
+    });
+});
+
+// Rooms
+router.get("/admin/rooms", async (req, res) => {
+  Room.query()
+    .then((rooms) => {
+      return res.render("pages/Admin/Room/index", {
+        currentAdmin: req.session.admin,
+        rooms: rooms,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.render("partials/page500");
     });
 });
 

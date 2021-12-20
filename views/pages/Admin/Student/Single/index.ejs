@@ -25,8 +25,27 @@
       <div class="row">
         <!-- ClassEnroll Data - Start -->
         <div class="col-12 my-3">
-          <h4>Detail</h4>
-          <%#- include("./data-column.ejs", { key: "ID", value: classEnroll.id }) %>
+          <div class="d-flex flex-column flex-md-row">
+            <img
+              class="my-2 m-md-5 mx-auto _profile-image"
+              src="https://sps.widyatama.ac.id/wp-content/uploads/2020/08/dummy-profile-pic-male1-300x300.jpg"
+            />
+            <div class="container-fluid my-md-5 font-weight-bold">
+              <%- include("./main-data-column", {key: "Nama / NIM",  value:  student.name + " / " + student.nim}) %>
+              <%- include("./main-data-column", {key: "NIK",  value:  student.nik }) %>
+              <%- include("./main-data-column", {key: "Tempat / Tanggal Lahir",  value: `${student.place_of_birth} / ${new Date(student.date_of_birth).toLocaleDateString('en-GB',{day: "numeric", month: "long", year: "numeric"})}` }) %>
+              <%- include("./main-data-column", {key: "Agama",  value: student.religion }) %>
+              <%- include("./main-data-column", {key: "Jenis Kelamin",  value: student.sex === "L" ? "Laki-Laki" : "Perempuan" }) %>
+              <%- include("./main-data-column", {key: "Nomor Handphone / Email",  value: `${student.phone} / ${student.email}` }) %>
+              <% if(student.class_enrolls.length > 0) { %>
+              <%- include("./main-data-column", {key: "Program Studi / Kelas",  value:  student.class_enrolls[0].class.study_program + " / " + student.class_enrolls[0].class.letter}) %>
+              <%- include("./main-data-column", {key: "Peminatan",  value:  student.class_enrolls[0].class.study_program }) %>
+              <%- include("./main-data-column", {key: "Semester / Waktu Kuliah",  value:  student.class_enrolls[0].semester_roman + " / " + student.class_enrolls[0].time }) %>
+              <%- include("./main-data-column", {key: "Dosen Wali",  value:  student.class_enrolls[0].lecturer.name }) %>
+              <% } %>
+            </div>
+          </div>
+
         </div>
         <!-- ClassEnroll Data - End -->
         

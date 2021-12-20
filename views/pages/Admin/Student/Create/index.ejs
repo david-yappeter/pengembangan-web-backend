@@ -1,0 +1,89 @@
+<%- include("../../../../partials/header") %> 
+<%- include("../../../../components/Header/admin") %>
+
+<div class="container-fluid container-md px-0">
+  <%- include("../../../../components/Global/current-admin", {currentAdmin}) %>
+  <div class="card">
+    <div class="card-header" style="background-color: #094584; color: white">
+      <h4 class="card-title mb-0">Mahasiswa Baru</h4>
+    </div>
+    <div class="card-body py-0">
+      <div class="row">
+        <form id="_student-create-form" class="col-12" action="/admin/students" method="post">
+          <div class="form-group">
+            <input class="my-3 form-control" type="text" name="nik" id="nik"  placeholder="NIK ..." required>
+          </div>
+          <div class="form-group">
+            <input class="my-3 form-control" type="text" name="nim" id="nim"  placeholder="NIM ..." required>
+          </div>
+          <div class="form-group">
+            <input class="my-3 form-control" type="text" name="name" id="name" placeholder="Nama ..." required>
+          </div>
+          <div class="form-group">
+            <select class="my-3 form-control" name="sex" id="sex" required>
+              <option value="L">Laki-Laki</option>
+              <option value="P">Perempuan</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input class="my-3 form-control" type="email" name="email" id="email" placeholder="Email ..." required />
+          </div>
+          <div class="form-group">
+            <textarea class="my-3 form-control" rows="3" cols="60" name="place_of_birth" id="place_of_birth" placeholder="Tempat Kelahiran ..."/ required></textarea>  
+          </div>
+          <div class="form-group">
+            <label for="date_of_birth">Tanggal Lahir</label>
+            <input class="mb-3 form-control" type="date" name="date_of_birth" id="date_of_birth" placeholder="Tanggal Kelahiran ..."/ required />
+          </div>
+          <div class="form-group">
+            <select class="my-3 form-control" name="religion" id="religion" placeholder="Agama ..." required>
+              <option value="Islam">Islam</option>
+              <option value="Kristen">Kristen</option>
+              <option value="Katolik">Katolik</option>
+              <option value="Hindu">Hindu</option>
+              <option value="Buddha">Buddha</option>
+              <option value="Atheis">Atheis</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input class="my-3 form-control" type="text" name="phone" id="phone" placeholder="No HP ..." required>
+          </div>
+          <div class="form-group">
+            <input class="my-3 form-control" type="password" name="password" id="password" placeholder="Password ..." required>
+          </div>
+          <!-- <input class="my-3 form-control" name="category" id="category1"  placeholder="Category"/> -->
+
+          <button type="submit" class="btn btn-block btn-success my-2"  >
+            Create
+          </button>
+        </form>
+        
+    </div>
+  </div>
+</div>
+
+<script>
+    new window.JustValidate("#_student-create-form", {
+      submitHandler: function (form, values, ajax) {
+        ajax({
+          url: form.action,
+          method: "POST",
+          data: JSON.stringify(values),
+          async: true,
+          dataType: "json",
+          callback: function (response) {
+            window.location.replace("/admin/students");
+          },
+          error: function (response) {
+            alert("AJAX submit error! \nResponse from server:" + response);
+          },
+        });
+      },
+
+      invalidFormCallback: function (errors) {
+        console.log(errors);
+      },
+    });
+</script>
+
+<%- include("../../../../partials/footer") %>

@@ -288,7 +288,7 @@
           "room_name": $("#add-ruangan").val(),
           "subject_code": $("#add-subject").val(),
           "lecturer_nip": $("#add-lecturer-nip").val(),
-          "class_enroll_id": <%= classEnroll.id %>,
+          "class_enroll_id": parseInt("<%= classEnroll.id %>"),
         },
         success: function() {
           window.location.reload();

@@ -19,13 +19,18 @@
     </div>
     <div class="card-body py-0">
       <!-- Add Section - Start -->
+      <div class="text-right mt-3">
+        <a class="btn btn-success" href="/admin/students/create">
+          <i class="fa fa-plus"></i>
+        </a>
+      </div>
       <!-- Add Section - End -->
 
       <div class="row">
         <div class="col-12 pb-md-5 pt-2 pt-md-3">
           <!-- table - start -->
           <div class="table-responsive">
-            <table class="table table-sm table-hover table-bordered text-center" style="font-size: 0.8rem">
+            <table class="table table-sm table-hover table-bordered text-center" style="font-size: 0.8rem; min-width: 1000px">
               <thead>
                 <tr style="background: #094584;color: white">
                   <th scope="col">NIM</th>
@@ -37,7 +42,7 @@
               </thead>
               <tbody style="font-size: 0.9rem">
               <% students.forEach((student, idx) => { %>
-                <tr>
+                <tr id="_student-data-row-<%= idx %>">
                   <td class="align-middle"> 
                     <a href="/admin/students/<%= student.nim %>">
                       <%= student.nim %>
@@ -54,16 +59,16 @@
                     <!-- View Student - End -->
 
                     <!-- Delete Student - Start -->
-                    <button class="btn btn-danger" data-toggle="modal" data-target="#_remove-student-modal-<%= idx %>">
+                    <button class="btn btn-danger" data-toggle="modal" data-target="#_delete-student-modal-<%= idx %>">
                       <i class="fa fa-trash"></i>
                     </button>
                     
                     <!-- Modal -->
-                    <div class="modal fade" id="_remove-student-modal-<%= idx %>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal fade" id="_delete-student-modal-<%= idx %>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h5 class="modal-title">Remove <%= student.name %> (<%= student.nim %>) </h5>
+                            <h5 class="modal-title">Delete <%= student.name %> (<%= student.nim %>) </h5>
                               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                               </button>
@@ -73,7 +78,7 @@
                           </div>
                           <div class="modal-footer justify-content-start">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button id="_remove-student-btn-<%= idx %>" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+                            <button id="_delete-student-btn-<%= idx %>" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
                           </div>
                         </div>
                       </div>
@@ -83,7 +88,37 @@
                 </tr>
                 
                 <script>
+                  $(document).ready(function() {
+                    $("#_delete-student-btn-<%= idx %>").click(function() {
+                      $.ajax({
+                        url: "/admin/students/<%= student.nim %>",
+                        type: "DELETE",
+                        success: function(res) {
+                          new SnackBar({
+                            message: "Delete Success",
+                            status: "success",
+                            timeout: 5000,
+                            position: "bl",
+                            fixed: true,
+                          });
+                          setTimeout(() => {
+                            $("#_student-data-row-<%= idx %>").remove();
+                          }, 500);
+                        },
+                        error: function(err) {
+                          new SnackBar({
+                            message: "Internal Server Error",
+                            status: "error",
+                            timeout: 5000,
+                            position: "bl",
+                            fixed: true,
+                          });
+                        }
+                      });
+                    });
+                  });
                 </script>
+
                 <% }) %>
               </tbody>
             </table>
@@ -96,5 +131,17 @@
     </div>
   </div>
 </div>
+
+<script>
+  $('#sync-pagination').twbsPagination({
+    totalPages: parseInt("<%= totalPage %>"),
+    visiblePages: 4,
+    initiateStartPageClick: false,
+    startPage: parseInt("<%= page %>"),
+    onPageClick: function (evt, page) {
+      window.location.replace(window.location.href.split("?")[0] + "?page=" + page);
+    },
+  });
+</script>
 
 <%- include("../../../partials/footer") %>
