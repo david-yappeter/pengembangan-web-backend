@@ -17,8 +17,8 @@ class Room extends Model {
         relation: Model.HasManyRelation,
         modelClass: ClassEnrollSubject,
         join: {
-          from: this.tableName() + ".name",
-          to: ClassEnrollSubject.tableName() + ".room_name",
+          from: this.tableName + ".name",
+          to: ClassEnrollSubject.tableName + ".room_name",
         },
       },
     };

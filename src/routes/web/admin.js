@@ -293,7 +293,7 @@ router.get("/admin/students", async (req, res) => {
         .count("* as total")
         .first()
         .then(({ total: totalData }) => {
-          const totalPage = totalData / limit;
+          const totalPage = Math.ceil(totalData / limit);
           return res.render("pages/Admin/Student/index", {
             totalPage: totalPage,
             page: page,
@@ -451,16 +451,62 @@ router.delete("/admin/class_enroll_subjects/:id", async (req, res) => {
 
 // Rooms
 router.get("/admin/rooms", async (req, res) => {
+  const limit = 10;
+  const page = req.query.page || 1;
+
   Room.query()
+    .page(page - 1, limit)
     .then((rooms) => {
-      return res.render("pages/Admin/Room/index", {
-        currentAdmin: req.session.admin,
-        rooms: rooms,
-      });
+      Room.query()
+        .count("* as total")
+        .first()
+        .then(({ total: totalData }) => {
+          return res.render("pages/Admin/Room/index", {
+            currentAdmin: req.session.admin,
+            rooms: rooms,
+            totalData: totalData,
+            rooms: rooms.results,
+            totalPage: Math.ceil(totalData / limit),
+            page: page,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.render("partials/page500");
+        });
     })
     .catch((err) => {
       console.log(err);
       return res.render("partials/page500");
+    });
+});
+
+router.post("/admin/rooms", async (req, res) => {
+  Room.query()
+    .insert(req.body)
+    .then(() => {
+      res.status(200).send();
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send();
+    });
+});
+
+router.delete("/admin/rooms/:roomName", async (req, res) => {
+  const { roomName } = req.params;
+
+  Room.query()
+    .delete()
+    .where({
+      name: roomName,
+    })
+    .then(() => {
+      return res.status(200).send();
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send();
     });
 });
 
