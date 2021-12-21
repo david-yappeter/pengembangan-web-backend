@@ -6,7 +6,7 @@ exports.up = function (knex) {
       .notNullable();
     table.time("start_time").notNullable();
     table.time("end_time").notNullable();
-    table.timestamps();
+    table.timestamps(true, true);
 
     table
       .integer("class_enroll_id")

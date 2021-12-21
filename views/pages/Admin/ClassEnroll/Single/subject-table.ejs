@@ -86,13 +86,13 @@
     <tbody style="font-size: 0.9rem">
       <% class_enroll_subjects.forEach((jadwal, idx) => { %>
       <tr id="_subject-row-<%= idx %>">
-        <td><%= jadwal.day %></td>
-        <td><%= jadwal.subject_code %></td>
-        <td class="text-left"><%= jadwal.subject.name %> <strong>(<%= jadwal.lecturer.name %>)</strong></td>
-        <td><%= class_name %></td>
-        <td><%= jadwal.room_name %></td>
-        <td><%= jadwal.start_time.substring(0,5) + " - " + jadwal.end_time.substring(0,5) %></td>
-        <td><%= jadwal.sks  %></td>
+        <td class="align-middle"><%= jadwal.day %></td>
+        <td class="align-middle"><%= jadwal.subject_code %></td>
+        <td class="align-middle" class="text-left"><%= jadwal.subject.name %> <strong>(<%= jadwal.lecturer.name %>)</strong></td>
+        <td class="align-middle"><%= class_name %></td>
+        <td class="align-middle"><%= jadwal.room_name %></td>
+        <td class="align-middle"><%= jadwal.start_time.substring(0,5) + " - " + jadwal.end_time.substring(0,5) %></td>
+        <td class="align-middle"><%= jadwal.sks  %></td>
         <td class="d-flex justify-content-around">
 
           <!-- Edit Button - Start -->

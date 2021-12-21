@@ -6,7 +6,7 @@ exports.up = function (knex) {
     table.integer("year").notNullable();
     table.string("education_place", 100).notNullable();
     table.string("field", 100).notNullable();
-    table.timestamps();
+    table.timestamps(true, true);
   });
 };
 

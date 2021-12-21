@@ -123,6 +123,18 @@ router.get("/admin/classes", async (req, res) => {
     });
 });
 
+router.post("/admin/classes", async (req, res) => {
+  Class.query()
+    .insert(req.body)
+    .then(() => {
+      return res.status(200).send();
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send();
+    });
+});
+
 // ClassEnroll
 router.get("/admin/classes/:id/enroll", async (req, res) => {
   const { id: classId } = req.params;
@@ -132,16 +144,36 @@ router.get("/admin/classes/:id/enroll", async (req, res) => {
       id: classId,
     })
     .first()
-    .withGraphFetched("[class_enrolls]")
+    .withGraphFetched("[class_enrolls.[lecturer]]")
     .then((classObj) => {
-      return res.render("pages/Admin/ClassEnroll/index", {
-        currentAdmin: req.session.admin,
-        classObj: classObj,
-      });
+      Lecturer.query()
+        .then((lecturers) => {
+          return res.render("pages/Admin/ClassEnroll/index", {
+            currentAdmin: req.session.admin,
+            classObj: classObj,
+            lecturers: lecturers,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.render("partials/page500");
+        });
     })
     .catch((err) => {
       console.log(err);
       return res.render("partials/page500");
+    });
+});
+
+router.post("/admin/classes/:id/enroll", async (req, res) => {
+  ClassEnroll.query()
+    .insert(req.body)
+    .then(() => {
+      return res.status(200).send();
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send();
     });
 });
 
@@ -289,21 +321,13 @@ router.get("/admin/students", async (req, res) => {
   Student.query()
     .page(page - 1, limit)
     .then((students) => {
-      Student.query()
-        .count("* as total")
-        .first()
-        .then(({ total: totalData }) => {
-          const totalPage = Math.ceil(totalData / limit);
-          return res.render("pages/Admin/Student/index", {
-            totalPage: totalPage,
-            page: page,
-            currentAdmin: req.session.admin,
-            students: students.results,
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const totalPage = Math.ceil(students.total / limit);
+      return res.render("pages/Admin/Student/index", {
+        totalPage: totalPage,
+        page: page,
+        currentAdmin: req.session.admin,
+        students: students.results,
+      });
     })
     .catch((err) => {
       console.log(err);
@@ -457,22 +481,14 @@ router.get("/admin/rooms", async (req, res) => {
   Room.query()
     .page(page - 1, limit)
     .then((rooms) => {
-      Room.query()
-        .count("* as total")
-        .first()
-        .then(({ total: totalData }) => {
-          return res.render("pages/Admin/Room/index", {
-            currentAdmin: req.session.admin,
-            totalData: totalData,
-            rooms: rooms.results,
-            totalPage: Math.ceil(totalData / limit),
-            page: page,
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          return res.render("partials/page500");
-        });
+      const totalData = rooms.total;
+      return res.render("pages/Admin/Room/index", {
+        currentAdmin: req.session.admin,
+        totalData: totalData,
+        rooms: rooms.results,
+        totalPage: Math.ceil(totalData / limit),
+        page: page,
+      });
     })
     .catch((err) => {
       console.log(err);
@@ -517,22 +533,14 @@ router.get("/admin/subjects", async (req, res) => {
   Subject.query()
     .page(page - 1, limit)
     .then((subjects) => {
-      Subject.query()
-        .count("* as total")
-        .first()
-        .then(({ total: totalData }) => {
-          return res.render("pages/Admin/Subject/index", {
-            currentAdmin: req.session.admin,
-            totalData: totalData,
-            subjects: subjects.results,
-            totalPage: Math.ceil(totalData / limit),
-            page: page,
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          return res.render("partials/page500");
-        });
+      const totalData = subjects.total;
+      return res.render("pages/Admin/Subject/index", {
+        currentAdmin: req.session.admin,
+        totalData: totalData,
+        subjects: subjects.results,
+        totalPage: Math.ceil(totalData / limit),
+        page: page,
+      });
     })
     .catch((err) => {
       console.log(err);
@@ -558,6 +566,61 @@ router.delete("/admin/subjects/:subjectCode", async (req, res) => {
     .delete()
     .where({
       code: subjectCode,
+    })
+    .then(() => {
+      return res.status(200).send();
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send();
+    });
+});
+
+// Lecturer
+router.get("/admin/lecturers", async (req, res) => {
+  const limit = 10;
+  const page = req.query.page || 1;
+
+  Lecturer.query()
+    .page(page - 1, limit)
+    .orderBy("created_at", "asc")
+    .then((lecturers) => {
+      const totalData = lecturers.total;
+      return res.render("pages/Admin/Lecturer/index", {
+        currentAdmin: req.session.admin,
+        totalData: totalData,
+        lecturers: lecturers.results,
+        totalPage: Math.ceil(totalData / limit),
+        page: page,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.render("partials/page500");
+    });
+});
+
+router.post("/admin/lecturers", async (req, res) => {
+  Lecturer.query()
+    .insert({
+      ...req.body,
+      status: 1,
+    })
+    .then(() => {
+      return res.status(200).send();
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send();
+    });
+});
+
+router.delete("/admin/lecturers/:nip", async (req, res) => {
+  const { nip } = req.params;
+  Lecturer.query()
+    .delete()
+    .where({
+      nip: nip,
     })
     .then(() => {
       return res.status(200).send();

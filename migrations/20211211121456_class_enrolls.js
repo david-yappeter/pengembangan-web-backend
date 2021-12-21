@@ -4,7 +4,7 @@ exports.up = function (knex) {
     table.integer("start_year").notNullable();
     table.integer("semester").notNullable();
     table.enu("time", ["Pagi", "Sore"]).notNullable();
-    table.timestamps();
+    table.timestamps(true, true);
 
     table
       .integer("class_id")

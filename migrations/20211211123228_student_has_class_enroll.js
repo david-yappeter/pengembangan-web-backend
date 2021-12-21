@@ -16,7 +16,7 @@ exports.up = function (knex) {
       .unsigned()
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
-    table.timestamps();
+    table.timestamps(true, true);
   });
 };
 

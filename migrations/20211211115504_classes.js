@@ -4,7 +4,7 @@ exports.up = function (knex) {
     table.string("study_program", 100).notNullable();
     table.string("acronym", 10).notNullable();
     table.string("letter", 5).notNullable();
-    table.timestamps();
+    table.timestamps(true, true);
   });
 };
 

@@ -12,7 +12,7 @@ exports.up = function (knex) {
     table.enu("sex", ["L", "P"]).notNullable();
     table.string("email", 100).notNullable();
     table.enu("role", ["student", "dosen"]).notNullable();
-    table.timestamps();
+    table.timestamps(true, true);
   });
 };
 

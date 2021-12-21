@@ -1,7 +1,7 @@
 exports.up = function (knex) {
   return knex.schema.createTable("news_categories", (table) => {
     table.string("name", 45).primary();
-    table.timestamps();
+    table.timestamps(true, true);
   });
 };
 

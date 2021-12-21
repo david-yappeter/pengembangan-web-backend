@@ -3,7 +3,7 @@ exports.up = function (knex) {
     table.increments("id").primary();
     table.integer("week").notNullable();
     table.integer("status").notNullable();
-    table.timestamps();
+    table.timestamps(true, true);
   });
 };
 

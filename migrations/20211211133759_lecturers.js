@@ -5,7 +5,7 @@ exports.up = function (knex) {
     table.integer("status").notNullable();
     table.enu("sex", ["L", "P"]).notNullable();
     table.string("email", 100).notNullable();
-    table.timestamps();
+    table.timestamps(true, true);
   });
 };
 
