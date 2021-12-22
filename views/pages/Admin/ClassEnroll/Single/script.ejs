@@ -1,0 +1,89 @@
+<script>
+  $(document).ready(function() {
+    
+    // ClassEnrollSubject Add Event - Start
+    $("._add-subject-btn").click(function() {
+      $.ajax({
+        url: "/admin/class_enroll_subjects",
+        type: "POST",
+        data: $("._add-subject-modal form").serializeArray().reduce((prev, curr) => {
+          prev[curr.name] = curr.value;
+          return prev;
+        }, {}),
+        success: function() {
+          window.location.reload();
+        },
+        error: function(err) {
+          new SnackBar({
+            message: "Internal Server Error",
+            status: "error",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          });
+        }
+      })
+    })
+    // ClassEnrollSubject Add Event - End
+
+    // ClassEnrollSubject Update Event - Start
+    $("._subject-edit-btn").click(function() {
+      const id = $(this).data("id");
+
+      $.ajax({
+        url: `/admin/class_enroll_subjects/${id}`,
+        type: "PUT",
+        data: $(`._edit-subject-modal[data-id='${id}'] form`).serializeArray().reduce((prev, curr) => {
+          prev[curr.name] = curr.value;
+          return prev;
+        }, {}),
+        success: function() {
+          window.location.reload();
+        },
+        error: function(err) {
+          new SnackBar({
+            message: "Internal Server Error",
+            status: "error",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          });
+        }
+      })
+    })
+  // ClassEnrollSubject Update Event - End
+
+  // ClassEnrollSubject Delete Event - Start
+  $("._subject-delete-btn").click(function() {
+      const id = $(this).data("id");
+      $.ajax({
+        url: `/admin/class_enroll_subjects/${id}`,
+        method: "DELETE",
+        async: true,
+        success: function(data) {
+          new SnackBar({
+            message: "Successfully deleted",
+            status: "success",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          });
+          setTimeout(() => {
+            $(`._subject-row[data-id='${id}']`).remove();
+            $(`._absensi-subject-container[data-id='${id}']`).remove();
+          }, 500);
+        },
+        error: function(err) {
+          new SnackBar({
+            message: "Internal Server Error",
+            status: "error",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          });
+        },
+      })
+    })
+    // ClassEnrollSubject Delete Event - End
+  })
+</script>

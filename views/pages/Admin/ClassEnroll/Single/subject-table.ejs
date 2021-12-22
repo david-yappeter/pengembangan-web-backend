@@ -2,12 +2,12 @@
 
 <!-- Add Section - Start -->
 <div class="text-right m-3">
-  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#_add-subject-modal">
+  <button type="button" class="btn btn-success" data-toggle="modal" data-target="._add-subject-modal">
     <i class="fa fa-plus"></i>
   </button>
 </div>
 
-<div class="modal fade" id="_add-subject-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade _add-subject-modal"tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -16,54 +16,60 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <div>
-          <div class="form-group d-flex flex-column">
-            <label class="text-left" for="add-hari">Hari : </label>
-            <select class="form-control" id="add-hari" name="add-hari" required>
-              <% ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"].forEach((day) => { %>
-                <option value="<%= day %>"><%= day %></option>
-              <% }) %>
-            </select>
-          </div>
-          <div class="form-group d-flex flex-column">
-            <label class="text-left" for="add-subject">Mata Kuliah : </label>
-            <select class="form-control" id="add-subject" name="add-subject" required>
-              <% subjects.forEach((subject) => { %>
-              <option value="<%= subject.code %>"> <%= subject.code %> - <%= subject.name %> </option>
-              <% }) %>
-            </select>
-          </div>
-          <div class="form-group d-flex flex-column">
-            <label class="text-left" for="add-ruangan">Ruangan : </label>
-            <select class="form-control" id="add-ruangan" name="add-ruangan" required>
-              <% rooms.forEach((room) => { %>
-              <option value="<%= room.name %>"> <%= room.name %> </option>
-              <% }) %>
-            </select>
-          </div>
-          <div class="form-group d-flex flex-column">
-            <label class="text-left" for="add-lecturer-nip">Wali Kelas : </label>
-            <select class="form-control" id="add-lecturer-nip" name="add-lecturer-nip" required>
-              <% lecturers.forEach((lecturer) => { %>
-              <option value="<%= lecturer.nip %>"> <%= lecturer.nip %> - <%= lecturer.name %> </option>
-              <% }) %>
-            </select>
-          </div>
-          <div class="form-group d-flex flex-column">
-            <label class="text-left" for="add-starttime">Waktu Mulai : </label>
-            <input class="form-control" type="time" id="add-starttime" name="add-starttime" required />
-          </div>
-          <div class="form-group d-flex flex-column">
-            <label class="text-left" for="add-endtime">Waktu Selesai : </label>
-            <input class="form-control" type="time" id="add-endtime" name="add-endtime" required />
+      <form>
+        <div class="modal-body">
+          <div>
+            <div class="form-group d-flex flex-column">
+              <label class="text-left" >Hari : </label>
+              <select class="form-control"  name="day" required>
+                <% ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"].forEach((day) => { %>
+                  <option value="<%= day %>"><%= day %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group d-flex flex-column">
+              <label class="text-left" >Mata Kuliah : </label>
+              <select class="form-control" name="subject_code" required>
+                <% subjects.forEach((subject) => { %>
+                <option value="<%= subject.code %>"> <%= subject.code %> - <%= subject.name %> </option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group d-flex flex-column">
+              <label class="text-left" >Ruangan : </label>
+              <select class="form-control" name="room_name" required>
+                <% rooms.forEach((room) => { %>
+                <option value="<%= room.name %>"> <%= room.name %> </option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group d-flex flex-column">
+              <label class="text-left" >Wali Kelas : </label>
+              <select class="form-control" name="lecturer_nip" required>
+                <% lecturers.forEach((lecturer) => { %>
+                <option value="<%= lecturer.nip %>"> <%= lecturer.nip %> - <%= lecturer.name %> </option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group d-flex flex-column">
+              <label class="text-left" >Waktu Mulai : </label>
+              <input class="form-control" type="time" name="start_time" required />
+            </div>
+            <div class="form-group d-flex flex-column">
+              <label class="text-left" >Waktu Selesai : </label>
+              <input class="form-control" type="time" name="end_time" required />
+            </div>
+
+            <!-- Extra Param - Start -->
+            <input class="d-none" type="text" name="class_enroll_id" value="<%= classEnroll.id %>" />
+            <!-- Extra Param - End -->
           </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button id="_add-subject-btn" type="button" class="btn btn-success" data-dismiss="modal">Add</button>
-      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success _add-subject-btn" data-dismiss="modal">Add</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
@@ -85,7 +91,7 @@
     </thead>
     <tbody style="font-size: 0.9rem">
       <% class_enroll_subjects.forEach((jadwal, idx) => { %>
-      <tr id="_subject-row-<%= idx %>">
+      <tr class="_subject-row" data-id="<%= jadwal.id %>">
         <td class="align-middle"><%= jadwal.day %></td>
         <td class="align-middle"><%= jadwal.subject_code %></td>
         <td class="align-middle" class="text-left"><%= jadwal.subject.name %> <strong>(<%= jadwal.lecturer.name %>)</strong></td>
@@ -96,11 +102,11 @@
         <td class="d-flex justify-content-around">
 
           <!-- Edit Button - Start -->
-          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#_editSubjectModal-<%= idx %>">
+          <button type="button" class="btn btn-success" data-toggle="modal" data-target="._edit-subject-modal[data-id='<%= jadwal.id %>']">
             <i class="fa fa-pencil"></i>
           </button>
           
-          <div class="modal fade" id="_editSubjectModal-<%= idx %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade _edit-subject-modal" data-id="<%= jadwal.id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -109,70 +115,72 @@
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <div class="modal-body">
-                  <div>
-                    <div class="form-group d-flex flex-column">
-                      <label class="text-left" for="hari-<%= idx %>">Hari : </label>
-                      <select class="form-control" id="hari-<%= idx %>" name="hari-<%= idx %>">
-                        <% ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"].forEach((day) => { %>
-                          <option value="<%= day %>" 
-                            <% if(day === jadwal.day) { %>
+                <form>
+                  <div class="modal-body">
+                    <div>
+                      <div class="form-group d-flex flex-column">
+                        <label class="text-left" >Hari : </label>
+                        <select class="form-control" name="day">
+                          <% ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"].forEach((day) => { %>
+                            <option value="<%= day %>" 
+                              <% if(day === jadwal.day) { %>
+                                selected="selected"
+                              <% } %>
+                            ><%= day %></option>
+                            <% }) %>
+                        </select>
+                      </div>
+                      <div class="form-group d-flex flex-column">
+                        <label class="text-left" >Mata Kuliah : </label>
+                        <select class="form-control" name="subject_code">
+                          <% subjects.forEach((subject) => { %>
+                          <option value="<%= subject.code %>"
+                            <% if(subject.code === jadwal.subject_code) { %>
                               selected="selected"
                             <% } %>
-                          ><%= day %></option>
+                          > <%= subject.code %> - <%= subject.name %> </option>
                           <% }) %>
-                      </select>
-                    </div>
-                    <div class="form-group d-flex flex-column">
-                      <label class="text-left" for="subject-<%= idx %>">Mata Kuliah : </label>
-                      <select class="form-control" id="subject-<%= idx %>" name="subject-<%= idx %>">
-                        <% subjects.forEach((subject) => { %>
-                        <option value="<%= subject.code %>"
-                          <% if(subject.code === jadwal.subject_code) { %>
-                            selected="selected"
-                          <% } %>
-                        > <%= subject.code %> - <%= subject.name %> </option>
-                        <% }) %>
-                      </select>
-                    </div>
-                    <div class="form-group d-flex flex-column">
-                      <label class="text-left" for="ruangan-<%= idx %>">Ruangan : </label>
-                      <select class="form-control" id="ruangan-<%= idx %>" name="ruangan-<%= idx %>">
-                        <% rooms.forEach((room) => { %>
-                        <option value="<%= room.name %>"
-                          <% if(room.name === jadwal.room_name) { %>
-                            selected="selected"
-                          <% } %>
-                        > <%= room.name %> </option>
-                        <% }) %>
-                      </select>
-                    </div>
-                    <div class="form-group d-flex flex-column">
-                      <label class="text-left" for="lecturer-nip-<%= idx %>">Wali Kelas : </label>
-                      <select class="form-control" id="lecturer-nip-<%= idx %>" name="lecturer-nip-<%= idx %>">
-                        <% lecturers.forEach((lecturer) => { %>
-                        <option value="<%= lecturer.nip %>"
-                          <% if(lecturer.nip === jadwal.lecturer_nip) { %>
-                            selected="selected"
-                          <% } %>
-                        > <%= lecturer.nip %> - <%= lecturer.name %> </option>
-                        <% }) %>
-                      </select>
-                    </div>
-                    <div class="form-group d-flex flex-column">
-                      <label class="text-left" for="starttime-<%= idx %>">Waktu Mulai : </label>
-                      <input class="form-control" type="time" id="starttime-<%= idx %>" name="starttime-<%= idx %>" value="<%= jadwal.start_time %>" required />
-                    </div>
-                    <div class="form-group d-flex flex-column">
-                      <label class="text-left" for="endtime-<%= idx %>">Waktu Selesai : </label>
-                      <input class="form-control" type="time" id="endtime-<%= idx %>" name="endtime-<%= idx %>" value="<%= jadwal.end_time %>" required />
+                        </select>
+                      </div>
+                      <div class="form-group d-flex flex-column">
+                        <label class="text-left" >Ruangan : </label>
+                        <select class="form-control" name="room_name">
+                          <% rooms.forEach((room) => { %>
+                          <option value="<%= room.name %>"
+                            <% if(room.name === jadwal.room_name) { %>
+                              selected="selected"
+                            <% } %>
+                          > <%= room.name %> </option>
+                          <% }) %>
+                        </select>
+                      </div>
+                      <div class="form-group d-flex flex-column">
+                        <label class="text-left" >Wali Kelas : </label>
+                        <select class="form-control" name="lecturer_nip">
+                          <% lecturers.forEach((lecturer) => { %>
+                          <option value="<%= lecturer.nip %>"
+                            <% if(lecturer.nip === jadwal.lecturer_nip) { %>
+                              selected="selected"
+                            <% } %>
+                          > <%= lecturer.nip %> - <%= lecturer.name %> </option>
+                          <% }) %>
+                        </select>
+                      </div>
+                      <div class="form-group d-flex flex-column">
+                        <label class="text-left" >Waktu Mulai : </label>
+                        <input class="form-control" type="time" name="start_time" value="<%= jadwal.start_time %>" required />
+                      </div>
+                      <div class="form-group d-flex flex-column">
+                        <label class="text-left" >Waktu Selesai : </label>
+                        <input class="form-control" type="time" name="end_time" value="<%= jadwal.end_time %>" required />
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="modal-footer justify-content-start">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  <button id="_subject-edit-btn-<%= idx %>" type="button" class="btn btn-success" data-dismiss="modal">Update</button>
-                </div>
+                  <div class="modal-footer justify-content-start">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button data-id="<%= jadwal.id %>" type="submit" class="btn btn-success _subject-edit-btn" data-dismiss="modal">Update</button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
@@ -194,7 +202,7 @@
                 </div>
                 <div class="modal-footer justify-content-start">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  <button id="_subject-delete-btn-<%= idx %>" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+                  <button type="button" class="btn btn-danger _subject-delete-btn" data-dismiss="modal" data-id="<%= jadwal.id %>" >Delete</button>
                 </div>
               </div>
             </div>
@@ -202,107 +210,7 @@
           <!-- Trash Button - End -->
         </td>
       </tr>
-      
-
-      <script>
-        $(document).ready(function() {
-          // ClassEnrollSubject Update Event - Start
-          $("#_subject-edit-btn-<%= idx %>").click(function() {
-            $.ajax({
-              url: "/admin/class_enroll_subjects/<%= jadwal.id %>",
-              type: "PUT",
-              data: {
-                "day": $("#hari-<%= idx %>").val(),
-                "start_time": $("#starttime-<%= idx %>").val(),
-                "end_time": $("#endtime-<%= idx %>").val(),
-                "room_name": $("#ruangan-<%= idx %>").val(),
-                "subject_code": $("#subject-<%= idx %>").val(),
-                "lecturer_nip": $("#lecturer-nip-<%= idx %>").val(),
-              },
-              success: function() {
-                window.location.reload();
-              },
-              error: function(err) {
-                new SnackBar({
-                  message: "Internal Server Error",
-                  status: "error",
-                  timeout: 5000,
-                  position: "bl",
-                  fixed: true,
-                });
-              }
-            })
-          })
-          // ClassEnrollSubject Update Event - End
-
-
-          // ClassEnrollSubject Delete Event - Start
-          $("#_subject-delete-btn-<%= idx %>").click(function() {
-            $.ajax({
-              url: "/admin/class_enroll_subjects/<%= jadwal.id %>",
-              method: "DELETE",
-              async: true,
-              success: function(data) {
-                new SnackBar({
-                  message: "Successfully deleted",
-                  status: "success",
-                  timeout: 5000,
-                  position: "bl",
-                  fixed: true,
-                });
-                setTimeout(() => {
-                  $("#_subject-row-<%= idx %>").remove();
-                  $("#_absensi-subject-container-<%= idx %>").remove();
-                }, 500);
-              },
-              error: function(err) {
-                new SnackBar({
-                  message: "Internal Server Error",
-                  status: "error",
-                  timeout: 5000,
-                  position: "bl",
-                  fixed: true,
-                });
-              },
-            })
-          })
-        });
-        // ClassEnrollSubject Delete Event - End 
-
-      </script>
       <% }) %>
     </tbody>
   </table>
 </div>        
-
-<script>
-  $(document).ready(function() {
-    $("#_add-subject-btn").click(function() {
-      $.ajax({
-        url: "/admin/class_enroll_subjects",
-        type: "POST",
-        data: {
-          "day": $("#add-hari").val(),
-          "start_time": $("#add-starttime").val(),
-          "end_time": $("#add-endtime").val(),
-          "room_name": $("#add-ruangan").val(),
-          "subject_code": $("#add-subject").val(),
-          "lecturer_nip": $("#add-lecturer-nip").val(),
-          "class_enroll_id": parseInt("<%= classEnroll.id %>"),
-        },
-        success: function() {
-          window.location.reload();
-        },
-        error: function(err) {
-          new SnackBar({
-            message: "Internal Server Error",
-            status: "error",
-            timeout: 5000,
-            position: "bl",
-            fixed: true,
-          });
-        }
-      })
-    })
-  });
-</script>
