@@ -66,18 +66,18 @@
               </thead>
               <tbody style="font-size: 0.9rem">
                 <% rooms.forEach((room, idx) => { %>
-                  <tr id="_room-row-container-<%= idx %>">
+                  <tr class="_room-row-container" data-id="<%= room.name %>" >
                     <td class="align-middle"> <%= room.name %> </td>
                     <td class="align-middle"> <%= new Date(room.created_at).toLocaleDateString('en-GB', {day: "numeric",month: "long", year: "numeric"}) %> </td>
                     <td class="align-middle"> <%= room.updated_at || "-" %> </td>
                     <!-- Delete Button - Start -->
                     <td>
-                      <button class="btn btn-danger" data-toggle="modal" data-target="#_delete-modal-container-<%= idx %>">
+                      <button class="btn btn-danger" data-toggle="modal" data-target="._delete-modal-container[data-id='<%= room.name %>']">
                         <i class="fa fa-trash"></i>
                       </button>
 
                       <!-- Delete Modal - Start -->
-                      <div class="modal fade" id="_delete-modal-container-<%= idx %>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                      <div class="modal fade _delete-modal-container" data-id="<%= room.name %>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                           <div class="modal-content">
                             <div class="modal-header">
@@ -91,7 +91,7 @@
                             </div>
                             <div class="modal-footer">
                               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              <button id="_delete-room-btn-<%= idx %>" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+                              <button data-id="<%= room.name %>" type="submit" class="btn btn-danger" data-dismiss="modal">Delete</button>
                             </div>
                           </div>
                         </div>
@@ -101,38 +101,6 @@
                     </td>
                     <!-- Delete Button - End -->
                   </tr>
-
-                  <script>
-                    $("#_delete-room-btn-<%= idx %>").click(() => {
-                      $.ajax({
-                        url: "/admin/rooms/<%= room.name %>",
-                        type: "DELETE",
-                        async: true,
-                        success: () => {
-                          new SnackBar({
-                            message: "Success Delete",
-                            status: "success",
-                            timeout: 5000,
-                            position: "bl",
-                            fixed: true,
-                          })
-
-                          setTimeout(() => {
-                            $("#_room-row-container-<%= idx %>").remove();
-                          }, 500);
-                        },
-                        error: () => {
-                          new SnackBar({
-                            message: "Internal Server Error",
-                            status: "error",
-                            timeout: 5000,
-                            position: "bl",
-                            fixed: true,
-                          })
-                        }
-                      })
-                    });
-                  </script>
                 <% }) %>
               </tbody>
             </table>
@@ -156,31 +124,7 @@
       window.location.replace(window.location.href.split("?")[0] + "?page=" + page);
     },
   });
-  
-  $(document).ready(function() {
-    $("#_add-room-btn").click(function() {
-      $.ajax({
-        url: "/admin/rooms",
-        type: "POST",
-        data: {
-          name: $("#_add-room").val().trim(),
-        },
-        async: true,
-        success: () => {
-          window.location.reload();
-        },
-        error: () => {
-          new SnackBar({
-            message: "Internal Server Error",
-            status: "error",
-            timeout: 5000,
-            position: "bl",
-            fixed: true,
-          });
-        },
-      })
-    });
-  })
 </script>
 
 <%- include("../../../partials/footer") %>
+<%- include("./script") %>

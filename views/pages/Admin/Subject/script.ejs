@@ -1,0 +1,64 @@
+<script>
+  $(document).ready(function() {
+    // Add Section - Start
+    $("#_add-subject-form").submit(function(e) {
+      e.preventDefault();
+      const serialized = $(this).serializeArray()
+      $.ajax({
+        url: "/admin/subjects",
+        type: "POST",
+        data: serialized.reduce((prev, curr)  => {
+          prev[curr.name] = curr.value;
+          return prev;
+        }, {}),
+        async: true,
+        success: () => {
+          window.location.reload();
+        },
+        error: () => {
+          new SnackBar({
+            message: "Internal Server Error",
+            status: "error",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          });
+        },
+      })
+    });
+    // Add Section - End
+    
+    // Delete Section - Start
+    $("._delete-modal-container button[type='submit']").click(function() {
+      const code = $(this).data("id");
+      $.ajax({
+        url: `/admin/subjects/${code}`,
+        type: "DELETE",
+        async: true,
+        success: () => {
+          new SnackBar({
+            message: "Success Delete",
+            status: "success",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          })
+
+          setTimeout(() => {
+            $(`._subject-row-container[data-id='${code}'`).remove();
+          }, 500);
+        },
+        error: () => {
+          new SnackBar({
+            message: "Internal Server Error",
+            status: "error",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          })
+        }
+      })
+    });
+    // Delete Section - End
+  })
+</script>

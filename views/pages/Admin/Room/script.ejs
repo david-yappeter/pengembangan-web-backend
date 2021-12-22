@@ -1,0 +1,64 @@
+<script>
+  $(document).ready(function() {
+    // Create Section - Start
+    $("#_add-room-btn").click(function() {
+      $.ajax({
+        url: "/admin/rooms",
+        type: "POST",
+        data: {
+          name: $("#_add-room").val().trim(),
+        },
+        async: true,
+        success: () => {
+          window.location.reload();
+        },
+        error: () => {
+          new SnackBar({
+            message: "Internal Server Error",
+            status: "error",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          });
+        },
+      })
+    });
+    // Create Section - End
+
+    // Delete Section - Start
+    $("._delete-modal-container button[type='submit']").click(function() {
+      console.log($(this));
+      console.log($(this).data());
+      const name = $(this).data("id");
+      console.log(name);
+      $.ajax({
+        url: `/admin/rooms/${name}`,
+        type: "DELETE",
+        async: true,
+        success: () => {
+          new SnackBar({
+            message: "Success Delete",
+            status: "success",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          })
+
+          setTimeout(() => {
+            $(`._room-row-container[data-id='${name}']`).remove();
+          }, 500);
+        },
+        error: () => {
+          new SnackBar({
+            message: "Internal Server Error",
+            status: "error",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          })
+        }
+      })
+    });
+    // Delete Section - End
+  })
+</script>

@@ -69,19 +69,19 @@
               </thead>
               <tbody style="font-size: 0.9rem">
                 <% subjects.forEach((subject, idx) => { %>
-                  <tr id="_subject-row-container-<%= idx %>">
+                  <tr class="_subject-row-container" data-id="<%= subject.code %>">
                     <td class="align-middle"> <%= subject.code %> </td>
                     <td class="align-middle"> <%= subject.name %> </td>
                     <td class="align-middle"> <%= new Date(subject.created_at).toLocaleDateString('en-GB', {day: "numeric",month: "long", year: "numeric"}) %> </td>
                     <td class="align-middle"> <%= subject.updated_at || "-" %> </td>
                     <!-- Delete Button - Start -->
                     <td>
-                      <button class="btn btn-danger" data-toggle="modal" data-target="#_delete-modal-container-<%= idx %>">
+                      <button class="btn btn-danger" data-toggle="modal" data-target="._delete-modal-container[data-id='<%= subject.code %>']">
                         <i class="fa fa-trash"></i>
                       </button>
 
                       <!-- Delete Modal - Start -->
-                      <div class="modal fade" id="_delete-modal-container-<%= idx %>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                      <div class="modal fade _delete-modal-container" data-id="<%= subject.code %>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                           <div class="modal-content">
                             <div class="modal-header">
@@ -95,7 +95,7 @@
                             </div>
                             <div class="modal-footer">
                               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              <button id="_delete-subject-btn-<%= idx %>" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+                              <button data-id="<%= subject.code %>" type="submit" class="btn btn-danger" data-dismiss="modal">Delete</button>
                             </div>
                           </div>
                         </div>
@@ -105,38 +105,6 @@
                     </td>
                     <!-- Delete Button - End -->
                   </tr>
-
-                  <script>
-                    $("#_delete-subject-btn-<%= idx %>").click(() => {
-                      $.ajax({
-                        url: "/admin/subjects/<%= subject.code %>",
-                        type: "DELETE",
-                        async: true,
-                        success: () => {
-                          new SnackBar({
-                            message: "Success Delete",
-                            status: "success",
-                            timeout: 5000,
-                            position: "bl",
-                            fixed: true,
-                          })
-
-                          setTimeout(() => {
-                            $("#_subject-row-container-<%= idx %>").remove();
-                          }, 500);
-                        },
-                        error: () => {
-                          new SnackBar({
-                            message: "Internal Server Error",
-                            status: "error",
-                            timeout: 5000,
-                            position: "bl",
-                            fixed: true,
-                          })
-                        }
-                      })
-                    });
-                  </script>
                 <% }) %>
               </tbody>
             </table>
@@ -160,34 +128,7 @@
       window.location.replace(window.location.href.split("?")[0] + "?page=" + page);
     },
   });
-  
-  $(document).ready(function() {
-    $("#_add-subject-form").submit(function(e) {
-      e.preventDefault();
-      const serialized = $(this).serializeArray()
-      $.ajax({
-        url: "/admin/subjects",
-        type: "POST",
-        data: serialized.reduce((prev, curr)  => {
-          prev[curr.name] = curr.value;
-          return prev;
-        }, {}),
-        async: true,
-        success: () => {
-          window.location.reload();
-        },
-        error: () => {
-          new SnackBar({
-            message: "Internal Server Error",
-            status: "error",
-            timeout: 5000,
-            position: "bl",
-            fixed: true,
-          });
-        },
-      })
-    });
-  })
 </script>
 
 <%- include("../../../partials/footer") %>
+<%- include("./script") %>
