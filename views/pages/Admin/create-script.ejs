@@ -1,0 +1,34 @@
+<script>
+  $(document).ready(function() {
+    CKEDITOR.replace( 'editor1' );
+
+    // Create Section - Start
+    $("#_berita-create-form").submit(function(e) {
+      e.preventDefault();
+      for(instance in CKEDITOR.instances){
+        CKEDITOR.instances[instance].updateElement();
+      }
+      $.ajax({
+        url: "/admin/berita/insert",
+        type: "POST",
+        data: $(this).serializeArray().reduce((prev, curr) => {
+          prev[curr.name] = curr.value;
+          return prev;
+        }, {}),
+        success: function(data) {
+          window.location.replace("/admin");
+        },
+        error: function(err) {
+          new SnackBar({
+            message: "Internal System Error",
+            status: "error",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          });
+        }
+      });
+    });
+    // Create Section - End
+  });
+</script>

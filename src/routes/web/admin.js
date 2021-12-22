@@ -76,13 +76,8 @@ router.get("/admin/berita/create", async (req, res) => {
 });
 
 router.post("/admin/berita/insert", async (req, res) => {
-  const { editor1, title, category } = req.body;
   News.query()
-    .insert({
-      title: title,
-      content: editor1,
-      newsCategoriesName: category,
-    })
+    .insert(req.body)
     .then((result) => {
       res.send(result);
     })

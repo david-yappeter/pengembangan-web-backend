@@ -1,0 +1,22 @@
+<script>
+  $(document).ready(function() {
+    // Delete Section - Start
+    $("button[type='submit']").click(function(e) {
+      e.preventDefault();
+      const id = $(this).data("id");
+      $.ajax({
+        url: `/admin/berita/delete/${id}`,
+        type: "DELETE",
+        success: function(data) {
+          setTimeout(function() {
+            $(`._news_removeable_container[data-id='${id}']`).remove();
+          }, 500);
+        },
+        error: function(err) {
+          console.log(err);
+        }
+      });
+    });
+    // Delete Section - End
+  });
+</script>
