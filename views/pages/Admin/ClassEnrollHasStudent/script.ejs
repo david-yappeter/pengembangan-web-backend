@@ -1,0 +1,115 @@
+
+<script>
+  // Delete Section - Start
+  $(document).ready(function() {
+    $("._remove-student-modal button[type='submit']").click(function() {
+      const nim = $(this).data("id");
+      const enrollId = $(this).data("enroll-id");
+      $.ajax({
+        url: `/admin/class_enrolls/${enrollId}/students/${nim}`,
+        type: "DELETE",
+        success: function() {
+          window.location.reload();
+        },
+        error: function() {
+          new SnackBar({
+            message: "Internal Server Error",
+            status: "error",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          });
+        }
+      });
+    });
+  });
+  // Delete Section - End 
+
+  // Create Section - Start
+    new window.JustValidate("#_add-student-enroll-form", {
+      rules: {
+        nim: {
+          required: true,
+        }
+      },
+      focusWrongField: true,
+
+      submitHandler: function(form, values, ajax) {
+        ajax({
+          url: form.action,
+          method: "POST",
+          data: JSON.stringify(values),
+          async:  true,
+          callback: function() {
+              window.location.reload();
+          },
+          error: function(response) {
+            new SnackBar({
+              message: "Mahasiswa sudah terdaftar",
+              status: "error",
+              timeout: 5000,
+              position: "bl",
+              fixed: true,
+            });
+          }
+        })
+      },
+      invalidFormCallback: function (errors) {
+        console.log(errors);
+      },
+    })
+
+    let delayTimer;
+    $("#nim").focusout(function() {
+      setTimeout(() => {
+        $("#searchResult").empty();
+      }, 200)
+    })
+
+    $("#nim").keyup(function() {
+      $("#searchResult").empty();
+      clearTimeout(delayTimer);
+      delayTimer = setTimeout(() => {
+        var nim = $("#nim").val().trim();
+        if(nim === "") {
+          $("#searchResult").empty();
+          return;
+        }
+        $.ajax({
+          url: "/admin/students/search",
+          type: "POST",
+          data: {
+            "nim": nim
+          },
+          success: function(data) {
+            $("#searchResult").empty();
+  
+            data.forEach((student) => {
+              $("#searchResult").append(`
+                <button type="button" class="list-group-item" value="${student.nim}">
+                  <bold>${student.nim} - ${student.name} </bold>
+                </button>
+              `);
+            });
+
+            if(data.length === 0) {
+              $("#searchResult").append(`
+                <li class="list-group-item">
+                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                  Data tidak ditemukan
+                </li>
+              `);
+              return
+            }
+            
+            $("#searchResult button").bind('click', function() {
+              $("#nim").val($(this).val());
+              $("#searchResult").empty();
+            });
+          }
+        });
+      }, 1000);
+    });
+  // Create Section - End
+
+</script>

@@ -61,12 +61,12 @@
                   <td class="align-middle"> <%= student.email %> </td>
                   <td>
                     <!-- Remove Student From Class - Start -->
-                    <button class="btn btn-danger" data-toggle="modal" data-target="#_remove-student-modal-<%= idx %>">
+                    <button class="btn btn-danger" data-toggle="modal" data-target="._remove-student-modal[data-id='<%= student.nim %>']">
                       <i class="fa fa-trash"></i>
                     </button>
                     
                     <!-- Modal -->
-                    <div class="modal fade" id="_remove-student-modal-<%= idx %>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal fade _remove-student-modal" data-id="<%= student.nim %>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -80,7 +80,7 @@
                           </div>
                           <div class="modal-footer justify-content-start">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button id="_remove-student-btn-<%= idx %>" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+                            <button data-id="<%= student.nim %>" data-enroll-id="<%= classEnroll.id %>" type="submit" class="btn btn-danger" data-dismiss="modal">Delete</button>
                           </div>
                         </div>
                       </div>
@@ -88,27 +88,6 @@
                     <!-- Remove Student From Class - End -->
                   </td>
                 </tr>
-                
-                <script>
-                  $("#_remove-student-btn-<%= idx %>").click(function() {
-                    $.ajax({
-                      url: "/admin/class_enrolls/<%= classEnroll.id %>/students/<%= student.nim %>",
-                      type: "DELETE",
-                      success: function() {
-                        window.location.reload();
-                      },
-                      error: function() {
-                        new SnackBar({
-                          message: "Internal Server Error",
-                          status: "error",
-                          timeout: 5000,
-                          position: "bl",
-                          fixed: true,
-                        });
-                      }
-                    });
-                  });
-                </script>
                 <% }) %>
               </tbody>
             </table>
@@ -135,3 +114,4 @@
 </script>
 
 <%- include("../../../partials/footer") %>
+<%- include("script") %>

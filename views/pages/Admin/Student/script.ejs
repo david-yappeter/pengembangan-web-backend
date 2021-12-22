@@ -1,0 +1,32 @@
+<script>
+  $(document).ready(function() {
+    $("._delete-student-modal button[type='submit']").click(function() {
+      const nim = $(this).data("id");
+      $.ajax({
+        url: `/admin/students/${nim}`,
+        type: "DELETE",
+        success: function(res) {
+          new SnackBar({
+            message: "Delete Success",
+            status: "success",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          });
+          setTimeout(() => {
+            $(`._student-data-row[data-id='${nim}']`).remove();
+          }, 500);
+        },
+        error: function(err) {
+          new SnackBar({
+            message: "Internal Server Error",
+            status: "error",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          });
+        }
+      });
+    });
+  })
+</script>

@@ -1,0 +1,24 @@
+<script>
+  $(document).ready(function() {
+    $('#_add-classenroll-form').submit(function(e) {
+      e.preventDefault();
+      $.ajax({
+        url: '/admin/classes/<%= classObj.id %>/enroll',
+        method: 'POST',
+        data: {
+          ...$(this).serializeArray().reduce((obj, item) => {
+            obj[item.name] = item.value;
+            return obj;
+          }, {}),
+          class_id: parseInt("<%= classObj.id %>"),
+        },
+        success: function(data) {
+          window.location.reload();
+        },
+        error: function(err) {
+          console.log(err);
+        }
+      });
+    });
+  });
+</script>

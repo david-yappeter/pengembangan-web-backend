@@ -101,32 +101,5 @@
   </div>
 </div>
 
-<script>
-  $(document).ready(function() {
-    $('#_add-class-form').submit(function(e) {
-      e.preventDefault();
-      $.ajax({
-        url: '/admin/classes',
-        method: 'POST',
-        data: $(this).serializeArray().reduce((prev, curr)  => {
-          prev[curr.name] = curr.value;
-          return prev;
-        }, {}),
-        success: function(data) {
-          window.location.reload();
-        },
-        error: function(err) {
-          new SnackBar({
-            message: "Internal Server Error",
-            status: "error",
-            timeout: 5000,
-            position: "bl",
-            fixed: true,
-          });
-        }
-      });
-    });
-  });
-</script>
-
 <%- include("../../../partials/footer") %>
+<%- include("./script") %>

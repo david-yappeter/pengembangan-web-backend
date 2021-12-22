@@ -295,8 +295,6 @@ router.delete(
       })
       .delete();
 
-    console.log(temp.toKnexQuery().toQuery());
-
     temp
       .then(async () => {
         return res.status(200).send();

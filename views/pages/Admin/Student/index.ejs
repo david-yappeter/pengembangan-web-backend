@@ -42,7 +42,7 @@
               </thead>
               <tbody style="font-size: 0.9rem">
               <% students.forEach((student, idx) => { %>
-                <tr id="_student-data-row-<%= idx %>">
+                <tr class="_student-data-row" data-id="<%= student.nim %>">
                   <td class="align-middle"> 
                     <a href="/admin/students/<%= student.nim %>">
                       <%= student.nim %>
@@ -59,12 +59,12 @@
                     <!-- View Student - End -->
 
                     <!-- Delete Student - Start -->
-                    <button class="btn btn-danger" data-toggle="modal" data-target="#_delete-student-modal-<%= idx %>">
+                    <button class="btn btn-danger" data-toggle="modal" data-target="._delete-student-modal[data-id='<%= student.nim %>']">
                       <i class="fa fa-trash"></i>
                     </button>
                     
                     <!-- Modal -->
-                    <div class="modal fade" id="_delete-student-modal-<%= idx %>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal fade _delete-student-modal" data-id="<%= student.nim %>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -78,7 +78,7 @@
                           </div>
                           <div class="modal-footer justify-content-start">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button id="_delete-student-btn-<%= idx %>" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+                            <button data-id="<%= student.nim %>" type="submit" class="btn btn-danger" data-dismiss="modal">Delete</button>
                           </div>
                         </div>
                       </div>
@@ -86,39 +86,6 @@
                     <!-- Delete Student - End -->
                   </td>
                 </tr>
-                
-                <script>
-                  $(document).ready(function() {
-                    $("#_delete-student-btn-<%= idx %>").click(function() {
-                      $.ajax({
-                        url: "/admin/students/<%= student.nim %>",
-                        type: "DELETE",
-                        success: function(res) {
-                          new SnackBar({
-                            message: "Delete Success",
-                            status: "success",
-                            timeout: 5000,
-                            position: "bl",
-                            fixed: true,
-                          });
-                          setTimeout(() => {
-                            $("#_student-data-row-<%= idx %>").remove();
-                          }, 500);
-                        },
-                        error: function(err) {
-                          new SnackBar({
-                            message: "Internal Server Error",
-                            status: "error",
-                            timeout: 5000,
-                            position: "bl",
-                            fixed: true,
-                          });
-                        }
-                      });
-                    });
-                  });
-                </script>
-
                 <% }) %>
               </tbody>
             </table>
@@ -145,3 +112,4 @@
 </script>
 
 <%- include("../../../partials/footer") %>
+<%- include("./script") %>

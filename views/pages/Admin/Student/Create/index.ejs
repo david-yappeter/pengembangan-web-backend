@@ -62,28 +62,5 @@
   </div>
 </div>
 
-<script>
-    new window.JustValidate("#_student-create-form", {
-      submitHandler: function (form, values, ajax) {
-        ajax({
-          url: form.action,
-          method: "POST",
-          data: JSON.stringify(values),
-          async: true,
-          dataType: "json",
-          callback: function (response) {
-            window.location.replace("/admin/students");
-          },
-          error: function (response) {
-            alert("AJAX submit error! \nResponse from server:" + response);
-          },
-        });
-      },
-
-      invalidFormCallback: function (errors) {
-        console.log(errors);
-      },
-    });
-</script>
-
 <%- include("../../../../partials/footer") %>
+<%- include("./script") %>
