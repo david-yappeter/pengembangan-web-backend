@@ -85,5 +85,44 @@
       })
     })
     // ClassEnrollSubject Delete Event - End
+
+    // Absensi Edit Event - Start
+    $("select").change(function() {
+      const datas = $(this).data();
+      const status = $(this).children("option:selected").val();
+      $.ajax({
+        url: "/admin/attendances",
+        method: "POST",
+        async: true,
+        data: {
+          student_has_class_enroll_id: datas["shce"],
+          week: datas["week"],
+          class_enroll_subject_id: datas["ceb"],
+          status: status,
+        },
+        success: function(data) {
+          new SnackBar({
+            message: "Successfully updated",
+            status: "success",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          });
+
+          //$(`._row-student[data-ceb='${datas["ceb"]}']`).load(document.URL+ ` ._row-student[data-ceb='${datas["ceb"]}'] > *`);
+          window.location.reload();
+        },
+        error: function(data) {
+          new SnackBar({
+            message: "Internal Server Error",
+            status: "error",
+            timeout: 5000,
+            position: "bl",
+            fixed: true,
+          });
+        }
+      })
+    })
+    // Absensi Edit Event - End
   })
 </script>

@@ -1,3 +1,4 @@
+const { Attendance } = require("../../../db/models/attendance");
 const { Class } = require("../../../db/models/class");
 const { ClassEnroll } = require("../../../db/models/class_enroll");
 const {
@@ -179,19 +180,29 @@ router.get("/admin/class_enrolls/:id", async (req, res) => {
   ClassEnroll.query()
     .findById(classEnrollId)
     .withGraphFetched(
-      "[students,class,class_enroll_subjects.[lecturer,subject,attendances.[student_has_class_enroll.[student]]]]"
+      "[students,student_has_class_enrolls,class,class_enroll_subjects.[lecturer,subject,attendances.[student_has_class_enroll.[student]]]]"
     )
     .then(async (classEnroll) => {
       for (let i = 0; i < classEnroll.class_enroll_subjects.length; i++) {
         classEnroll.class_enroll_subjects[i].attendances =
           classEnroll.class_enroll_subjects[i].attendances.reduce(
             (acc, curr) => {
-              acc[curr.week] = curr;
+              if (acc[curr.week] === undefined) {
+                acc[curr.week] = [];
+              }
+              acc[curr.week].push(curr);
               return acc;
             },
             {}
           );
       }
+
+      classEnroll.student_has_class_enrolls.forEach(function (item) {
+        if (classEnroll.student_has_class_enrolls_map === undefined) {
+          classEnroll.student_has_class_enrolls_map = {};
+        }
+        classEnroll.student_has_class_enrolls_map[item.student_nim] = item;
+      });
 
       for (let i = 0; i < classEnroll.class_enroll_subjects.length; i++) {
         classEnroll.class_enroll_subjects = ClassEnrollSubject.sortArray(
@@ -617,6 +628,58 @@ router.delete("/admin/lecturers/:nip", async (req, res) => {
     })
     .then(() => {
       return res.status(200).send();
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send();
+    });
+});
+
+// Attendances
+router.post("/admin/attendances", async (req, res) => {
+  const { student_has_class_enroll_id, week, class_enroll_subject_id, status } =
+    req.body;
+  Attendance.query()
+    .where({
+      student_has_class_enroll_id,
+      week,
+      class_enroll_subject_id,
+    })
+    .first()
+    .then((attendance) => {
+      if (attendance) {
+        if (attendance.status !== status) {
+          Attendance.query()
+            .update({
+              status,
+            })
+            .where({
+              id: attendance.id,
+            })
+            .then(() => {
+              return res.status(200).send();
+            })
+            .catch((err) => {
+              console.log(err);
+              return res.status(500).send();
+            });
+        }
+      } else {
+        Attendance.query()
+          .insert({
+            student_has_class_enroll_id,
+            week,
+            class_enroll_subject_id,
+            status,
+          })
+          .then(() => {
+            return res.status(200).send();
+          })
+          .catch((err) => {
+            console.log(err);
+            return res.status(500).send();
+          });
+      }
     })
     .catch((err) => {
       console.log(err);
