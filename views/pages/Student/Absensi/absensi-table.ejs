@@ -54,6 +54,8 @@
                   <% } else if (attendance.status === 2) { %>  
                     <td style="background-color: red; color: white">A</td>
                     <% maxKehadiran++ %>
+                  <% } else if (attendance.status === 3) { %>
+                    <td>-</td>
                   <% } %>
                 <% } else { %>
                   <td>-</td>
