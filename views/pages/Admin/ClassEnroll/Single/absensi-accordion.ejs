@@ -103,13 +103,14 @@
                       <!-- <td>-</td> -->
                     <% } %>
                   <% } %>
-                  <td class="_col-kehadiran" data-ceb="<%= item.id %>" data-shce="<%= class_enroll.student_has_class_enrolls_map[student.nim].id %>"><%= kehadiran %> / <%= maxKehadiran %></td>
+                  <td class="_col-kehadiran" data-kehadiran="<%= kehadiran %>" data-max-kehadiran="<%= maxKehadiran %>" data-ceb="<%= item.id %>" data-shce="<%= class_enroll.student_has_class_enrolls_map[student.nim].id %>"><%= kehadiran %> / <%= maxKehadiran %></td>
                   <td style="color: blue">
                     <% if (maxKehadiran == 0) { %>
-                      <span class="_col-persen-kehadiran" data-ceb="<%= item.id %>" data-shce="<%= class_enroll.student_has_class_enrolls_map[student.nim].id %>" data-kehadiran="<%= kehadiran %>" data-max-kehadiran="<%= maxKehadiran %>" >100</span> %
+                      <span>100</span>
                     <% } else { %>
-                      <%= Math.ceil(kehadiran/maxKehadiran * 100) %> %
+                      <span><%= Math.ceil(kehadiran/maxKehadiran * 100) %> </span>
                     <% } %>
+                    %
                   </td>
                   <td><%= item.sks  %></td>
                 </tr>

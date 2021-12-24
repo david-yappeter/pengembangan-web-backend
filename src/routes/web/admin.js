@@ -657,7 +657,9 @@ router.post("/admin/attendances", async (req, res) => {
               id: attendance.id,
             })
             .then(() => {
-              return res.status(200).send();
+              return res.status(200).send({
+                prev: attendance.status,
+              });
             })
             .catch((err) => {
               console.log(err);
@@ -672,8 +674,10 @@ router.post("/admin/attendances", async (req, res) => {
             class_enroll_subject_id,
             status,
           })
-          .then(() => {
-            return res.status(200).send();
+          .then((attendance) => {
+            return res.status(201).send({
+              prev: attendance.status,
+            });
           })
           .catch((err) => {
             console.log(err);

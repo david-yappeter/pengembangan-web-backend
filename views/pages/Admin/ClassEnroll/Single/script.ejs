@@ -89,7 +89,8 @@
     // Absensi Edit Event - Start
     $("select").change(function() {
       const datas = $(this).data();
-      const status = $(this).children("option:selected").val();
+      const selectComponent = $(this)
+      const status = parseInt($(this).children("option:selected").val());
       $.ajax({
         url: "/admin/attendances",
         method: "POST",
@@ -100,7 +101,7 @@
           class_enroll_subject_id: datas["ceb"],
           status: status,
         },
-        success: function(data) {
+        success: function(data,_,xhr) {
           new SnackBar({
             message: "Successfully updated",
             status: "success",
@@ -109,8 +110,56 @@
             fixed: true,
           });
 
-          //$(`._row-student[data-ceb='${datas["ceb"]}']`).load(document.URL+ ` ._row-student[data-ceb='${datas["ceb"]}'] > *`);
-          window.location.reload();
+          const selector = `._col-kehadiran[data-ceb='${datas['ceb']}'][data-shce='${datas['shce']}']`
+          let { kehadiran, maxKehadiran } = $(selector).data();
+          kehadiran = parseInt(kehadiran);
+          maxKehadiran = parseInt(maxKehadiran);
+
+          if(status === 1) {
+            if (xhr.status === 201) {
+              maxKehadiran++;
+            } else {
+              if(data.prev === 3) {
+                maxKehadiran++;
+              }
+            }
+            kehadiran += 1;
+            selectComponent.css({
+              "background-color": "#4d70b7",
+              "color": "white",
+            });
+          } else if (status === 2) {
+            if (xhr.status === 201) {
+              maxKehadiran++;
+            } else {
+              if(data.prev === 3) {
+                maxKehadiran++;
+              }
+              kehadiran--;
+            }
+            selectComponent.css({
+              "background-color": "red",
+              "color": "white",
+            });
+          } else if (status === 3) {
+            if(data.prev === 1) {
+              kehadiran--;
+            }
+            maxKehadiran--;
+            selectComponent.css({
+              "background-color": "white",
+              "color": "black",
+            });
+          }
+
+          $(selector).data({
+            kehadiran: kehadiran,
+            maxKehadiran: maxKehadiran,
+          });
+          $(selector).html(`${kehadiran}/${maxKehadiran}`);
+
+          console.log(this);
+          $(`${selector} + td > span`).html(`${maxKehadiran === 0 ? 0 : Math.ceil(kehadiran / maxKehadiran * 100)}`);
         },
         error: function(data) {
           new SnackBar({
