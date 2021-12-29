@@ -12,22 +12,23 @@ const {
 
 const router = require("express").Router();
 
-router.use((req, res, next) => {
+const studentMiddleware = (req, res, next) => {
   if (req.session.isAuth) {
     next();
   } else {
     res.redirect("/");
   }
-});
+};
 
-router.get("/home", (req, res) => {
+router.get("/home", studentMiddleware, async (req, res) => {
   res.send("Welcome to the Student Home Page");
 });
 
-router.get("/berita", async (req, res) => {
-  const { page } = req.query.page || 1;
+router.get("/berita", studentMiddleware, async (req, res) => {
+  const page = req.query.page || 1;
+  const limit = 10;
   News.query()
-    .page(page - 1, 10)
+    .page(page - 1, limit)
     .then((result) => {
       return res.render("pages/Student/berita", {
         news: result.results,
@@ -42,7 +43,7 @@ router.get("/berita", async (req, res) => {
     });
 });
 
-router.get("/berita/detail/:id", async (req, res) => {
+router.get("/berita/detail/:id", studentMiddleware, async (req, res) => {
   News.query()
     .where({
       id: req.params.id,
@@ -64,7 +65,7 @@ router.get("/berita/detail/:id", async (req, res) => {
     });
 });
 
-router.get("/profile", async (req, res) => {
+router.get("/profile", studentMiddleware, async (req, res) => {
   Student.query()
     .findById(req.session.login.nim)
     .withGraphFetched(
@@ -99,7 +100,7 @@ router.get("/profile", async (req, res) => {
     });
 });
 
-router.get("/absensi", async (req, res) => {
+router.get("/absensi", studentMiddleware, async (req, res) => {
   let filterSemester = req.query.semester;
   const nim = req.session.login.nim;
 

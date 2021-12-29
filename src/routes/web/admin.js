@@ -16,15 +16,15 @@ const { Subject } = require("../../../db/models/subject");
 
 const router = require("express").Router();
 
-router.use("/admin", (req, res, next) => {
+const adminMiddleware = (req, res, next) => {
   if (req.session.isAdmin) {
     next();
   } else {
     res.redirect("/admin/login");
   }
-});
+};
 
-router.get("/admin", async (req, res) => {
+router.get("/admin", adminMiddleware, async (req, res) => {
   const page = req.query.page || 1;
   const limit = 10;
   News.query()
@@ -43,7 +43,7 @@ router.get("/admin", async (req, res) => {
     });
 });
 
-router.get("/admin/berita/detail/:id", async (req, res) => {
+router.get("/admin/berita/detail/:id", adminMiddleware, async (req, res) => {
   News.query()
     .findById(req.params.id)
     .then((result) => {
@@ -62,7 +62,7 @@ router.get("/admin/berita/detail/:id", async (req, res) => {
     });
 });
 
-router.get("/admin/berita/create", async (req, res) => {
+router.get("/admin/berita/create", adminMiddleware, async (req, res) => {
   NewsCategory.query()
     .then((result) => {
       return res.render("pages/Admin/berita-create", {
@@ -76,7 +76,7 @@ router.get("/admin/berita/create", async (req, res) => {
     });
 });
 
-router.post("/admin/berita/insert", async (req, res) => {
+router.post("/admin/berita/insert", adminMiddleware, async (req, res) => {
   News.query()
     .insert(req.body)
     .then((result) => {
@@ -88,7 +88,7 @@ router.post("/admin/berita/insert", async (req, res) => {
     });
 });
 
-router.delete("/admin/berita/delete/:id", async (req, res) => {
+router.delete("/admin/berita/delete/:id", adminMiddleware, async (req, res) => {
   const { id } = req.params;
   News.query()
     .delete()
@@ -105,7 +105,7 @@ router.delete("/admin/berita/delete/:id", async (req, res) => {
 });
 
 // Class
-router.get("/admin/classes", async (req, res) => {
+router.get("/admin/classes", adminMiddleware, async (req, res) => {
   Class.query()
     .then((classes) => {
       return res.render("pages/Admin/Class/index", {
@@ -119,7 +119,7 @@ router.get("/admin/classes", async (req, res) => {
     });
 });
 
-router.post("/admin/classes", async (req, res) => {
+router.post("/admin/classes", adminMiddleware, async (req, res) => {
   Class.query()
     .insert(req.body)
     .then(() => {
@@ -132,7 +132,7 @@ router.post("/admin/classes", async (req, res) => {
 });
 
 // ClassEnroll
-router.get("/admin/classes/:id/enroll", async (req, res) => {
+router.get("/admin/classes/:id/enroll", adminMiddleware, async (req, res) => {
   const { id: classId } = req.params;
 
   Class.query()
@@ -161,7 +161,7 @@ router.get("/admin/classes/:id/enroll", async (req, res) => {
     });
 });
 
-router.post("/admin/classes/:id/enroll", async (req, res) => {
+router.post("/admin/classes/:id/enroll", adminMiddleware, async (req, res) => {
   ClassEnroll.query()
     .insert(req.body)
     .then(() => {
@@ -174,7 +174,7 @@ router.post("/admin/classes/:id/enroll", async (req, res) => {
 });
 
 // ClassEnrollHasStudent
-router.get("/admin/class_enrolls/:id", async (req, res) => {
+router.get("/admin/class_enrolls/:id", adminMiddleware, async (req, res) => {
   const { id: classEnrollId } = req.params;
 
   ClassEnroll.query()
@@ -230,72 +230,81 @@ router.get("/admin/class_enrolls/:id", async (req, res) => {
 });
 
 // ClassEnrollHasStudent
-router.get("/admin/class_enrolls/:id/students", async (req, res) => {
-  const { id: classEnrollId } = req.params;
-  const page = req.query.page || 1;
-  const limit = 10;
+router.get(
+  "/admin/class_enrolls/:id/students",
+  adminMiddleware,
+  async (req, res) => {
+    const { id: classEnrollId } = req.params;
+    const page = req.query.page || 1;
+    const limit = 10;
 
-  ClassEnroll.query()
-    .findById(classEnrollId)
-    .withGraphFetched("[class,students(studentModify)]")
-    .modifiers({
-      studentModify: (builder) => {
-        builder.orderBy("student_nim", "asc");
-      },
-    })
-    .then((classEnroll) => {
-      const totalStudent = classEnroll.students.length;
+    ClassEnroll.query()
+      .findById(classEnrollId)
+      .withGraphFetched("[class,students(studentModify)]")
+      .modifiers({
+        studentModify: (builder) => {
+          builder.orderBy("student_nim", "asc");
+        },
+      })
+      .then((classEnroll) => {
+        const totalStudent = classEnroll.students.length;
 
-      classEnroll.students = classEnroll.students.slice(
-        limit * (page - 1),
-        limit * (page - 1) + limit
-      );
+        classEnroll.students = classEnroll.students.slice(
+          limit * (page - 1),
+          limit * (page - 1) + limit
+        );
 
-      return res.render("pages/Admin/ClassEnrollHasStudent/index", {
-        currentAdmin: req.session.admin,
-        classEnroll: classEnroll,
-        total: totalStudent,
-        totalPage: Math.ceil(totalStudent / limit),
-        page: page || 1,
-        semester: ClassEnroll.convertToRoman(classEnroll.semester),
+        return res.render("pages/Admin/ClassEnrollHasStudent/index", {
+          currentAdmin: req.session.admin,
+          classEnroll: classEnroll,
+          total: totalStudent,
+          totalPage: Math.ceil(totalStudent / limit),
+          page: page || 1,
+          semester: ClassEnroll.convertToRoman(classEnroll.semester),
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.render("partials/page500");
       });
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.render("partials/page500");
-    });
-});
+  }
+);
 
-router.post("/admin/class_enrolls/:id/students", async (req, res) => {
-  const { id: classEnrollId } = req.params;
-  const { nim } = req.body;
+router.post(
+  "/admin/class_enrolls/:id/students",
+  adminMiddleware,
+  async (req, res) => {
+    const { id: classEnrollId } = req.params;
+    const { nim } = req.body;
 
-  StudentHasClassEnroll.query()
-    .where({
-      class_enroll_id: classEnrollId,
-      student_nim: nim,
-    })
-    .first()
-    .then(async (result) => {
-      if (result) {
-        return res.status(400).send();
-      }
-
-      await StudentHasClassEnroll.query().insert({
+    StudentHasClassEnroll.query()
+      .where({
         class_enroll_id: classEnrollId,
         student_nim: nim,
-      });
+      })
+      .first()
+      .then(async (result) => {
+        if (result) {
+          return res.status(400).send();
+        }
 
-      return res.status(200).send();
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.status(500).send();
-    });
-});
+        await StudentHasClassEnroll.query().insert({
+          class_enroll_id: classEnrollId,
+          student_nim: nim,
+        });
+
+        return res.status(200).send();
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).send();
+      });
+  }
+);
 
 router.delete(
   "/admin/class_enrolls/:classEnrollId/students/:studentNim",
+  adminMiddleware,
   async (req, res) => {
     const { classEnrollId, studentNim } = req.params;
 
@@ -318,7 +327,7 @@ router.delete(
 );
 
 // Student
-router.get("/admin/students", async (req, res) => {
+router.get("/admin/students", adminMiddleware, async (req, res) => {
   const { nim } = req.params;
   const limit = 10;
   const page = req.query.page || 1;
@@ -339,13 +348,13 @@ router.get("/admin/students", async (req, res) => {
     });
 });
 
-router.get("/admin/students/create", async (req, res) => {
+router.get("/admin/students/create", adminMiddleware, async (req, res) => {
   return res.render("pages/Admin/Student/Create/index", {
     currentAdmin: req.session.admin,
   });
 });
 
-router.post("/admin/students", async (req, res) => {
+router.post("/admin/students", adminMiddleware, async (req, res) => {
   Student.query()
     .insert({
       ...req.body,
@@ -361,7 +370,7 @@ router.post("/admin/students", async (req, res) => {
     });
 });
 
-router.get("/admin/students/:nim", async (req, res) => {
+router.get("/admin/students/:nim", adminMiddleware, async (req, res) => {
   const { nim } = req.params;
 
   Student.query()
@@ -390,7 +399,7 @@ router.get("/admin/students/:nim", async (req, res) => {
     });
 });
 
-router.delete("/admin/students/:nim", async (req, res) => {
+router.delete("/admin/students/:nim", adminMiddleware, async (req, res) => {
   const { nim } = req.params;
 
   Student.query()
@@ -407,7 +416,7 @@ router.delete("/admin/students/:nim", async (req, res) => {
     });
 });
 
-router.post("/admin/students/search", async (req, res) => {
+router.post("/admin/students/search", adminMiddleware, async (req, res) => {
   Student.query()
     .where("nim", "like", `%${req.body.nim}%`)
     .limit(10)
@@ -431,54 +440,66 @@ router.post("/admin/students/search", async (req, res) => {
 });
 
 // ClassEnrollSubject
-router.post("/admin/class_enroll_subjects", async (req, res) => {
-  ClassEnrollSubject.query()
-    .insert(req.body)
-    .then((resp) => {
-      return res.status(200).send(resp);
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.status(500).send();
-    });
-});
+router.post(
+  "/admin/class_enroll_subjects",
+  adminMiddleware,
+  async (req, res) => {
+    ClassEnrollSubject.query()
+      .insert(req.body)
+      .then((resp) => {
+        return res.status(200).send(resp);
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).send();
+      });
+  }
+);
 
-router.put("/admin/class_enroll_subjects/:id", async (req, res) => {
-  const { id: classEnrollId } = req.params;
+router.put(
+  "/admin/class_enroll_subjects/:id",
+  adminMiddleware,
+  async (req, res) => {
+    const { id: classEnrollId } = req.params;
 
-  ClassEnrollSubject.query()
-    .update(req.body)
-    .where({
-      id: classEnrollId,
-    })
-    .then((resp) => {
-      return res.status(200).send();
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.status(500).send();
-    });
-});
+    ClassEnrollSubject.query()
+      .update(req.body)
+      .where({
+        id: classEnrollId,
+      })
+      .then((resp) => {
+        return res.status(200).send();
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).send();
+      });
+  }
+);
 
-router.delete("/admin/class_enroll_subjects/:id", async (req, res) => {
-  const { id: classEnrollId } = req.params;
+router.delete(
+  "/admin/class_enroll_subjects/:id",
+  adminMiddleware,
+  async (req, res) => {
+    const { id: classEnrollId } = req.params;
 
-  ClassEnrollSubject.query()
-    .delete()
-    .where({
-      id: classEnrollId,
-    })
-    .then(() => {
-      return res.send();
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.send();
-    });
-});
+    ClassEnrollSubject.query()
+      .delete()
+      .where({
+        id: classEnrollId,
+      })
+      .then(() => {
+        return res.send();
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.send();
+      });
+  }
+);
 
 // Rooms
-router.get("/admin/rooms", async (req, res) => {
+router.get("/admin/rooms", adminMiddleware, async (req, res) => {
   const limit = 10;
   const page = req.query.page || 1;
 
@@ -500,7 +521,7 @@ router.get("/admin/rooms", async (req, res) => {
     });
 });
 
-router.post("/admin/rooms", async (req, res) => {
+router.post("/admin/rooms", adminMiddleware, async (req, res) => {
   Room.query()
     .insert(req.body)
     .then(() => {
@@ -512,7 +533,7 @@ router.post("/admin/rooms", async (req, res) => {
     });
 });
 
-router.delete("/admin/rooms/:roomName", async (req, res) => {
+router.delete("/admin/rooms/:roomName", adminMiddleware, async (req, res) => {
   const { roomName } = req.params;
 
   Room.query()
@@ -530,7 +551,7 @@ router.delete("/admin/rooms/:roomName", async (req, res) => {
 });
 
 // Subjects
-router.get("/admin/subjects", async (req, res) => {
+router.get("/admin/subjects", adminMiddleware, async (req, res) => {
   const limit = 10;
   const page = req.query.page || 1;
 
@@ -552,7 +573,7 @@ router.get("/admin/subjects", async (req, res) => {
     });
 });
 
-router.post("/admin/subjects", async (req, res) => {
+router.post("/admin/subjects", adminMiddleware, async (req, res) => {
   Subject.query()
     .insert(req.body)
     .then(() => {
@@ -564,24 +585,28 @@ router.post("/admin/subjects", async (req, res) => {
     });
 });
 
-router.delete("/admin/subjects/:subjectCode", async (req, res) => {
-  const { subjectCode } = req.params;
-  Subject.query()
-    .delete()
-    .where({
-      code: subjectCode,
-    })
-    .then(() => {
-      return res.status(200).send();
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.status(500).send();
-    });
-});
+router.delete(
+  "/admin/subjects/:subjectCode",
+  adminMiddleware,
+  async (req, res) => {
+    const { subjectCode } = req.params;
+    Subject.query()
+      .delete()
+      .where({
+        code: subjectCode,
+      })
+      .then(() => {
+        return res.status(200).send();
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).send();
+      });
+  }
+);
 
 // Lecturer
-router.get("/admin/lecturers", async (req, res) => {
+router.get("/admin/lecturers", adminMiddleware, async (req, res) => {
   const limit = 10;
   const page = req.query.page || 1;
 
@@ -604,7 +629,7 @@ router.get("/admin/lecturers", async (req, res) => {
     });
 });
 
-router.post("/admin/lecturers", async (req, res) => {
+router.post("/admin/lecturers", adminMiddleware, async (req, res) => {
   Lecturer.query()
     .insert({
       ...req.body,
@@ -619,7 +644,7 @@ router.post("/admin/lecturers", async (req, res) => {
     });
 });
 
-router.delete("/admin/lecturers/:nip", async (req, res) => {
+router.delete("/admin/lecturers/:nip", adminMiddleware, async (req, res) => {
   const { nip } = req.params;
   Lecturer.query()
     .delete()
@@ -636,7 +661,7 @@ router.delete("/admin/lecturers/:nip", async (req, res) => {
 });
 
 // Attendances
-router.post("/admin/attendances", async (req, res) => {
+router.post("/admin/attendances", adminMiddleware, async (req, res) => {
   const { student_has_class_enroll_id, week, class_enroll_subject_id, status } =
     req.body;
   Attendance.query()

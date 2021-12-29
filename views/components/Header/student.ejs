@@ -2,80 +2,58 @@
   class="navbar navbar-expand-lg navbar-dark mb-3"
   style="width: 100%; min-height: 60px; background: #094584"
 >
-  <button
-    class="navbar-toggler ml-auto main-menu-btn"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbarSupportedContent"
-    aria-controls="navbarSupportedContent"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-    style="color: white"
-  >
-    <span>Mika Main Menu</span>
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div
-    id="navbarSupportedContent"
-    class="
-      d-lg-flex
-      justify-content-center
-      align-items-center
-      mx-auto
-      collapse
-      navbar-collapse
-    "
-    style="width: 100%"
-  >
-    <img
-      class="d-none d-lg-block"
-      style="height: 40px"
-      src="https://mika.mikroskil.ac.id/bundles/mikaglobal/images/mika.png"
-    />
-    <div class="navbar-nav">
-      <a class="nav-item mikro-nav-link" href="/home"> Home </a>
-      <a class="nav-item mikro-nav-link" href="/berita"> Berita </a>
-      <a class="nav-item mikro-nav-link" href="/profile"> Profile </a>
-      <a class="nav-item mikro-nav-link" href="/absensi"> Absensi </a>
-      <a class="nav-item mikro-nav-link" href="/absensi"> Absensi </a>
-      <a class="nav-item mikro-nav-link" href="/nilai"> Nilai </a>
-      <!-- <div class="nav-item dropdown">
-        <a class="mikro-nav-link dropdown-toggle" href="#", id="nilaiDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Nilai
-        </a>
-        <div class="dropdown-menu position-absolute" aria-labelledby="nilaiDropdown" style="width: 1150px;">
-          <a class="dropdown-item" href="#">Semester Reguler</a>
+  <div class="container-lg">
+    <button
+      class="navbar-toggler ml-auto main-menu-btn"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      style="color: white"
+    >
+      <span>Mika Main Menu</span>
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div
+      id="navbarSupportedContent"
+      class="
+        d-lg-flex
+        align-items-center
+        collapse
+        navbar-collapse
+      "
+      style="width: 100%"
+    >
+      <img
+        class="d-none d-lg-block ml-0"
+        style="height: 40px"
+        src="https://mika.mikroskil.ac.id/bundles/mikaglobal/images/mika.png"
+      />
+      <div class="navbar-nav d-lg-flex justify-content-between flex-grow-1">
+  
+        <!-- MD View - Start -->
+        <a class="d-lg-none nav-item mikro-nav-link" href="/home"> Home </a>
+        <a class="d-lg-none nav-item mikro-nav-link" href="/berita"> Berita </a>
+        <a class="d-lg-none nav-item mikro-nav-link" href="/profile"> Profile </a>
+        <a class="d-lg-none nav-item mikro-nav-link" href="/absensi"> Absensi </a>
+        <a class="d-lg-none nav-item mikro-nav-link ml-lg-5" href="/logout"> Logout </a>
+        <!-- MD View - End -->
+  
+        <!-- Large View - Start -->
+        <div class="d-lg-block d-none">
+          <a class="nav-item mikro-nav-link" href="/home"> Home </a>
+          <a class="nav-item mikro-nav-link" href="/berita"> Berita </a>
+          <a class="nav-item mikro-nav-link" href="/profile"> Profile </a>
+          <a class="nav-item mikro-nav-link" href="/absensi"> Absensi </a>
         </div>
-      </div> -->
-      <a class="nav-item mikro-nav-link" href="/absensi"> Absensi </a>
-      <a class="nav-item mikro-nav-link" href="/absensi"> Absensi </a>
-      <a class="nav-item mikro-nav-link" href="/absensi"> Absensi </a>
-      <a class="nav-item mikro-nav-link mr-5" href="/absensi">Tugas Akhir</a>
-
-      <a class="nav-item mikro-nav-link ml-lg-5" href="/logout"> Logout </a>
+        <div class="d-lg-block d-none">
+          <a class="nav-item mikro-nav-link ml-lg-5" href="/logout"> Logout </a>
+        </div>
+        <!-- Large View - End -->
+      </div>
     </div>
   </div>
 </nav>
-
-
-<!--
-<script>
-  const listenerFunc = function() {
-    const windowWidth = $(window).width();
-
-    if(windowWidth >= 992) {
-      $(".dropdown-menu").css("left", "-490px");
-      $(".dropdown-menu").css("width", "1150px");
-      $(".dropdown-toggle").addClass("disabled")
-    } else {
-      $(".dropdown-menu").css("left", "0px")
-      $(".dropdown-menu").css("width", "100%");
-      $(".dropdown-toggle").removeClass("disabled")
-    }
-
-  }
-
-  $(window).resize(listenerFunc);
-  listenerFunc();
-</script> -->
