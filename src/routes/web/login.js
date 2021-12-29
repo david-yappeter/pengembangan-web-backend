@@ -20,7 +20,6 @@ router.get("/admin/login", (req, res) => {
 
 router.get("/test", async (req, res) => {
   const resp = await Student.query().first();
-  console.log(resp);
 
   res.send("asd");
 });

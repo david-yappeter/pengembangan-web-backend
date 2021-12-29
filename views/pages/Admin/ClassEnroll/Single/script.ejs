@@ -158,7 +158,6 @@
           });
           $(selector).html(`${kehadiran}/${maxKehadiran}`);
 
-          console.log(this);
           $(`${selector} + td > span`).html(`${maxKehadiran === 0 ? 100 : Math.ceil(kehadiran / maxKehadiran * 100)}`);
         },
         error: function(data) {

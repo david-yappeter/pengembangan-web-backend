@@ -27,10 +27,7 @@
 
     // Delete Section - Start
     $("._delete-modal-container button[type='submit']").click(function() {
-      console.log($(this));
-      console.log($(this).data());
       const name = $(this).data("id");
-      console.log(name);
       $.ajax({
         url: `/admin/rooms/${name}`,
         type: "DELETE",
