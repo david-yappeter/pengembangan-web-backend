@@ -31,5 +31,12 @@ jobs:
         DOCKER_IMAGE_NAME: "davidyap/mikroskil-node:latest"
       run: docker push  "$DOCKER_IMAGE_NAME"
     
-      
-    
+    - name: Update VM Image
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        key: ${{ secrets.REMOTE_KEY }}
+        port: ${{ secrets.REMOTE_PORT }}
+        script: ~/test/restart-compose.sh
+        
