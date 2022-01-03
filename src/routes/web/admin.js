@@ -29,6 +29,7 @@ router.get("/admin", adminMiddleware, async (req, res) => {
   const limit = 10;
   News.query()
     .page(page - 1, limit)
+    .orderBy("created_at", "desc")
     .then((result) => {
       return res.render("pages/Admin/berita", {
         news: result.results,
