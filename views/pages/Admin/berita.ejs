@@ -26,7 +26,20 @@
       </div>
     </div>
   </div>
+  <div id="sync-pagination" class="d-flex justify-content-center mt-3"></div>
 </div>
+
+<script>
+  $('#sync-pagination').twbsPagination({
+    totalPages: parseInt("<%= totalPage %>"),
+    visiblePages: 4,
+    initiateStartPageClick: false,
+    startPage: parseInt("<%= page %>"),
+    onPageClick: function (evt, page) {
+      window.location.replace(window.location.href.split("?")[0] + "?page=" + page);
+    },
+  });
+</script>
 
 <%- include("../../partials/footer") %>
 <%- include("./script") %>

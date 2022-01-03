@@ -33,6 +33,7 @@ router.get("/berita", studentMiddleware, async (req, res) => {
       return res.render("pages/Student/berita", {
         news: result.results,
         count: result.total,
+        totalPage: Math.ceil(result.total / limit),
         page: page,
         currentLogin: req.session.login,
       });

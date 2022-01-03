@@ -33,6 +33,7 @@ router.get("/admin", adminMiddleware, async (req, res) => {
       return res.render("pages/Admin/berita", {
         news: result.results,
         count: result.total,
+        totalPage: Math.ceil(result.total / limit),
         page: page,
         currentAdmin: req.session.admin,
       });
