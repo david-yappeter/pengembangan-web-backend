@@ -113,7 +113,9 @@ include("../../components/TopFlag/banner") %>
             window.location.replace("/admin");
           },
           error: function (response) {
-            alert("AJAX submit error! \nResponse from server:" + response);
+            alert("Username atau Password salah");
+            $("#_login-form")[0].reset();
+            $("#username").focus();
           },
         });
       },

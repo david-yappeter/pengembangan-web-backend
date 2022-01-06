@@ -196,7 +196,9 @@ include("../../components/TopFlag/banner") %>
             window.location.replace("/berita");
           },
           error: function (response) {
-            alert("AJAX submit error! \nResponse from server:" + response);
+            alert("Username atau Password salah");
+            $("#_login-form")[0].reset();
+            $("#username").focus();
           },
         });
       },
