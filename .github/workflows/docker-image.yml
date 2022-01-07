@@ -13,7 +13,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: "Checkout Code"
+      uses: "actions/checkout@v2"
+
+    - name: "Zipping Code"
+      uses: "papeloto/action-zip@v1"
+      with:
+          files: ./
+          dest: final-project.zip
     
     - name: Docker Login
       env:

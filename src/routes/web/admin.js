@@ -133,6 +133,23 @@ router.post("/admin/classes", adminMiddleware, async (req, res) => {
     });
 });
 
+router.put("/admin/classes/:classId", adminMiddleware, async (req, res) => {
+  const { classId } = req.query;
+
+  Class.query()
+    .where({
+      id: classId,
+    })
+    .update(req.body)
+    .then(() => {
+      return res.status(200).send();
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send();
+    });
+});
+
 // ClassEnroll
 router.get("/admin/classes/:id/enroll", adminMiddleware, async (req, res) => {
   const { id: classId } = req.params;
