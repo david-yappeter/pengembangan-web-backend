@@ -16,17 +16,17 @@ jobs:
     - name: "Checkout Code"
       uses: "actions/checkout@v2"
 
-    - name: Archive Release
-      uses: thedoctor0/zip-release@master
-      with:
-        type: 'zip'
-        filename: 'release.zip'
-        exclusions: '*.git* /*node_modules/* .editorconfig'
+    # - name: Archive Release
+    #   uses: thedoctor0/zip-release@master
+    #   with:
+    #     type: 'zip'
+    #     filename: 'release.zip'
+    #     exclusions: '*.git* /*node_modules/* .editorconfig'
         
     - uses: actions/upload-artifact@v2
       with:
-        name: release.zip
-        path: release.zip
+        name: release
+        path: ./
     
     - name: Docker Login
       env:
