@@ -16,11 +16,17 @@ jobs:
     - name: "Checkout Code"
       uses: "actions/checkout@v2"
 
-    - name: "Zipping Code"
-      uses: "papeloto/action-zip@v1"
+    - name: Archive Release
+      uses: thedoctor0/zip-release@master
       with:
-          files: ./
-          dest: final-project.zip
+        type: 'zip'
+        filename: 'release.zip'
+        exclusions: '*.git* /*node_modules/* .editorconfig'
+        
+    - uses: actions/upload-artifact@v2
+      with:
+        name: release.zip
+        path: release.zip
     
     - name: Docker Login
       env:
