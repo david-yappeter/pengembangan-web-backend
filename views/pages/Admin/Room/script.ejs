@@ -1,14 +1,21 @@
 <script>
   $(document).ready(function() {
     // Create Section - Start
+    
+    $("#_add-room-form-tag").submit(function(e) {
+      e.preventDefault();
+      $("#_add-room-btn").click();
+    })
     $("#_add-room-btn").click(function() {
+      console.log("passed");
+      const serialized = $("#_add-room-form-tag").serializeArray()
       $.ajax({
         url: "/admin/rooms",
         type: "POST",
-        data: {
-          name: $("#_add-room").val().trim(),
-        },
-        async: true,
+        data: serialized.reduce((prev, curr)  => {
+          prev[curr.name] = curr.value;
+          return prev;
+        }, {}),
         success: () => {
           window.location.reload();
         },

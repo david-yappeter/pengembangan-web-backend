@@ -34,7 +34,7 @@ router.get("/admin", adminMiddleware, async (req, res) => {
       return res.render("pages/Admin/berita", {
         news: result.results,
         count: result.total,
-        totalPage: Math.ceil(result.total / limit),
+        totalPage: Math.ceil(result.total / limit) || 1,
         page: page,
         currentAdmin: req.session.admin,
       });
@@ -277,7 +277,7 @@ router.get(
           currentAdmin: req.session.admin,
           classEnroll: classEnroll,
           total: totalStudent,
-          totalPage: Math.ceil(totalStudent / limit),
+          totalPage: Math.ceil(totalStudent / limit) || 1,
           page: page || 1,
           semester: ClassEnroll.convertToRoman(classEnroll.semester),
         });
@@ -530,7 +530,7 @@ router.get("/admin/rooms", adminMiddleware, async (req, res) => {
         currentAdmin: req.session.admin,
         totalData: totalData,
         rooms: rooms.results,
-        totalPage: Math.ceil(totalData / limit),
+        totalPage: Math.ceil(totalData / limit) || 1,
         page: page,
       });
     })
@@ -541,9 +541,11 @@ router.get("/admin/rooms", adminMiddleware, async (req, res) => {
 });
 
 router.post("/admin/rooms", adminMiddleware, async (req, res) => {
+  console.log(req.body);
   Room.query()
     .insert(req.body)
-    .then(() => {
+    .then((resp) => {
+      // console.log(resp);
       res.status(200).send();
     })
     .catch((err) => {
@@ -582,7 +584,7 @@ router.get("/admin/subjects", adminMiddleware, async (req, res) => {
         currentAdmin: req.session.admin,
         totalData: totalData,
         subjects: subjects.results,
-        totalPage: Math.ceil(totalData / limit),
+        totalPage: Math.ceil(totalData / limit) || 1,
         page: page,
       });
     })
@@ -638,7 +640,7 @@ router.get("/admin/lecturers", adminMiddleware, async (req, res) => {
         currentAdmin: req.session.admin,
         totalData: totalData,
         lecturers: lecturers.results,
-        totalPage: Math.ceil(totalData / limit),
+        totalPage: Math.ceil(totalData / limit) || 1,
         page: page,
       });
     })

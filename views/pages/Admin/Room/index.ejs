@@ -34,17 +34,17 @@
                     <span aria-hidden="true">&times;</span>
                   </button>
               </div>
-              <div class="modal-body">
-                <form>
-                  <div class="form-group">
-                    <input class="form-control" type="text" id="_add-room" name="_add-room" required />
-                  </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button id="_add-room-btn" type="button" class="btn btn-success" data-dismiss="modal"> Create </button>
-              </div>
+              <form id="_add-room-form-tag">
+                <div class="modal-body">
+                    <div class="form-group">
+                      <input class="form-control" type="text" id="_add-room" name="name" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button id="_add-room-btn" type="submit" class="btn btn-success" data-dismiss="modal"> Create </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
